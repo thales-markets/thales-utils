@@ -1,0 +1,22 @@
+{
+  "name": "thales-utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "ethers": "5.7.2",
+    "numbro": "^2.4.0",
+    "lodash": "^4.17.21",
+    "styled-components": "^5.3.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "@types/node": "^20.8.10"
+  }
+}
