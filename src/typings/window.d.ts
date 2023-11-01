@@ -21,7 +21,7 @@ declare global {
         ethereum?: {
             on: (event: string, cb: () => void) => void;
             networkVersion: NetworkId;
-            request: <ReturnType>(args: RequestArguments) => Promise<ReturnType>;
+            request: (args: RequestArguments) => Promise<unknown>;
             isMetaMask: boolean;
         };
         MSStream;

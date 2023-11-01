@@ -2,10 +2,10 @@ export const isMetamask = async () => {
     if (!window.ethereum) {
         return false;
     }
-    const clientVersion = await window.ethereum.request<string>({
+    const clientVersion = await window.ethereum.request({
         method: 'web3_clientVersion',
     });
-    const isMetamaskClientVersion = clientVersion.split('/')[0] === 'MetaMask';
+    const isMetamaskClientVersion = (clientVersion as string).split('/')[0] === 'MetaMask';
 
     return window && window.ethereum.isMetaMask && isMetamaskClientVersion;
 };
