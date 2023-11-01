@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, DependencyList, EffectCallback } from 'react';
 import debounce from 'lodash/debounce';
-import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'constants/defaults';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from '../constants/defaults';
 
 // source: https://simbathesailor.dev/debounced-useEffect-itself/
 function useDebouncedEffect(

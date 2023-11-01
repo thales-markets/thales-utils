@@ -3,20 +3,28 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "browser": "browser.js",
   "scripts": {
-    "build": "tsc"
+    "pack": "webpack --mode production",
+    "prepublish": "npm run pack"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "date-fns": "^2.30.0",
     "ethers": "5.7.2",
-    "numbro": "^2.4.0",
     "lodash": "^4.17.21",
+    "numbro": "^2.4.0",
+    "react": "^18.2.0",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
-    "typescript": "^5.2.2",
-    "@types/node": "^20.8.10"
+    "@types/lodash": "^4.14.200",
+    "@types/node": "^20.8.10",
+    "@types/react": "^18.2.33",
+    "ts-loader": "^9.5.0",
+    "typescript": "^4.5.5",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   }
 }

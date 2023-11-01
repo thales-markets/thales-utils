@@ -1,4 +1,4 @@
-import { NetworkId } from 'enums/network';
+import { NetworkId } from '../enums/network';
 
 interface RequestArguments {
     method: string;

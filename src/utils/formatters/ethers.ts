@@ -1,8 +1,8 @@
-import { COLLATERAL_DECIMALS } from 'constants/currency';
+import { COLLATERAL_DECIMALS } from '../../constants/currency';
 import { BigNumberish, ethers } from 'ethers';
-import { Coins } from 'types/tokens';
-import { getDefaultDecimalsForNetwork } from 'utils/network';
-import { floorNumberToDecimals } from 'utils/formatters/number';
+import { Coins } from '../../types/tokens';
+import { getDefaultDecimalsForNetwork } from '../../utils/network';
+import { floorNumberToDecimals } from '../../utils/formatters/number';
 
 export const bytesFormatter = (input: string) => ethers.utils.formatBytes32String(input);
 

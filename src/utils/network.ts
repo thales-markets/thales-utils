@@ -1,5 +1,5 @@
-import { NetworkId } from 'enums/network';
-import { NetworkParams } from 'types/network';
+import { NetworkId } from '../enums/network';
+import { NetworkParams } from '../types/network';
 
 export const hasEthereumInjected = () => !!window.ethereum;
 
