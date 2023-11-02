@@ -2,8 +2,7 @@
   "name": "thales-utils",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "browser": "browser.js",
+  "main": "main.js",
   "scripts": {
     "pack": "webpack --mode production",
     "prepublish": "npm run pack"

@@ -27,5 +27,5 @@ yarn-error.log*
 /.env
 /.vscode
 
-browser.js
-browser.js.LICENSE.txt
+main.js
+main.js.LICENSE.txt

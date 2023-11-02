@@ -15,7 +15,7 @@ module.exports = {
 		extensions: ['.tsx', '.ts', '.js'],
 	},
 	output: {
-		filename: 'browser.js',
+		filename: 'main.js',
 		path: path.resolve(__dirname),
 		library: 'thalesUtils',
 		libraryTarget: 'umd',
