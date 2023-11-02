@@ -1,6 +1,6 @@
 {
     "name": "thales-utils",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "",
     "main": "main.js",
     "scripts": {
@@ -15,6 +15,7 @@
         "lodash": "^4.17.21",
         "numbro": "^2.4.0",
         "react": "^17.0.1",
+        "react-dom": "^17.0.1",
         "styled-components": "^5.3.3"
     },
     "devDependencies": {
