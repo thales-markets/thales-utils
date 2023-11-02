@@ -13,10 +13,6 @@ module.exports = {
 	  },
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
-		alias: {
-			// shim ws to WebSockets for browser
-			ws: path.join(path.resolve('./'), 'ws-shim.js'),
-		},
 	},
 	output: {
 		filename: 'browser.js',
