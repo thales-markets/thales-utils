@@ -12,3 +12,6 @@ export * from './src/utils/style';
 //hooks
 export { default as useDebouncedEffect } from './src/hooks/useDebouncedEffect';
 export { default as useInterval } from './src/hooks/useInterval';
+
+//enums
+export * from './src/enums/network';
