@@ -8,12 +8,16 @@ export const getDefaultDecimalsForNetwork = (networkId: NetworkId) => {
     return 18;
 };
 
-export const changeNetwork = async (network: NetworkParams, callback?: VoidFunction): Promise<void> => {
+export const changeNetwork = async (
+    network?: NetworkParams,
+    callback?: VoidFunction,
+    chainId?: string
+): Promise<void> => {
     if (hasEthereumInjected()) {
         try {
             await (window.ethereum as any).request({
                 method: 'wallet_switchEthereumChain',
-                params: [{ chainId: network.chainId }],
+                params: [{ chainId: network?.chainId || chainId }],
             });
             callback && callback();
         } catch (switchError: any) {

@@ -5,7 +5,7 @@ export * from './src/utils/formatters/number';
 export * from './src/utils/formatters/string';
 export * from './src/utils/device';
 export * from './src/utils/etherscan';
-export * from './src/utils/localStore';
+export { default as localStore } from './src/utils/localStore';
 export * from './src/utils/network';
 export * from './src/utils/style';
 
