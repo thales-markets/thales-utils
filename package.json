@@ -1,6 +1,6 @@
 {
     "name": "thales-utils",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "",
     "main": "main.js",
     "scripts": {
@@ -10,6 +10,10 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "@types/lodash": "^4.14.200",
+        "@types/node": "^20.8.10",
+        "@types/react": "^17.0.2",
+        "@types/styled-components": "^5.1.29",
         "date-fns": "^2.30.0",
         "ethers": "5.7.2",
         "lodash": "^4.17.21",
@@ -19,10 +23,6 @@
         "styled-components": "^5.3.3"
     },
     "devDependencies": {
-        "@types/lodash": "^4.14.200",
-        "@types/node": "^20.8.10",
-        "@types/react": "^17.0.2",
-        "@types/styled-components": "^5.1.29",
         "ts-loader": "^9.5.0",
         "typescript": "^4.5.5",
         "webpack": "^5.89.0",
