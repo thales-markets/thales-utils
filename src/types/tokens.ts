@@ -1,1 +1,1 @@
-export type Coins = 'sUSD' | 'DAI' | 'USDCe' | 'USDC' | 'USDT' | 'BUSD' | 'OP' | 'WETH' | 'ETH' | 'ARB';
+export type Coins = 'sUSD' | 'DAI' | 'USDCe' | 'USDbC' | 'USDC' | 'USDT' | 'BUSD' | 'OP' | 'WETH' | 'ETH' | 'ARB';
