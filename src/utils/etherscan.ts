@@ -5,8 +5,9 @@ const EtherscanNetworkNameById: Record<NetworkId, string> = {
     [NetworkId.OptimismGoerli]: 'goerli-optimism',
     [NetworkId.Arbitrum]: 'arbitrum-one',
     [NetworkId.Base]: 'base',
-    [NetworkId.Mainnet]: 'polygon-mainnet',
-    [NetworkId.PolygonMainnet]: 'mainnet',
+    [NetworkId.PolygonMainnet]: 'polygon-mainnet',
+    [NetworkId.Mainnet]: 'mainnet',
+    [NetworkId.ZkSync]: 'zksync',
 };
 
 const getEtherscanBaseURL = (networkId: NetworkId) => {
@@ -20,6 +21,8 @@ const getEtherscanBaseURL = (networkId: NetworkId) => {
         return 'https://basescan.org';
     } else if (networkId === NetworkId.PolygonMainnet) {
         return 'https://polygonscan.com';
+    } else if (networkId === NetworkId.ZkSync) {
+        return 'https://explorer.zksync.io';
     }
 
     return `https://${network.toLowerCase()}.etherscan.io`;
