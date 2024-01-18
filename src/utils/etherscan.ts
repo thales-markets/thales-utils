@@ -3,11 +3,13 @@ import { NetworkId } from '../enums/network';
 const EtherscanNetworkNameById: Record<NetworkId, string> = {
     [NetworkId.OptimismMainnet]: 'optimistic',
     [NetworkId.OptimismGoerli]: 'goerli-optimism',
+    [NetworkId.OptimismSepolia]: 'sepolia-optimism',
     [NetworkId.Arbitrum]: 'arbitrum-one',
     [NetworkId.Base]: 'base',
     [NetworkId.PolygonMainnet]: 'polygon-mainnet',
     [NetworkId.Mainnet]: 'mainnet',
     [NetworkId.ZkSync]: 'zksync',
+    [NetworkId.ZkSyncSepolia]: 'sepolia-zksync',
 };
 
 const getEtherscanBaseURL = (networkId: NetworkId) => {
@@ -23,6 +25,8 @@ const getEtherscanBaseURL = (networkId: NetworkId) => {
         return 'https://polygonscan.com';
     } else if (networkId === NetworkId.ZkSync) {
         return 'https://explorer.zksync.io';
+    } else if (networkId === NetworkId.ZkSyncSepolia) {
+        return 'https://sepolia.explorer.zksync.io';
     }
 
     return `https://${network.toLowerCase()}.etherscan.io`;
