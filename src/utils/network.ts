@@ -4,7 +4,16 @@ import { NetworkParams } from '../types/network';
 export const hasEthereumInjected = () => !!window.ethereum;
 
 export const getDefaultDecimalsForNetwork = (networkId: NetworkId) => {
-    if ([NetworkId.Arbitrum, NetworkId.PolygonMainnet, NetworkId.Base].includes(networkId)) return 6;
+    if (
+        [
+            NetworkId.Arbitrum,
+            NetworkId.PolygonMainnet,
+            NetworkId.Base,
+            NetworkId.ZkSync,
+            NetworkId.ZkSyncSepolia,
+        ].includes(networkId)
+    )
+        return 6;
     return 18;
 };
 
