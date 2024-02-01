@@ -8,4 +8,5 @@ export enum NetworkId {
     Base = 8453,
     Arbitrum = 42161,
     OptimismSepolia = 11155420,
+    BlastSepolia = 168587773,
 }

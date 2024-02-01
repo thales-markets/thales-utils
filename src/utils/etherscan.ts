@@ -10,6 +10,7 @@ const EtherscanNetworkNameById: Record<NetworkId, string> = {
     [NetworkId.Mainnet]: 'mainnet',
     [NetworkId.ZkSync]: 'zksync',
     [NetworkId.ZkSyncSepolia]: 'sepolia-zksync',
+    [NetworkId.BlastSepolia]: 'sepolia-blast',
 };
 
 const getEtherscanBaseURL = (networkId: NetworkId) => {
@@ -27,6 +28,8 @@ const getEtherscanBaseURL = (networkId: NetworkId) => {
         return 'https://explorer.zksync.io';
     } else if (networkId === NetworkId.ZkSyncSepolia) {
         return 'https://sepolia.explorer.zksync.io';
+    } else if (networkId === NetworkId.BlastSepolia) {
+        return 'https://testnet.blastscan.io';
     }
 
     return `https://${network.toLowerCase()}.etherscan.io`;
