@@ -7,7 +7,6 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     USDbC: 6,
     USDC: 6,
     USDT: 6,
-    BUSD: 18,
     OP: 18,
     WETH: 18,
     ETH: 18,
