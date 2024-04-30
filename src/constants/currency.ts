@@ -16,4 +16,5 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
 
 export const DEFAULT_CURRENCY_DECIMALS = 2;
 export const SHORT_CURRENCY_DECIMALS = 4;
+export const MEDIUM_CURRENCY_DECIMALS = 6;
 export const LONG_CURRENCY_DECIMALS = 8;
