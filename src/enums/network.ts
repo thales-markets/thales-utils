@@ -4,7 +4,6 @@ export enum NetworkId {
     PolygonMainnet = 137,
     ZkSyncSepolia = 300,
     ZkSync = 324,
-    OptimismGoerli = 420,
     Base = 8453,
     Arbitrum = 42161,
     OptimismSepolia = 11155420,

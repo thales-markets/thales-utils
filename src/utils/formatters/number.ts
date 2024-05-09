@@ -1,5 +1,10 @@
 import numbro from 'numbro';
-import { DEFAULT_CURRENCY_DECIMALS, LONG_CURRENCY_DECIMALS, SHORT_CURRENCY_DECIMALS } from '../../constants/currency';
+import {
+    DEFAULT_CURRENCY_DECIMALS,
+    LONG_CURRENCY_DECIMALS,
+    MEDIUM_CURRENCY_DECIMALS,
+    SHORT_CURRENCY_DECIMALS,
+} from '../../constants/currency';
 
 type NumericValue = string | number;
 
@@ -10,6 +15,9 @@ export const getPrecision = (amount: NumericValue) => {
     }
     if (Number(amount) >= 0.01) {
         return SHORT_CURRENCY_DECIMALS;
+    }
+    if (Number(amount) >= 0.0001) {
+        return MEDIUM_CURRENCY_DECIMALS;
     }
     return LONG_CURRENCY_DECIMALS;
 };

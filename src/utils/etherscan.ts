@@ -2,7 +2,6 @@ import { NetworkId } from '../enums/network';
 
 const EtherscanNetworkNameById: Record<NetworkId, string> = {
     [NetworkId.OptimismMainnet]: 'optimistic',
-    [NetworkId.OptimismGoerli]: 'goerli-optimism',
     [NetworkId.OptimismSepolia]: 'sepolia-optimism',
     [NetworkId.Arbitrum]: 'arbitrum-one',
     [NetworkId.Base]: 'base',
