@@ -11,6 +11,7 @@ export const getDefaultDecimalsForNetwork = (networkId: NetworkId) => {
             NetworkId.Base,
             NetworkId.ZkSync,
             NetworkId.OptimismSepolia,
+            NetworkId.OptimismMainnet,
         ].includes(networkId)
     )
         return 6;
