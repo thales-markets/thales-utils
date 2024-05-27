@@ -45,7 +45,7 @@ export const formatCurrencyWithSign = (
     decimals?: number,
     trimDecimals?: boolean
 ) => {
-    return `${Number(value) < 0 ? '- ' : ''}${sign ? sign + ' ' : ''}${formatCurrency(
+    return `${Number(value) < 0 ? '- ' : ''}${sign ? sign : ''}${formatCurrency(
         typeof value == 'number' ? Math.abs(value) : value,
         decimals !== undefined ? decimals : getPrecision(value),
         trimDecimals
