@@ -10,8 +10,6 @@ export const formatHoursAndMinutesFromTimestamp = (timestamp: number) => format(
 
 export const formatDateWithTime = (date: Date | number) => format(date, 'dd MMM HH:mm');
 
-export const formatTimeFromDate = (date: Date | number) => format(date, 'HH:mm');
-
 export const convertUTCToLocalDate = (date: Date) => {
     return new Date(
         date.getUTCFullYear(),
