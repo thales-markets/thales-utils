@@ -12,6 +12,7 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     WETH: 18,
     ETH: 18,
     ARB: 18,
+    THALES: 18,
 };
 
 export const DEFAULT_CURRENCY_DECIMALS = 2;
