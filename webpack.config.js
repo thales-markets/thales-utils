@@ -21,5 +21,6 @@ module.exports = {
         path: path.resolve(__dirname),
         library: 'thalesUtils',
         libraryTarget: 'umd',
+        globalObject: 'this',
     },
 };

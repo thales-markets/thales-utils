@@ -1,4 +1,4 @@
-export const findOddsForTeam = (liveOddsProviders, gameWithOdds, market, teamsMap, isDrawAvailable) => {
+export const extractOddsForGamePerProvider = (liveOddsProviders, gameWithOdds, market, teamsMap, isDrawAvailable) => {
     const linesMap = new Map<any, any>();
 
     liveOddsProviders.forEach((oddsProvider) => {

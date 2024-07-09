@@ -1,4 +1,4 @@
-import { LEAGUES_NO_FORMAL_HOME_AWAY, League } from '../constants/sports';
+import { LEAGUES_NO_FORMAL_HOME_AWAY, League } from '../enums/sports';
 
 export const teamNamesMatching = (
     leagueId: number,

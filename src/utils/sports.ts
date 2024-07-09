@@ -1,6 +1,12 @@
-import { League, Sport } from '../constants/sports';
+import { LeagueMap } from '../constants/sports';
+import { League, Sport } from '../enums/sports';
 
-export const allowGame = (opticOddsScoresApiResponse, marketLeague, marketSport, constraintsMap) => {
+export const getLeagueSport = (league: number) => {
+    const leagueInfo = LeagueMap[league];
+    return leagueInfo ? leagueInfo.sport : Sport.EMPTY;
+};
+
+export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, constraintsMap) => {
     const currentScoreHome = opticOddsScoresApiResponse.score_home_total;
     const currentScoreAway = opticOddsScoresApiResponse.score_away_total;
     const currentClock = opticOddsScoresApiResponse.clock;
@@ -8,6 +14,8 @@ export const allowGame = (opticOddsScoresApiResponse, marketLeague, marketSport,
     const currentGameStatus = opticOddsScoresApiResponse.status;
     const homeTeam = opticOddsScoresApiResponse.home_team;
     const awayTeam = opticOddsScoresApiResponse.away_team;
+
+    const marketSport = getLeagueSport(marketLeague);
 
     if (currentGameStatus.toLowerCase() == 'completed') {
         console.log(`Blocking game ${homeTeam} - ${awayTeam} because it is no longer live.`);
@@ -133,6 +141,13 @@ export const allowTennisMatch = (
                 currentAwayGameScore: currentAwayGameScore,
             };
         }
+        // RETURN TRUE IF NO PLAYER HAS WON 2 SETS
+        return {
+            allow: true,
+            message: '',
+            currentHomeGameScore: currentHomeGameScore,
+            currentAwayGameScore: currentAwayGameScore,
+        };
     } else {
         if (Number(currentScoreHome) == 1 || Number(currentScoreAway) == 1) {
             switch (setInProgress) {
@@ -165,5 +180,12 @@ export const allowTennisMatch = (
                 currentAwayGameScore: currentAwayGameScore,
             };
         }
+        // RETURN TRUE IF NO PLAYER HAS STILL WON A SET
+        return {
+            allow: true,
+            message: '',
+            currentHomeGameScore: currentHomeGameScore,
+            currentAwayGameScore: currentAwayGameScore,
+        };
     }
 };
