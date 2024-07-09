@@ -1,4 +1,4 @@
-import { LEAGUES_NO_FORMAL_HOME_AWAY, Sport } from '../constants/sports';
+import { LEAGUES_NO_FORMAL_HOME_AWAY, League } from '../constants/sports';
 
 export const teamNamesMatching = (
     leagueId: number,
@@ -64,11 +64,14 @@ export const teamNamesMatching = (
 export const gamesDatesMatching = (
     marketMaturityDate: Date,
     apiStartDate: Date,
-    marketSport: string,
+    sportId: number,
     tennisDifferenceEnvVariable: number
 ) => {
     let datesMatch;
-    if (marketSport === Sport.TENNIS) {
+    if (
+        sportId.toString().startsWith(League.TENNIS_GS.toString()) ||
+        sportId.toString().startsWith(League.TENNIS_MASTERS.toString())
+    ) {
         const opticOddsTimestamp = apiStartDate.getTime();
         const marketTimestamp = marketMaturityDate.getTime();
         const differenceBetweenDates = Math.abs(marketTimestamp - opticOddsTimestamp);
