@@ -51,7 +51,13 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
     }
 
     if (marketSport === Sport.SOCCER) {
-        allowedObject = allowSoccerGame(homeTeam, awayTeam, currentClock, constraintsMap.get(Sport.SOCCER));
+        allowedObject = allowSoccerGame(
+            homeTeam,
+            awayTeam,
+            currentClock,
+            currentPeriod,
+            constraintsMap.get(Sport.SOCCER)
+        );
     }
 
     if (marketSport === Sport.TENNIS) {
@@ -79,11 +85,11 @@ export const allowGameSportWithPeriodConstraint = (homeTeam, awayTeam, currentPe
     return { allow: true, message: '' };
 };
 
-export const allowSoccerGame = (homeTeam, awayTeam, currentClock, soccerMinuteLimitForLiveTrading) => {
+export const allowSoccerGame = (homeTeam, awayTeam, currentClock, currentPeriod, soccerMinuteLimitForLiveTrading) => {
     const currentClockNumber = Number(currentClock);
     if (
         (!Number.isNaN(currentClockNumber) && currentClockNumber >= soccerMinuteLimitForLiveTrading) ||
-        (Number.isNaN(currentClockNumber) && currentClock != 'HALF')
+        (Number.isNaN(currentClockNumber) && currentPeriod != 'HALF')
     ) {
         return { allow: false, message: `Blocking game ${homeTeam} - ${awayTeam} due to clock: ${currentClock}min` };
     }
