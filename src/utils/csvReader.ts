@@ -1,4 +1,5 @@
 import csvParser from 'csv-parser';
+import fetch from 'node-fetch';
 import stream from 'stream';
 
 /**
