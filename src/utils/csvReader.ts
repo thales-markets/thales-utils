@@ -1,4 +1,3 @@
-import axios from 'axios';
 import csvParser from 'csv-parser';
 import stream from 'stream';
 
@@ -11,8 +10,8 @@ import stream from 'stream';
  */
 export const readCsvFromUrl = async (url) => {
     try {
-        const response = await axios.get(url);
-        const csvContent = response.data;
+        const response = await fetch(url);
+        const csvContent = await response.json();
 
         const csvStream = new stream.Readable();
         csvStream.push(csvContent);
