@@ -1,5 +1,4 @@
 const path = require('path');
-const { buffer } = require('stream/consumers');
 
 module.exports = {
     entry: './index.ts',
@@ -14,7 +13,6 @@ module.exports = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
-        fallback: { stream: require.resolve('stream-browserify'), buffer: require.resolve('buffer/') },
     },
     output: {
         filename: 'main.js',

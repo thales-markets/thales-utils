@@ -1,6 +1,6 @@
 {
     "name": "overtime-live-trading-utils",
-    "version": "0.0.15",
+    "version": "0.0.21",
     "description": "",
     "main": "main.js",
     "scripts": {
@@ -11,12 +11,8 @@
     "license": "MIT",
     "dependencies": {
         "@types/node": "^20.8.10",
-        "buffer": "^6.0.3",
-        "csv-parser": "^3.0.0",
-        "node-fetch": "^2.6.1",
         "oddslib": "^2.1.1",
-        "react": "^17.0.1",
-        "stream-browserify": "^3.0.0"
+        "react": "^17.0.1"
     },
     "devDependencies": {
         "ts-loader": "^9.5.0",
