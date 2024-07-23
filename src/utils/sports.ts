@@ -127,16 +127,20 @@ export const allowGameSportWithResultConstraint = (
     const currentSetsScore = { home: currentScoreHome, away: currentScoreAway };
 
     if (marketSport == Sport.VOLLEYBALL) {
-        return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 2, 20);
+        if (setInProgress == 5) {
+            return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 2, 10);
+        } else {
+            return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 2, 20);
+        }
     }
 
-    if (marketLeague.startsWith(League.TENNIS_GS) && atpGrandSlamMatch) {
+    if (marketLeague.toString().startsWith(League.TENNIS_GS) && atpGrandSlamMatch) {
         return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 2, 5);
     }
 
     if (
-        (marketLeague.startsWith(League.TENNIS_GS) && !atpGrandSlamMatch) ||
-        marketLeague.startsWith(League.TENNIS_MASTERS)
+        (marketLeague.toString().startsWith(League.TENNIS_GS) && !atpGrandSlamMatch) ||
+        marketLeague.toString().startsWith(League.TENNIS_MASTERS)
     ) {
         return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 1, 5);
     }
@@ -168,14 +172,14 @@ const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiResponse)
 
 const checkResultConstraint = (homeTeam, awayTeam, currentResultInSet, currentSetsWon, setThreshold, resultLimit) => {
     if (Number(currentSetsWon.home) == setThreshold || Number(currentSetsWon.away) == setThreshold) {
-        if (Number(currentSetsWon.home) == 2 && currentResultInSet.home >= resultLimit) {
+        if (Number(currentSetsWon.home) == setThreshold && currentResultInSet.home >= resultLimit) {
             return {
                 allow: false,
                 message: `Blocking game ${homeTeam} - ${awayTeam} due to current result: ${currentSetsWon.home} - ${currentSetsWon.away} (${currentResultInSet.home} - ${currentResultInSet.away})`,
             };
         }
 
-        if (Number(currentSetsWon.away) == 2 && currentResultInSet.away >= resultLimit) {
+        if (Number(currentSetsWon.away) == setThreshold && currentResultInSet.away >= resultLimit) {
             return {
                 allow: false,
                 message: `Blocking game ${homeTeam} - ${awayTeam} due to current result: ${currentSetsWon.home} - ${currentSetsWon.away} (${currentResultInSet.home} - ${currentResultInSet.away})`,
