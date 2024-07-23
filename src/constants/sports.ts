@@ -81,7 +81,6 @@ export const LeagueMap: Record<number, any> = {
         sport: Sport.SOCCER,
         id: League.UEFA_EL,
         isDrawAvailable: true,
-        priority: 104,
     },
     [League.FIFA_WC]: {
         sport: Sport.SOCCER,
@@ -136,7 +135,7 @@ export const LeagueMap: Record<number, any> = {
     [League.FIFA_WC_WOMEN]: {
         sport: Sport.SOCCER,
         id: League.FIFA_WC_WOMEN,
-        priority: 112,
+        isDrawAvailable: true,
     },
     [League.ENGLAND_CUP]: {
         sport: Sport.SOCCER,
@@ -288,5 +287,34 @@ export const LeagueMap: Record<number, any> = {
         sport: Sport.SOCCER,
         id: League.LIGA_MX,
         isDrawAvailable: true,
+    },
+    [League.SUMMER_OLYMPICS_SOCCER_WOMEN]: {
+        sport: Sport.SOCCER,
+        id: League.SUMMER_OLYMPICS_SOCCER_WOMEN,
+        isDrawAvailable: true,
+    },
+    [League.SUMMER_OLYMPICS_SOCCER]: {
+        sport: Sport.SOCCER,
+        id: League.SUMMER_OLYMPICS_SOCCER,
+        isDrawAvailable: true,
+    },
+    [League.SUMMER_OLYMPICS_BASKETBALL]: {
+        sport: Sport.BASKETBALL,
+        id: League.SUMMER_OLYMPICS_BASKETBALL,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_BASKETBALL_WOMEN]: {
+        sport: Sport.BASKETBALL,
+        id: League.SUMMER_OLYMPICS_BASKETBALL_WOMEN,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN]: {
+        sport: Sport.VOLLEYBALL,
+        id: League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_VOLEYBALL]: {
+        sport: Sport.VOLLEYBALL,
+        isDrawAvailable: false,
     },
 };

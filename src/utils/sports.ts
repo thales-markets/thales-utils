@@ -72,6 +72,15 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
         );
     }
 
+    if (marketSport === Sport.VOLLEYBALL) {
+        allowedObject = allowGameSportWithPeriodConstraint(
+            homeTeam,
+            awayTeam,
+            currentPeriod,
+            constraintsMap.get(Sport.VOLLEYBALL)
+        );
+    }
+
     return allowedObject;
 };
 
