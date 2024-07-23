@@ -61,23 +61,28 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
     }
 
     if (marketSport === Sport.TENNIS) {
-        allowedObject = allowTennisMatch(
+        allowedObject = allowGameSportWithResultConstraint(
             opticOddsScoresApiResponse,
             homeTeam,
             awayTeam,
             currentPeriod,
             currentScoreHome,
             currentScoreAway,
-            marketLeague
+            marketLeague,
+            marketSport
         );
     }
 
     if (marketSport === Sport.VOLLEYBALL) {
-        allowedObject = allowGameSportWithPeriodConstraint(
+        allowedObject = allowGameSportWithResultConstraint(
+            opticOddsScoresApiResponse,
             homeTeam,
             awayTeam,
             currentPeriod,
-            constraintsMap.get(Sport.VOLLEYBALL)
+            currentScoreHome,
+            currentScoreAway,
+            marketLeague,
+            marketSport
         );
     }
 
@@ -106,101 +111,87 @@ export const allowSoccerGame = (homeTeam, awayTeam, currentClock, currentPeriod,
     return { allow: true, message: '' };
 };
 
-export const allowTennisMatch = (
+export const allowGameSportWithResultConstraint = (
     opticOddsScoresApiResponse,
     homeTeam,
     awayTeam,
     currentPeriod,
     currentScoreHome,
     currentScoreAway,
-    marketLeague
+    marketLeague,
+    marketSport
 ) => {
     const setInProgress = Number(currentPeriod);
-    let currentHomeGameScore;
-    let currentAwayGameScore;
-
+    const currentResultInSet = fetchResultInCurrentSet(setInProgress, opticOddsScoresApiResponse);
     const atpGrandSlamMatch = opticOddsScoresApiResponse.league.toLowerCase() == 'atp';
-    if (marketLeague == League.TENNIS_GS && atpGrandSlamMatch) {
-        if (Number(currentScoreHome) == 2 || Number(currentScoreAway) == 2) {
-            switch (setInProgress) {
-                case 3:
-                    currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_3);
-                    currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_3);
-                    break;
-                case 4:
-                    currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_4);
-                    currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_4);
-                    break;
-                case 5:
-                    currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_5);
-                    currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_5);
-                    break;
-            }
-            if (Number(currentScoreHome) == 2 && currentHomeGameScore >= 5) {
-                return {
-                    allow: false,
-                    message: `Blocking game ${homeTeam} - ${awayTeam} due to current result: ${currentScoreHome} - ${currentScoreAway} (${currentHomeGameScore} - ${currentAwayGameScore})`,
-                };
-            }
+    const currentSetsScore = { home: currentScoreHome, away: currentScoreAway };
 
-            if (Number(currentScoreAway) == 2 && currentAwayGameScore >= 5) {
-                return {
-                    allow: false,
-                    message: `Blocking game ${homeTeam} - ${awayTeam} due to current result: ${currentScoreHome} - ${currentScoreAway} (${currentHomeGameScore} - ${currentAwayGameScore})`,
-                };
-            }
+    if (marketSport == Sport.VOLLEYBALL) {
+        return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 2, 20);
+    }
+
+    if (marketLeague.startsWith(League.TENNIS_GS) && atpGrandSlamMatch) {
+        return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 2, 5);
+    }
+
+    if (
+        (marketLeague.startsWith(League.TENNIS_GS) && !atpGrandSlamMatch) ||
+        marketLeague.startsWith(League.TENNIS_MASTERS)
+    ) {
+        return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 1, 5);
+    }
+};
+
+const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiResponse) => {
+    let currentHomeGameScore = 0;
+    let currentAwayGameScore = 0;
+    switch (currentSet) {
+        case 2:
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_2);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_2);
+            break;
+        case 3:
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_3);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_3);
+            break;
+        case 4:
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_4);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_4);
+            break;
+        case 5:
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_5);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_5);
+            break;
+    }
+    return { home: currentHomeGameScore, away: currentAwayGameScore };
+};
+
+const checkResultConstraint = (homeTeam, awayTeam, currentResultInSet, currentSetsWon, setThreshold, resultLimit) => {
+    if (Number(currentSetsWon.home) == setThreshold || Number(currentSetsWon.away) == setThreshold) {
+        if (Number(currentSetsWon.home) == 2 && currentResultInSet.home >= resultLimit) {
             return {
-                allow: true,
-                message: '',
-                currentHomeGameScore: currentHomeGameScore,
-                currentAwayGameScore: currentAwayGameScore,
+                allow: false,
+                message: `Blocking game ${homeTeam} - ${awayTeam} due to current result: ${currentSetsWon.home} - ${currentSetsWon.away} (${currentResultInSet.home} - ${currentResultInSet.away})`,
             };
         }
-        // RETURN TRUE IF NO PLAYER HAS WON 2 SETS
+
+        if (Number(currentSetsWon.away) == 2 && currentResultInSet.away >= resultLimit) {
+            return {
+                allow: false,
+                message: `Blocking game ${homeTeam} - ${awayTeam} due to current result: ${currentSetsWon.home} - ${currentSetsWon.away} (${currentResultInSet.home} - ${currentResultInSet.away})`,
+            };
+        }
         return {
             allow: true,
             message: '',
-            currentHomeGameScore: currentHomeGameScore,
-            currentAwayGameScore: currentAwayGameScore,
-        };
-    } else {
-        if (Number(currentScoreHome) == 1 || Number(currentScoreAway) == 1) {
-            switch (setInProgress) {
-                case 2:
-                    currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_2);
-                    currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_2);
-                    break;
-                case 3:
-                    currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_3);
-                    currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_3);
-                    break;
-            }
-            if (Number(currentScoreHome) == 1 && currentHomeGameScore >= 5) {
-                return {
-                    allow: false,
-                    message: `Blocking game ${homeTeam} - ${awayTeam} due to current result: ${currentScoreHome} - ${currentScoreAway} (${currentHomeGameScore} - ${currentAwayGameScore})`,
-                };
-            }
-
-            if (Number(currentScoreAway) == 1 && currentAwayGameScore >= 5) {
-                return {
-                    allow: false,
-                    message: `Blocking game ${homeTeam} - ${awayTeam} due to current result: ${currentScoreHome} - ${currentScoreAway} (${currentHomeGameScore} - ${currentAwayGameScore})`,
-                };
-            }
-            return {
-                allow: true,
-                message: '',
-                currentHomeGameScore: currentHomeGameScore,
-                currentAwayGameScore: currentAwayGameScore,
-            };
-        }
-        // RETURN TRUE IF NO PLAYER HAS STILL WON A SET
-        return {
-            allow: true,
-            message: '',
-            currentHomeGameScore: currentHomeGameScore,
-            currentAwayGameScore: currentAwayGameScore,
+            currentHomeGameScore: currentResultInSet.home,
+            currentAwayGameScore: currentResultInSet.away,
         };
     }
+    return {
+        allow: true,
+        message: '',
+        currentHomeGameScore: currentResultInSet.home,
+        currentAwayGameScore: currentResultInSet.away,
+    };
 };
