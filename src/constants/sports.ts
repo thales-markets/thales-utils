@@ -318,3 +318,10 @@ export const LeagueMap: Record<number, any> = {
         isDrawAvailable: false,
     },
 };
+
+export const VOLLEYBALL_SET_THRESHOLD = 2;
+export const VOLLEYBALL_POINTS_LIMIT = 20;
+export const VOLLEYBALL_FIFTH_SET_POINTS_LIMIT = 10;
+export const TENNIS_ATP_GRAND_SLAM_SET_THRESHOLD = 2;
+export const TENNIS_MASTERS_SET_THRESHOLD = 1;
+export const TENNIS_GEMS_LIMIT = 5;

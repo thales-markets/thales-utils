@@ -1,4 +1,12 @@
-import { LeagueMap } from '../constants/sports';
+import {
+    LeagueMap,
+    TENNIS_ATP_GRAND_SLAM_SET_THRESHOLD,
+    TENNIS_GEMS_LIMIT,
+    TENNIS_MASTERS_SET_THRESHOLD,
+    VOLLEYBALL_FIFTH_SET_POINTS_LIMIT,
+    VOLLEYBALL_POINTS_LIMIT,
+    VOLLEYBALL_SET_THRESHOLD,
+} from '../constants/sports';
 import { League, Sport } from '../enums/sports';
 
 export const getLeagueSport = (league: number) => {
@@ -128,21 +136,49 @@ export const allowGameSportWithResultConstraint = (
 
     if (marketSport == Sport.VOLLEYBALL) {
         if (setInProgress == 5) {
-            return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 2, 10);
+            return checkResultConstraint(
+                homeTeam,
+                awayTeam,
+                currentResultInSet,
+                currentSetsScore,
+                VOLLEYBALL_SET_THRESHOLD,
+                VOLLEYBALL_FIFTH_SET_POINTS_LIMIT
+            );
         } else {
-            return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 2, 20);
+            return checkResultConstraint(
+                homeTeam,
+                awayTeam,
+                currentResultInSet,
+                currentSetsScore,
+                VOLLEYBALL_SET_THRESHOLD,
+                VOLLEYBALL_POINTS_LIMIT
+            );
         }
     }
 
     if (marketLeague.toString().startsWith(League.TENNIS_GS) && atpGrandSlamMatch) {
-        return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 2, 5);
+        return checkResultConstraint(
+            homeTeam,
+            awayTeam,
+            currentResultInSet,
+            currentSetsScore,
+            TENNIS_ATP_GRAND_SLAM_SET_THRESHOLD,
+            TENNIS_GEMS_LIMIT
+        );
     }
 
     if (
         (marketLeague.toString().startsWith(League.TENNIS_GS) && !atpGrandSlamMatch) ||
         marketLeague.toString().startsWith(League.TENNIS_MASTERS)
     ) {
-        return checkResultConstraint(homeTeam, awayTeam, currentResultInSet, currentSetsScore, 1, 5);
+        return checkResultConstraint(
+            homeTeam,
+            awayTeam,
+            currentResultInSet,
+            currentSetsScore,
+            TENNIS_MASTERS_SET_THRESHOLD,
+            TENNIS_GEMS_LIMIT
+        );
     }
 };
 
