@@ -132,6 +132,16 @@ export const LeagueMap: Record<number, any> = {
         id: League.PRIMEIRA_LIGA,
         isDrawAvailable: true,
     },
+    [League.SUMMER_OLYMPICS_SOCCER_WOMEN]: {
+        sport: Sport.SOCCER,
+        id: League.SUMMER_OLYMPICS_SOCCER_WOMEN,
+        isDrawAvailable: true,
+    },
+    [League.SUMMER_OLYMPICS_SOCCER]: {
+        sport: Sport.SOCCER,
+        id: League.SUMMER_OLYMPICS_SOCCER,
+        isDrawAvailable: true,
+    },
     [League.FIFA_WC_WOMEN]: {
         sport: Sport.SOCCER,
         id: League.FIFA_WC_WOMEN,
@@ -144,6 +154,7 @@ export const LeagueMap: Record<number, any> = {
     },
     [League.FRANCE_CUP]: {
         sport: Sport.SOCCER,
+        id: League.FRANCE_CUP,
         isDrawAvailable: true,
     },
     [League.SPAIN_CUP]: {
@@ -153,6 +164,7 @@ export const LeagueMap: Record<number, any> = {
     },
     [League.ITALY_CUP]: {
         sport: Sport.SOCCER,
+        id: League.ITALY_CUP,
         isDrawAvailable: true,
     },
     [League.TENNIS_GS]: {
@@ -163,6 +175,11 @@ export const LeagueMap: Record<number, any> = {
     [League.TENNIS_MASTERS]: {
         sport: Sport.TENNIS,
         id: League.TENNIS_MASTERS,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_TENNIS]: {
+        sport: Sport.TENNIS,
+        id: League.SUMMER_OLYMPICS_TENNIS,
         isDrawAvailable: false,
     },
     [League.GERMANY_CUP]: {
@@ -185,9 +202,29 @@ export const LeagueMap: Record<number, any> = {
         id: League.FIFA_WORLD_CUP_U20,
         isDrawAvailable: true,
     },
+    [League.SUMMER_OLYMPICS_HANDBALL_WOMEN]: {
+        sport: Sport.HANDBALL,
+        id: League.SUMMER_OLYMPICS_HANDBALL_WOMEN,
+        isDrawAvailable: true,
+    },
+    [League.SUMMER_OLYMPICS_HANDBALL]: {
+        sport: Sport.HANDBALL,
+        id: League.SUMMER_OLYMPICS_HANDBALL,
+        isDrawAvailable: true,
+    },
     [League.EUROLEAGUE]: {
         sport: Sport.BASKETBALL,
         id: League.EUROLEAGUE,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_BASKETBALL]: {
+        sport: Sport.BASKETBALL,
+        id: League.SUMMER_OLYMPICS_BASKETBALL,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_BASKETBALL_WOMEN]: {
+        sport: Sport.BASKETBALL,
+        id: League.SUMMER_OLYMPICS_BASKETBALL_WOMEN,
         isDrawAvailable: false,
     },
     [League.FIBA_WORLD_CUP]: {
@@ -200,6 +237,21 @@ export const LeagueMap: Record<number, any> = {
         id: League.FORMULA1,
         isDrawAvailable: false,
     },
+    [League.SUMMER_OLYMPICS_BEACH_VOLEYBALL_WOMEN]: {
+        sport: Sport.VOLLEYBALL,
+        id: League.SUMMER_OLYMPICS_BEACH_VOLEYBALL_WOMEN,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_BEACH_VOLEYBALL]: {
+        sport: Sport.VOLLEYBALL,
+        id: League.SUMMER_OLYMPICS_BEACH_VOLEYBALL,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_TABLE_TENNIS]: {
+        sport: Sport.TABLE_TENNIS,
+        id: League.SUMMER_OLYMPICS_TABLE_TENNIS,
+        isDrawAvailable: false,
+    },
     [League.MOTOGP]: {
         sport: Sport.MOTOSPORT,
         id: League.MOTOGP,
@@ -210,10 +262,47 @@ export const LeagueMap: Record<number, any> = {
         id: League.SAUDI_PROFESSIONAL_LEAGUE,
         isDrawAvailable: true,
     },
+    [League.SUMMER_OLYMPICS_WATERPOLO]: {
+        sport: Sport.WATERPOLO,
+        id: League.SUMMER_OLYMPICS_WATERPOLO,
+        isDrawAvailable: true,
+    },
+    [League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN]: {
+        sport: Sport.VOLLEYBALL,
+        id: League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_VOLEYBALL]: {
+        sport: Sport.VOLLEYBALL,
+        id: League.SUMMER_OLYMPICS_VOLEYBALL,
+        isDrawAvailable: false,
+    },
     [League.BOXING]: {
         sport: Sport.FIGHTING,
         id: League.BOXING,
         isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_RUGBY]: {
+        sport: Sport.RUGBY,
+        id: League.SUMMER_OLYMPICS_RUGBY,
+        isDrawAvailable: true,
+    },
+    [League.SUMMER_OLYMPICS_RUGBY_WOMEN]: {
+        sport: Sport.RUGBY,
+        id: League.SUMMER_OLYMPICS_RUGBY_WOMEN,
+
+        isDrawAvailable: true,
+    },
+    [League.SUMMER_OLYMPICS_HOCKEY_WOMEN]: {
+        sport: Sport.HOCKEY,
+        id: League.SUMMER_OLYMPICS_HOCKEY_WOMEN,
+
+        isDrawAvailable: true,
+    },
+    [League.SUMMER_OLYMPICS_HOCKEY]: {
+        sport: Sport.HOCKEY,
+        id: League.SUMMER_OLYMPICS_HOCKEY,
+        isDrawAvailable: true,
     },
     [League.UEFA_NATIONS_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -233,6 +322,16 @@ export const LeagueMap: Record<number, any> = {
     [League.DOTA2]: {
         sport: Sport.ESPORTS,
         id: League.DOTA2,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_BASKETBALL_3X3]: {
+        sport: Sport.BASKETBALL,
+        id: League.SUMMER_OLYMPICS_BASKETBALL_3X3,
+        isDrawAvailable: false,
+    },
+    [League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN]: {
+        sport: Sport.BASKETBALL,
+        id: League.SUMMER_OLYMPICS_BASKETBALL_3X3_WOMEN,
         isDrawAvailable: false,
     },
     [League.SUMMER_OLYMPICS_QUALIFICATION]: {
@@ -257,6 +356,7 @@ export const LeagueMap: Record<number, any> = {
     },
     [League.NON_TITLE_BOXING]: {
         sport: Sport.FIGHTING,
+        id: League.NON_TITLE_BOXING,
         isDrawAvailable: false,
     },
     [League.UEFA_CHAMPIONS_LEAGUE_QUALIFICATION]: {
@@ -271,6 +371,7 @@ export const LeagueMap: Record<number, any> = {
     },
     [League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION]: {
         sport: Sport.SOCCER,
+        id: League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION,
         isDrawAvailable: true,
     },
     [League.GOLF_H2H]: {
@@ -287,35 +388,6 @@ export const LeagueMap: Record<number, any> = {
         sport: Sport.SOCCER,
         id: League.LIGA_MX,
         isDrawAvailable: true,
-    },
-    [League.SUMMER_OLYMPICS_SOCCER_WOMEN]: {
-        sport: Sport.SOCCER,
-        id: League.SUMMER_OLYMPICS_SOCCER_WOMEN,
-        isDrawAvailable: true,
-    },
-    [League.SUMMER_OLYMPICS_SOCCER]: {
-        sport: Sport.SOCCER,
-        id: League.SUMMER_OLYMPICS_SOCCER,
-        isDrawAvailable: true,
-    },
-    [League.SUMMER_OLYMPICS_BASKETBALL]: {
-        sport: Sport.BASKETBALL,
-        id: League.SUMMER_OLYMPICS_BASKETBALL,
-        isDrawAvailable: false,
-    },
-    [League.SUMMER_OLYMPICS_BASKETBALL_WOMEN]: {
-        sport: Sport.BASKETBALL,
-        id: League.SUMMER_OLYMPICS_BASKETBALL_WOMEN,
-        isDrawAvailable: false,
-    },
-    [League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN]: {
-        sport: Sport.VOLLEYBALL,
-        id: League.SUMMER_OLYMPICS_VOLEYBALL_WOMEN,
-        isDrawAvailable: false,
-    },
-    [League.SUMMER_OLYMPICS_VOLEYBALL]: {
-        sport: Sport.VOLLEYBALL,
-        isDrawAvailable: false,
     },
 };
 

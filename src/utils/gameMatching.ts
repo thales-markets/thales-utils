@@ -1,4 +1,5 @@
-import { LEAGUES_NO_FORMAL_HOME_AWAY, League } from '../enums/sports';
+import { LEAGUES_NO_FORMAL_HOME_AWAY, Sport } from '../enums/sports';
+import { getLeagueSport } from './sports';
 
 export const teamNamesMatching = (
     leagueId: number,
@@ -68,10 +69,8 @@ export const gamesDatesMatching = (
     tennisDifferenceEnvVariable: number
 ) => {
     let datesMatch;
-    if (
-        sportId.toString().startsWith(League.TENNIS_GS.toString()) ||
-        sportId.toString().startsWith(League.TENNIS_MASTERS.toString())
-    ) {
+    const marketSport = getLeagueSport(sportId);
+    if (marketSport == Sport.TENNIS) {
         const opticOddsTimestamp = apiStartDate.getTime();
         const marketTimestamp = marketMaturityDate.getTime();
         const differenceBetweenDates = Math.abs(marketTimestamp - opticOddsTimestamp);
