@@ -180,6 +180,11 @@ export const allowGameSportWithResultConstraint = (
             TENNIS_GEMS_LIMIT
         );
     }
+
+    return {
+        allow: true,
+        message: `The sport ${marketLeague} does not have result constraint`,
+    };
 };
 
 const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiResponse) => {
