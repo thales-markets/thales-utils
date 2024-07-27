@@ -26,8 +26,10 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
     const marketSport = getLeagueSport(marketLeague);
 
     if (currentGameStatus.toLowerCase() == 'completed') {
-        console.log(`Blocking game ${homeTeam} - ${awayTeam} because it is no longer live.`);
-        return null;
+        return {
+            allow: false,
+            message: `Blocking game ${homeTeam} - ${awayTeam} because it is no longer live.`,
+        };
     }
 
     let allowedObject;
