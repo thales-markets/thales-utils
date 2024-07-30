@@ -14,6 +14,16 @@ export const getLeagueSport = (league: number) => {
     return leagueInfo ? leagueInfo.sport : Sport.EMPTY;
 };
 
+export const getLeagueSpreadType = (league: number) => {
+    const leagueInfo = LeagueMap[league];
+    return leagueInfo ? leagueInfo.spread : undefined;
+};
+
+export const getLeagueTotalType = (league: number) => {
+    const leagueInfo = LeagueMap[league];
+    return leagueInfo ? leagueInfo.total : undefined;
+};
+
 export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, constraintsMap) => {
     const currentScoreHome = opticOddsScoresApiResponse.score_home_total;
     const currentScoreAway = opticOddsScoresApiResponse.score_away_total;
