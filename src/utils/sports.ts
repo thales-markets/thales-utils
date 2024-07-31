@@ -32,7 +32,7 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
     const currentGameStatus = opticOddsScoresApiResponse.status;
     const homeTeam = opticOddsScoresApiResponse.home_team;
     const awayTeam = opticOddsScoresApiResponse.away_team;
-
+    const currentPeriodNumber = parseInt(currentPeriod);
     const marketSport = getLeagueSport(marketLeague);
 
     if (currentGameStatus.toLowerCase() == 'completed') {
@@ -47,7 +47,7 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
         allowedObject = allowGameSportWithPeriodConstraint(
             homeTeam,
             awayTeam,
-            currentPeriod,
+            currentPeriodNumber,
             constraintsMap.get(Sport.BASKETBALL)
         );
     }
@@ -56,7 +56,7 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
         allowedObject = allowGameSportWithPeriodConstraint(
             homeTeam,
             awayTeam,
-            currentPeriod,
+            currentPeriodNumber,
             constraintsMap.get(Sport.HOCKEY)
         );
     }
@@ -65,7 +65,7 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
         allowedObject = allowGameSportWithPeriodConstraint(
             homeTeam,
             awayTeam,
-            currentPeriod,
+            currentPeriodNumber,
             constraintsMap.get(Sport.BASEBALL)
         );
     }
@@ -98,7 +98,7 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
             opticOddsScoresApiResponse,
             homeTeam,
             awayTeam,
-            currentPeriod,
+            currentPeriodNumber,
             currentScoreHome,
             currentScoreAway,
             marketLeague,
@@ -110,7 +110,7 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
 };
 
 export const allowGameSportWithPeriodConstraint = (homeTeam, awayTeam, currentPeriod, periodLimitForLiveTrade) => {
-    if (Number(currentPeriod) >= periodLimitForLiveTrade) {
+    if (!Number.isNaN(currentPeriod) && currentPeriod >= periodLimitForLiveTrade) {
         return {
             allow: false,
             message: `Blocking game ${homeTeam} - ${awayTeam} due to period: ${currentPeriod}. period`,
