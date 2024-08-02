@@ -186,7 +186,7 @@ export const allowGameSportWithResultConstraint = (
     };
 };
 
-const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiResponse) => {
+export const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiResponse) => {
     let currentHomeGameScore = 0;
     let currentAwayGameScore = 0;
     switch (currentSet) {
