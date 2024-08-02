@@ -190,6 +190,10 @@ export const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiRe
     let currentHomeGameScore = 0;
     let currentAwayGameScore = 0;
     switch (currentSet) {
+        case 1:
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_1);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_1);
+            break;
         case 2:
             currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_2);
             currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_2);
