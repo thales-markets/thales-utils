@@ -42,9 +42,8 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
         };
     }
 
-    let allowedObject;
     if (marketSport === Sport.BASKETBALL) {
-        allowedObject = allowGameSportWithPeriodConstraint(
+        return allowGameSportWithPeriodConstraint(
             homeTeam,
             awayTeam,
             currentPeriodNumber,
@@ -53,7 +52,7 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
     }
 
     if (marketSport === Sport.HOCKEY) {
-        allowedObject = allowGameSportWithPeriodConstraint(
+        return allowGameSportWithPeriodConstraint(
             homeTeam,
             awayTeam,
             currentPeriodNumber,
@@ -62,7 +61,7 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
     }
 
     if (marketSport === Sport.BASEBALL) {
-        allowedObject = allowGameSportWithPeriodConstraint(
+        return allowGameSportWithPeriodConstraint(
             homeTeam,
             awayTeam,
             currentPeriodNumber,
@@ -71,17 +70,11 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
     }
 
     if (marketSport === Sport.SOCCER) {
-        allowedObject = allowSoccerGame(
-            homeTeam,
-            awayTeam,
-            currentClock,
-            currentPeriod,
-            constraintsMap.get(Sport.SOCCER)
-        );
+        return allowSoccerGame(homeTeam, awayTeam, currentClock, currentPeriod, constraintsMap.get(Sport.SOCCER));
     }
 
     if (marketSport === Sport.TENNIS) {
-        allowedObject = allowGameSportWithResultConstraint(
+        return allowGameSportWithResultConstraint(
             opticOddsScoresApiResponse,
             homeTeam,
             awayTeam,
@@ -94,7 +87,7 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
     }
 
     if (marketSport === Sport.VOLLEYBALL) {
-        allowedObject = allowGameSportWithResultConstraint(
+        return allowGameSportWithResultConstraint(
             opticOddsScoresApiResponse,
             homeTeam,
             awayTeam,
@@ -106,7 +99,10 @@ export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague, co
         );
     }
 
-    return allowedObject;
+    return {
+        allow: true,
+        message: `The sport ${marketLeague} does not have constraint`,
+    };
 };
 
 export const allowGameSportWithPeriodConstraint = (homeTeam, awayTeam, currentPeriod, periodLimitForLiveTrade) => {
@@ -200,10 +196,14 @@ export const allowGameSportWithResultConstraint = (
     };
 };
 
-const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiResponse) => {
+export const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiResponse) => {
     let currentHomeGameScore = 0;
     let currentAwayGameScore = 0;
     switch (currentSet) {
+        case 1:
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_1);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_1);
+            break;
         case 2:
             currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_2);
             currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_2);
