@@ -162,6 +162,7 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
     console.log('Filtering odds by market name: ' + marketName);
     liveOddsProviders.forEach((oddsProvider) => {
         let homeOdds = 0;
+        console.log(oddsArray);
         const homeTeamOddsObject = oddsArray.filter(
             (odd) =>
                 odd.market_name.toLowerCase() === marketName.toLowerCase() &&
@@ -232,6 +233,9 @@ export const getParentOdds = (
 
     const commonData = { homeTeam: oddsApiObject.home_team, awayTeam: oddsApiObject.away_team };
 
+    
+    console.log(isTwoPositionalSport)
+    console.log(oddsApiObject.odds)
     // EXTRACTING ODDS FROM THE RESPONSE PER MARKET NAME AND BOOKMAKER
     const moneylineOddsMap = filterOddsByMarketNameTeamNameBookmaker(
         oddsApiObject.odds,
