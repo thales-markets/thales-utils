@@ -374,6 +374,26 @@ export const LeagueMap: Record<number, any> = {
         id: League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION,
         isDrawAvailable: true,
     },
+    [League.US_ELECTION]: {
+        sport: Sport.POLITICS,
+        id: League.US_ELECTION,
+        isDrawAvailable: false,
+    },
+    [League.UEFA_SUPER_CUP]: {
+        sport: Sport.SOCCER,
+        id: League.UEFA_SUPER_CUP,
+        isDrawAvailable: true,
+    },
+    [League.BRAZIL_CUP]: {
+        sport: Sport.SOCCER,
+        id: League.BRAZIL_CUP,
+        isDrawAvailable: true,
+    },
+    [League.ENGLAND_CHAMPIONSHIP]: {
+        sport: Sport.SOCCER,
+        id: League.ENGLAND_CHAMPIONSHIP,
+        isDrawAvailable: true,
+    },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
         id: League.GOLF_H2H,
