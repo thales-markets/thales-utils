@@ -9,7 +9,6 @@ export const getDefaultDecimalsForNetwork = (networkId: NetworkId) => {
             NetworkId.Arbitrum,
             NetworkId.PolygonMainnet,
             NetworkId.Base,
-            NetworkId.ZkSync,
             NetworkId.OptimismSepolia,
             NetworkId.OptimismMainnet,
         ].includes(networkId)
