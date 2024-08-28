@@ -141,6 +141,7 @@ const createSpreadChildMarkets = (
         awayTeam: apiResponseWithOdds.away_team,
     };
     if (spreadType) {
+        // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
         const allSpreadOdds = filterOddsByMarketNameBookmaker(
             apiResponseWithOdds.odds,
             spreadType,
@@ -192,6 +193,7 @@ export const createTotalChildMarkets = (
     };
 
     if (totalType) {
+        // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
         const totalOdds = filterOddsByMarketNameBookmaker(apiResponseWithOdds.odds, totalType, liveOddsProviders[0]);
 
         if (totalOdds.length > 0) {
