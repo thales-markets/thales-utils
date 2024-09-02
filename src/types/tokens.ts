@@ -5,7 +5,6 @@ export type Coins =
     | 'USDbC'
     | 'USDC'
     | 'USDT'
-    | 'BUSD'
     | 'OP'
     | 'WETH'
     | 'ETH'
