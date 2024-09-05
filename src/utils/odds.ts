@@ -165,6 +165,7 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
         console.log(oddsArray);
         const homeTeamOddsObject = oddsArray.filter(
             (odd) =>
+                odd &&
                 odd.market_name.toLowerCase() === marketName.toLowerCase() &&
                 odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
                 odd.selection.toLowerCase() == commonData.homeTeam.toLowerCase()
@@ -176,6 +177,7 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
         let awayOdds = 0;
         const awayTeamOddsObject = oddsArray.filter(
             (odd) =>
+                odd &&
                 odd.market_name.toLowerCase() === marketName.toLowerCase() &&
                 odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
                 odd.selection.toLowerCase() == commonData.awayTeam.toLowerCase()
@@ -189,6 +191,7 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
         if (!isTwoPositionalSport) {
             const drawOddsObject = oddsArray.filter(
                 (odd) =>
+                    odd &&
                     odd.market_name.toLowerCase() === marketName.toLowerCase() &&
                     odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
                     odd.selection.toLowerCase() == DRAW.toLowerCase()
@@ -242,6 +245,8 @@ export const getParentOdds = (
         isTwoPositionalSport
     );
 
+    console.log('odds filterOddsByMarketNameTeamNameBookmaker');
+
     // CHECKING AND COMPARING ODDS FOR THE GIVEN BOOKMAKERS
     const oddsList = checkOddsFromBookmakers(
         moneylineOddsMap,
@@ -250,6 +255,8 @@ export const getParentOdds = (
         maxPercentageDiffBetwenOdds,
         MIN_ODDS_FOR_DIFF_CHECKING
     );
+
+    console.log('odds checkOddsFromBookmakers');
 
     const isThere100PercentOdd = oddsList.some(
         (oddsObject) => oddsObject.homeOdds == 1 || oddsObject.awayOdds == 1 || oddsObject.drawOdds == 1
