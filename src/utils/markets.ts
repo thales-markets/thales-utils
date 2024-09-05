@@ -42,25 +42,28 @@ export const processMarket = (
     const isZeroParentOdds =
         moneylineOdds[0] == ZERO || moneylineOdds[1] == ZERO || (isDrawAvailable && moneylineOdds[2] == ZERO);
 
-    market.odds = market.odds.map((_odd, index) => {
-        let positionOdds;
-        switch (index) {
-            case 0:
-                positionOdds = moneylineOdds[0];
-                break;
-            case 1:
-                positionOdds = moneylineOdds[1];
-                break;
-            case 2:
-                positionOdds = moneylineOdds[2];
-                break;
-        }
-        return {
-            american: oddslib.from('impliedProbability', positionOdds).to('moneyline'),
-            decimal: oddslib.from('impliedProbability', positionOdds).to('decimal'),
-            normalizedImplied: positionOdds,
-        };
-    });
+    if (market.odds.length > 0) {
+        market.odds = market.odds.map((_odd, index) => {
+            let positionOdds;
+            console.log('odd: ', _odd, 'index: ', index);
+            switch (index) {
+                case 0:
+                    positionOdds = moneylineOdds[0];
+                    break;
+                case 1:
+                    positionOdds = moneylineOdds[1];
+                    break;
+                case 2:
+                    positionOdds = moneylineOdds[2];
+                    break;
+            }
+            return {
+                american: oddslib.from('impliedProbability', _odd.normalizedImplied).to('moneyline'),
+                decimal: oddslib.from('impliedProbability', _odd.normalizedImplied).to('decimal'),
+                normalizedImplied: _odd.normalizedImplied,
+            };
+        });
+    }
 
     console.log('FETCHING CHILD ODDS:');
     const childMarkets = isZeroParentOdds

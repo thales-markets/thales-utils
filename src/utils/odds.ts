@@ -129,14 +129,14 @@ const getOddsFromTo = (from, to, input) => {
 const extractMoneylineOdds = (moneylineOdds, commonData, isTwoWay) => {
     if (isTwoWay) {
         return [
-            convertOddsToImpl(moneylineOdds.find((odd) => odd.selection === commonData.homeTeam)?.price || 0),
-            convertOddsToImpl(moneylineOdds.find((odd) => odd.selection === commonData.awayTeam)?.price || 0),
+            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === commonData.homeTeam)?.price || 0),
+            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === commonData.awayTeam)?.price || 0),
         ];
     } else {
         return [
-            convertOddsToImpl(moneylineOdds.find((odd) => odd.selection === commonData.homeTeam)?.price || 0),
-            convertOddsToImpl(moneylineOdds.find((odd) => odd.selection === commonData.awayTeam)?.price || 0),
-            convertOddsToImpl(moneylineOdds.find((odd) => odd.selection === DRAW)?.price || 0),
+            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === commonData.homeTeam)?.price || 0),
+            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === commonData.awayTeam)?.price || 0),
+            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === DRAW)?.price || 0),
         ];
     }
 };
@@ -271,9 +271,15 @@ export const getParentOdds = (
     }
     const primaryBookmakerOdds = [oddsList[0].homeOdds, oddsList[0].awayOdds, oddsList[0].drawOdds];
 
+    console.log('primaryBookmakerOdds: ', primaryBookmakerOdds);
+
     let parentOdds = extractMoneylineOdds(primaryBookmakerOdds, commonData, isTwoPositionalSport);
 
+    console.log('primaryBookmakerOdds -> parentOdds: ', parentOdds);
+
     const spreadData = getSpreadData(sportSpreadData, sportId, LIVE_TYPE_ID_BASE, defaultSpreadForLiveMarkets);
+
+    console.log('spreadData: ', spreadData);
 
     if (spreadData !== null) {
         parentOdds = adjustSpreadOnOdds(parentOdds, spreadData.minSpread, spreadData.targetSpread);
@@ -321,7 +327,7 @@ export const formatSpreadOdds = (
     typeId,
     defaultSpreadForLiveMarkets
 ) => {
-    const validSpreadOdds = spreadOdds.filter((odd) => Math.abs(odd.selection_points % 1) === 0.5);
+    const validSpreadOdds = spreadOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5);
 
     const formattedSpreadOdds = groupAndFormatSpreadOdds(validSpreadOdds, commonData);
 
@@ -485,7 +491,7 @@ export const processTotalOdds = (
     defaultSpreadForLiveMarkets
 ) => {
     const childMarkets = [];
-    const validTotalOdds = totalOdds.filter((odd) => Math.abs(odd.selection_points % 1) === 0.5);
+    const validTotalOdds = totalOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5);
     const groupedOdds = groupOddsBySelectionAndPoints(validTotalOdds);
     const iterableGroupedOdds = Object.entries(groupedOdds) as any;
 
@@ -580,15 +586,18 @@ export const processTotalOdds = (
  */
 export const groupOddsBySelectionAndPoints = (oddsArray) => {
     return oddsArray.reduce((acc, odd) => {
-        const key = `${odd.selection}_${odd.selection_points}`;
-        if (!acc[key]) {
-            acc[key] = { over: null, under: null };
+        if (odd) {
+            const key = `${odd.selection}_${odd.selection_points}`;
+            if (!acc[key]) {
+                acc[key] = { over: null, under: null };
+            }
+            if (odd.selection_line === 'over') {
+                acc[key].over = odd.price;
+            } else if (odd.selection_line === 'under') {
+                acc[key].under = odd.price;
+            }
         }
-        if (odd.selection_line === 'over') {
-            acc[key].over = odd.price;
-        } else if (odd.selection_line === 'under') {
-            acc[key].under = odd.price;
-        }
+
         return acc;
     }, {});
 };
