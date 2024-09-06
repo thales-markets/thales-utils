@@ -1,9 +1,9 @@
 import * as oddslib from 'oddslib';
 import { DRAW, LIVE_TYPE_ID_BASE, MIN_ODDS_FOR_DIFF_CHECKING, MULTIPLIER_100, ZERO } from '../constants/common';
-import { MONEYLINE } from '../constants/constantsOpticodds';
 import { statusCodes } from '../enums/statuses';
 import { checkOddsFromBookmakers } from './bookmakers';
 import { adjustSpreadOnOdds, getSpreadData } from './spread';
+import { LeagueMap } from '../constants/sports';
 
 // TODO DEPRECATE FUNCTION
 export const extractOddsForGamePerProvider = (liveOddsProviders, gameWithOdds, market, teamsMap, isDrawAvailable) => {
@@ -167,8 +167,7 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
             (odd) =>
                 odd &&
                 odd.market_name.toLowerCase() === marketName.toLowerCase() &&
-                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
-                odd.selection.toLowerCase() == commonData.homeTeam.toLowerCase()
+                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
         );
 
         if (homeTeamOddsObject != undefined) {
@@ -179,8 +178,7 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
             (odd) =>
                 odd &&
                 odd.market_name.toLowerCase() === marketName.toLowerCase() &&
-                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
-                odd.selection.toLowerCase() == commonData.awayTeam.toLowerCase()
+                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
         );
 
         if (awayTeamOddsObject != undefined) {
@@ -193,8 +191,7 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
                 (odd) =>
                     odd &&
                     odd.market_name.toLowerCase() === marketName.toLowerCase() &&
-                    odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
-                    odd.selection.toLowerCase() == DRAW.toLowerCase()
+                    odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
             );
 
             if (drawOddsObject != undefined) {
@@ -239,7 +236,7 @@ export const getParentOdds = (
     // EXTRACTING ODDS FROM THE RESPONSE PER MARKET NAME AND BOOKMAKER
     const moneylineOddsMap = filterOddsByMarketNameTeamNameBookmaker(
         oddsApiObject.odds,
-        MONEYLINE,
+        LeagueMap[sportId].spread,
         liveOddsProviders,
         commonData,
         isTwoPositionalSport
