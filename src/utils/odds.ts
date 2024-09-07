@@ -3,7 +3,7 @@ import { DRAW, LIVE_TYPE_ID_BASE, MIN_ODDS_FOR_DIFF_CHECKING, MULTIPLIER_100, ZE
 import { statusCodes } from '../enums/statuses';
 import { checkOddsFromBookmakers } from './bookmakers';
 import { adjustSpreadOnOdds, getSpreadData } from './spread';
-import { LeagueMap } from '../constants/sports';
+import { MONEYLINE } from '../constants/constantsOpticodds';
 
 // TODO DEPRECATE FUNCTION
 export const extractOddsForGamePerProvider = (liveOddsProviders, gameWithOdds, market, teamsMap, isDrawAvailable) => {
@@ -119,29 +119,6 @@ const getOddsFromTo = (from, to, input) => {
 };
 
 /**
- * Extracts the period moneyline odds based on the given parameters.
- *
- * @param {Array} moneylineOdds - The odds array for the moneyline.
- * @param {Object} commonData - The common data object.
- * @param {boolean} isTwoWay - Indicates if the market is a two-way market.
- * @returns {Array} The extracted odds.
- */
-const extractMoneylineOdds = (moneylineOdds, commonData, isTwoWay) => {
-    if (isTwoWay) {
-        return [
-            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === commonData.homeTeam)?.price || 0),
-            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === commonData.awayTeam)?.price || 0),
-        ];
-    } else {
-        return [
-            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === commonData.homeTeam)?.price || 0),
-            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === commonData.awayTeam)?.price || 0),
-            convertOddsToImpl(moneylineOdds.find((odd) => odd && odd.selection === DRAW)?.price || 0),
-        ];
-    }
-};
-
-/**
  * Filters the odds array to find entries matching the specified market name and bookmaker.
  *
  * @param {Array} oddsArray - The array of odds objects.
@@ -159,30 +136,42 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
     isTwoPositionalSport
 ) => {
     const linesMap = new Map<any, any>();
-    console.log('Filtering odds by market name: ' + marketName);
+    console.log('########## FILTER ODDS START ##########');
+    console.log('oddsArray: ' + oddsArray);
+    console.log('marketName: ' + marketName);
+    console.log('liveOddsProviders: ' + liveOddsProviders);
+    console.log('isTwoPositionalSport: ' + isTwoPositionalSport);
+    console.log('########## FILTER ODDS END ##########');
     liveOddsProviders.forEach((oddsProvider) => {
+        console.log('oddsProvider: ', oddsProvider);
         let homeOdds = 0;
-        console.log(oddsArray);
-        const homeTeamOddsObject = oddsArray.filter(
-            (odd) =>
+        const homeTeamOddsObject = oddsArray.filter((odd) => {
+            console.log('oddd: ', odd);
+            return (
                 odd &&
                 odd.market_name.toLowerCase() === marketName.toLowerCase() &&
-                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
-        );
-
-        if (homeTeamOddsObject != undefined) {
-            homeOdds = homeTeamOddsObject.price;
+                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
+                odd.selection.toLowerCase() === commonData.homeTeam.toLowerCase()
+            );
+        });
+        console.log('homeTeamOddsObject: ' + homeTeamOddsObject);
+        if (homeTeamOddsObject.length !== 0) {
+            homeOdds = homeTeamOddsObject[0].price;
         }
+
         let awayOdds = 0;
         const awayTeamOddsObject = oddsArray.filter(
             (odd) =>
                 odd &&
                 odd.market_name.toLowerCase() === marketName.toLowerCase() &&
-                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
+                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
+                odd.selection.toLowerCase() === commonData.awayTeam.toLowerCase()
         );
 
-        if (awayTeamOddsObject != undefined) {
-            awayOdds = awayTeamOddsObject.price;
+        console.log('awayTeamOddsObject: ' + awayTeamOddsObject);
+
+        if (awayTeamOddsObject.length !== 0) {
+            awayOdds = awayTeamOddsObject[0].price;
         }
 
         let drawOdds = 0;
@@ -191,11 +180,14 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
                 (odd) =>
                     odd &&
                     odd.market_name.toLowerCase() === marketName.toLowerCase() &&
-                    odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
+                    odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
+                    odd.selection.toLowerCase() === DRAW.toLowerCase()
             );
 
-            if (drawOddsObject != undefined) {
-                drawOdds = drawOddsObject.price;
+            console.log('drawOddsObject: ' + drawOddsObject);
+
+            if (drawOddsObject.length !== 0) {
+                drawOdds = drawOddsObject[0].price;
             }
         }
 
@@ -236,13 +228,13 @@ export const getParentOdds = (
     // EXTRACTING ODDS FROM THE RESPONSE PER MARKET NAME AND BOOKMAKER
     const moneylineOddsMap = filterOddsByMarketNameTeamNameBookmaker(
         oddsApiObject.odds,
-        LeagueMap[sportId].spread,
+        MONEYLINE,
         liveOddsProviders,
         commonData,
         isTwoPositionalSport
     );
 
-    console.log('odds filterOddsByMarketNameTeamNameBookmaker');
+    console.log('moneylineOddsMap: ', moneylineOddsMap);
 
     // CHECKING AND COMPARING ODDS FOR THE GIVEN BOOKMAKERS
     const oddsList = checkOddsFromBookmakers(
@@ -253,7 +245,7 @@ export const getParentOdds = (
         MIN_ODDS_FOR_DIFF_CHECKING
     );
 
-    console.log('odds checkOddsFromBookmakers');
+    console.log('oddsList: ', oddsList);
 
     const isThere100PercentOdd = oddsList.some(
         (oddsObject) => oddsObject.homeOdds == 1 || oddsObject.awayOdds == 1 || oddsObject.drawOdds == 1
@@ -270,7 +262,7 @@ export const getParentOdds = (
 
     console.log('primaryBookmakerOdds: ', primaryBookmakerOdds);
 
-    let parentOdds = extractMoneylineOdds(primaryBookmakerOdds, commonData, isTwoPositionalSport);
+    let parentOdds = primaryBookmakerOdds.map((odd) => convertOddsToImpl(odd));
 
     console.log('primaryBookmakerOdds -> parentOdds: ', parentOdds);
 

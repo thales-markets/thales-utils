@@ -24,6 +24,13 @@ export const checkOddsFromBookmakers = (
     maxImpliedPercentageDifference: number,
     minOddsForDiffChecking: number
 ) => {
+    console.log('########## CHECK ODDS START ##########');
+    console.log('oddsMap: ' + oddsMap);
+    console.log('arrayOfBookmakers: ' + arrayOfBookmakers);
+    console.log('isTwoPositionalSport: ' + isTwoPositionalSport);
+    console.log('maxImpliedPercentageDifference: ' + maxImpliedPercentageDifference);
+    console.log('minOddsForDiffChecking: ' + minOddsForDiffChecking);
+    console.log('########## CHECK ODDS END ##########');
     // Check if any bookmaker has odds of 0 or 0.0001
     const hasZeroOrOne = arrayOfBookmakers.some((bookmakerId) => {
         const line = oddsMap.get(bookmakerId);

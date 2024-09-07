@@ -45,7 +45,6 @@ export const processMarket = (
     if (market.odds.length > 0) {
         market.odds = market.odds.map((_odd, index) => {
             let positionOdds;
-            console.log('odd: ', _odd, 'index: ', index);
             switch (index) {
                 case 0:
                     positionOdds = moneylineOdds[0];
