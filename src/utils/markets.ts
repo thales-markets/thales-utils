@@ -57,9 +57,9 @@ export const processMarket = (
                     break;
             }
             return {
-                american: oddslib.from('impliedProbability', _odd.normalizedImplied).to('moneyline'),
-                decimal: oddslib.from('impliedProbability', _odd.normalizedImplied).to('decimal'),
-                normalizedImplied: _odd.normalizedImplied,
+                american: oddslib.from('impliedProbability', positionOdds).to('moneyline'),
+                decimal: oddslib.from('impliedProbability', positionOdds).to('decimal'),
+                normalizedImplied: positionOdds,
             };
         });
     }
