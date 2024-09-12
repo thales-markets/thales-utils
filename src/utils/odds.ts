@@ -389,12 +389,8 @@ export const formatSpreadOdds = (
             // }
 
             return {
-                gameId: market.gameId,
-                sportId: market.sportId,
+                ...market,
                 typeId: typeId,
-                maturity: market.maturity,
-                homeTeam: market.homeTeam,
-                awayTeam: market.awayTeam,
                 results: [],
                 status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
                 line: line * MULTIPLIER_100,
@@ -549,12 +545,8 @@ export const processTotalOdds = (
         // }
 
         const childMarket = {
-            gameId: market.gameId,
-            sportId: market.sportId,
+            ...market,
             typeId: typeId,
-            maturity: market.maturity,
-            homeTeam: market.homeTeam,
-            awayTeam: market.awayTeam,
             results: [],
             status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
             line: parseFloat(selection_points) * MULTIPLIER_100,
