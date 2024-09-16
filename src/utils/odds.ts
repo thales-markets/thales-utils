@@ -221,8 +221,6 @@ export const getParentOdds = (
     defaultSpreadForLiveMarkets,
     maxPercentageDiffBetwenOdds
 ) => {
-    console.log('Calculating parent odds');
-
     const commonData = { homeTeam: oddsApiObject.home_team, awayTeam: oddsApiObject.away_team };
 
     // EXTRACTING ODDS FROM THE RESPONSE PER MARKET NAME AND BOOKMAKER
@@ -234,8 +232,6 @@ export const getParentOdds = (
         isTwoPositionalSport
     );
 
-    console.log('moneylineOddsMap: ', moneylineOddsMap);
-
     // CHECKING AND COMPARING ODDS FOR THE GIVEN BOOKMAKERS
     const oddsList = checkOddsFromBookmakers(
         moneylineOddsMap,
@@ -244,8 +240,6 @@ export const getParentOdds = (
         maxPercentageDiffBetwenOdds,
         MIN_ODDS_FOR_DIFF_CHECKING
     );
-
-    console.log('oddsList: ', oddsList);
 
     const isThere100PercentOdd = oddsList.some(
         (oddsObject) => oddsObject.homeOdds == 1 || oddsObject.awayOdds == 1 || oddsObject.drawOdds == 1
@@ -260,15 +254,8 @@ export const getParentOdds = (
     }
     const primaryBookmakerOdds = [oddsList[0].homeOdds, oddsList[0].awayOdds, oddsList[0].drawOdds];
 
-    console.log('primaryBookmakerOdds: ', primaryBookmakerOdds);
-
     let parentOdds = primaryBookmakerOdds.map((odd) => convertOddsToImpl(odd));
-
-    console.log('primaryBookmakerOdds -> parentOdds: ', parentOdds);
-
     const spreadData = getSpreadData(sportSpreadData, sportId, LIVE_TYPE_ID_BASE, defaultSpreadForLiveMarkets);
-
-    console.log('spreadData: ', spreadData);
 
     if (spreadData !== null) {
         parentOdds = adjustSpreadOnOdds(parentOdds, spreadData.minSpread, spreadData.targetSpread);
@@ -276,8 +263,6 @@ export const getParentOdds = (
         // Use min spread by sport if available, otherwise use default min spread
         parentOdds = adjustSpreadOnOdds(parentOdds, defaultSpreadForLiveMarkets, 0);
     }
-
-    console.log('Parent odds calculated and adjusted for spread: ' + JSON.stringify(parentOdds));
     return parentOdds;
 };
 
@@ -311,7 +296,7 @@ export const filterOddsByMarketNameBookmaker = (oddsArray, marketName, oddsProvi
 export const formatSpreadOdds = (
     spreadOdds,
     commonData,
-    market,
+    leagueId,
     spreadDataForSport,
     typeId,
     defaultSpreadForLiveMarkets
@@ -334,7 +319,7 @@ export const formatSpreadOdds = (
             if (!isZeroOddsChild) {
                 const spreadData = getSpreadData(
                     spreadDataForSport,
-                    market.leagueId,
+                    leagueId,
                     // TODO SREDITI TYPEID KOJI TREBA DA BUDE
                     typeId,
                     defaultSpreadForLiveMarkets
@@ -389,7 +374,7 @@ export const formatSpreadOdds = (
             // }
 
             return {
-                ...market,
+                leagueId,
                 typeId: typeId,
                 results: [],
                 status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
@@ -467,14 +452,7 @@ export const cutOddsCloseToValue = (oddsArray, threshold = 0.952) => {
  * @param {Number} defaultSpreadForLiveMarkets - Default spread for live markets,
  * @returns {Array} The processed total odds market objects.
  */
-export const processTotalOdds = (
-    totalOdds,
-    commonData,
-    market,
-    spreadDataForSport,
-    typeId,
-    defaultSpreadForLiveMarkets
-) => {
+export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId, defaultSpreadForLiveMarkets) => {
     const childMarkets = [];
     const validTotalOdds = totalOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5);
     const groupedOdds = groupOddsBySelectionAndPoints(validTotalOdds);
@@ -492,7 +470,7 @@ export const processTotalOdds = (
         // const maxOdds = MAX_ODDS_RANGE_CHILDREN[sportTypeIdKey];
 
         if (!isZeroOddsChild) {
-            const spreadData = getSpreadData(spreadDataForSport, market.leagueId, typeId, defaultSpreadForLiveMarkets);
+            const spreadData = getSpreadData(spreadDataForSport, leagueId, typeId, defaultSpreadForLiveMarkets);
             if (spreadData !== null) {
                 let adjustedOdds = adjustSpreadOnOdds(
                     [overOdds, underOdds],
@@ -545,7 +523,7 @@ export const processTotalOdds = (
         // }
 
         const childMarket = {
-            ...market,
+            leagueId,
             typeId: typeId,
             results: [],
             status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
