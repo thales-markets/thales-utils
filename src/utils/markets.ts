@@ -129,7 +129,7 @@ export const createSpreadChildMarkets = (
     defaultSpreadForLiveMarkets
 ) => {
     console.log('CREATING SPREAD CHILD MARKETS');
-    const childMarkets = [];
+    const childMarkets = [] as any;
     const spreadType = getLeagueSpreadType(leagueId);
     const commonData = {
         homeTeam: apiResponseWithOdds.home_team,
@@ -180,7 +180,7 @@ export const createTotalChildMarkets = (
     defaultSpreadForLiveMarkets
 ) => {
     console.log('CREATING TOTAL CHILD MARKETS');
-    const childMarkets = [];
+    const childMarkets = [] as any;
     const totalType = getLeagueTotalType(leagueId);
 
     if (totalType) {
