@@ -301,7 +301,7 @@ export const formatSpreadOdds = (
     typeId,
     defaultSpreadForLiveMarkets
 ) => {
-    const validSpreadOdds = spreadOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5);
+    const validSpreadOdds = spreadOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5) as any;
 
     const formattedSpreadOdds = groupAndFormatSpreadOdds(validSpreadOdds, commonData);
 
@@ -394,7 +394,7 @@ export const formatSpreadOdds = (
  */
 export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
     // Group odds by their selection points and selection
-    const groupedOdds = oddsArray.reduce((acc, odd) => {
+    const groupedOdds = oddsArray.reduce((acc: any, odd: any) => {
         const { selection_points, price, selection } = odd;
         const isHomeTeam = selection === commonData.homeTeam;
 
@@ -411,13 +411,13 @@ export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
         }
 
         return acc;
-    }, {});
+    }, {}) as any;
     // Format the grouped odds into the desired output
-    const formattedOdds = Object.entries(groupedOdds).reduce((acc, [key, value]) => {
+    const formattedOdds = (Object.entries(groupedOdds as any) as any).reduce((acc, [key, value]) => {
         const line = parseFloat(key);
         if ((value as any).home !== null && (value as any).away !== null) {
             acc.push({
-                line,
+                line: line as any,
                 odds: [(value as any).home, (value as any).away],
             });
         }
@@ -453,7 +453,7 @@ export const cutOddsCloseToValue = (oddsArray, threshold = 0.952) => {
  * @returns {Array} The processed total odds market objects.
  */
 export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId, defaultSpreadForLiveMarkets) => {
-    const childMarkets = [];
+    const childMarkets = [] as any;
     const validTotalOdds = totalOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5);
     const groupedOdds = groupOddsBySelectionAndPoints(validTotalOdds);
     const iterableGroupedOdds = Object.entries(groupedOdds) as any;
