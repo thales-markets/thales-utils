@@ -147,7 +147,6 @@ export const createSpreadChildMarkets = (
     liveOddsProviders,
     defaultSpreadForLiveMarkets
 ) => {
-    console.log('CREATING SPREAD CHILD MARKETS');
     const childMarkets = [] as any;
     const spreadType = getLeagueSpreadType(leagueId);
     const commonData = {
@@ -177,7 +176,6 @@ export const createSpreadChildMarkets = (
     } else {
         console.warn(`Spread type for sport ID ${leagueId} not found.`);
     }
-    console.log('RETURNING SPREAD CHILD MARKETS', childMarkets);
     return childMarkets;
 };
 
@@ -198,7 +196,6 @@ export const createTotalChildMarkets = (
     liveOddsProviders,
     defaultSpreadForLiveMarkets
 ) => {
-    console.log('CREATING TOTAL CHILD MARKETS');
     const childMarkets = [] as any;
     const totalType = getLeagueTotalType(leagueId);
 
@@ -220,7 +217,5 @@ export const createTotalChildMarkets = (
     } else {
         console.warn(`Configuration (totals) for sport ID ${leagueId} not found.`);
     }
-
-    console.log('RETURNING TOTAL CHILD MARKETS: ', childMarkets);
     return childMarkets;
 };

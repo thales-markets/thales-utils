@@ -136,17 +136,9 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
     isTwoPositionalSport
 ) => {
     const linesMap = new Map<any, any>();
-    console.log('########## FILTER ODDS START ##########');
-    console.log('oddsArray: ' + oddsArray);
-    console.log('marketName: ' + marketName);
-    console.log('liveOddsProviders: ' + liveOddsProviders);
-    console.log('isTwoPositionalSport: ' + isTwoPositionalSport);
-    console.log('########## FILTER ODDS END ##########');
     liveOddsProviders.forEach((oddsProvider) => {
-        console.log('oddsProvider: ', oddsProvider);
         let homeOdds = 0;
         const homeTeamOddsObject = oddsArray.filter((odd) => {
-            console.log('oddd: ', odd);
             return (
                 odd &&
                 odd.market_name.toLowerCase() === marketName.toLowerCase() &&
@@ -154,7 +146,6 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
                 odd.selection.toLowerCase() === commonData.homeTeam.toLowerCase()
             );
         });
-        console.log('homeTeamOddsObject: ' + homeTeamOddsObject);
         if (homeTeamOddsObject.length !== 0) {
             homeOdds = homeTeamOddsObject[0].price;
         }
@@ -167,8 +158,6 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
                 odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
                 odd.selection.toLowerCase() === commonData.awayTeam.toLowerCase()
         );
-
-        console.log('awayTeamOddsObject: ' + awayTeamOddsObject);
 
         if (awayTeamOddsObject.length !== 0) {
             awayOdds = awayTeamOddsObject[0].price;
@@ -183,8 +172,6 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
                     odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
                     odd.selection.toLowerCase() === DRAW.toLowerCase()
             );
-
-            console.log('drawOddsObject: ' + drawOddsObject);
 
             if (drawOddsObject.length !== 0) {
                 drawOdds = drawOddsObject[0].price;
@@ -378,7 +365,7 @@ export const formatSpreadOdds = (
                 typeId: typeId,
                 results: [],
                 status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
-                line: line * MULTIPLIER_100,
+                line: line,
                 odds: [homeTeamOdds, awayTeamOdds],
             };
         })
@@ -527,7 +514,7 @@ export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId
             typeId: typeId,
             results: [],
             status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
-            line: parseFloat(selection_points) * MULTIPLIER_100,
+            line: parseFloat(selection_points),
 
             odds: [overOdds, underOdds],
         };
