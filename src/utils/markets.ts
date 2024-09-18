@@ -62,8 +62,27 @@ export const processMarket = (
               liveOddsProviders,
               defaultSpreadForLiveMarkets
           );
-    console.log('Mapped event for game ID: ' + market.gameId);
-    market.childMarkets = childMarkets;
+    const packedChildMarkets = childMarkets.map((childMarket: any) => {
+        const preparedMarket = { ...market, ...childMarket };
+        if (preparedMarket.odds.length > 0) {
+            preparedMarket.odds = preparedMarket.odds.map((_odd) => {
+                if (_odd == 0) {
+                    return {
+                        american: 0,
+                        decimal: 0,
+                        normalizedImplied: 0,
+                    };
+                }
+                return {
+                    american: oddslib.from('impliedProbability', _odd).to('moneyline'),
+                    decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
+                    normalizedImplied: _odd,
+                };
+            });
+        }
+        return preparedMarket;
+    });
+    market.childMarkets = packedChildMarkets;
 
     return market;
 };
