@@ -363,6 +363,7 @@ export const formatSpreadOdds = (
             return {
                 leagueId,
                 typeId: typeId,
+                type: 'spread',
                 results: [],
                 status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
                 line: line,
@@ -512,6 +513,7 @@ export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId
         const childMarket = {
             leagueId,
             typeId: typeId,
+            type: 'total',
             results: [],
             status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
             line: parseFloat(selection_points),
