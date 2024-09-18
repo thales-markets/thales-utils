@@ -44,7 +44,13 @@ export const processMarket = (
         market.odds = market.odds.map((_odd, index) => {
             let positionOdds;
             if (index < 3) positionOdds = moneylineOdds[index];
-
+            if (positionOdds == 0) {
+                return {
+                    american: 0,
+                    decimal: 0,
+                    normalizedImplied: 0,
+                };
+            }
             return {
                 american: oddslib.from('impliedProbability', positionOdds).to('moneyline'),
                 decimal: oddslib.from('impliedProbability', positionOdds).to('decimal'),
