@@ -1,5 +1,5 @@
 import * as oddslib from 'oddslib';
-import { DRAW, LIVE_TYPE_ID_BASE, MIN_ODDS_FOR_DIFF_CHECKING, MULTIPLIER_100, ZERO } from '../constants/common';
+import { DRAW, LIVE_TYPE_ID_BASE, MIN_ODDS_FOR_DIFF_CHECKING, ZERO } from '../constants/common';
 import { statusCodes } from '../enums/statuses';
 import { checkOddsFromBookmakers } from './bookmakers';
 import { adjustSpreadOnOdds, getSpreadData } from './spread';
