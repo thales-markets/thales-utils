@@ -167,6 +167,11 @@ export const LeagueMap: Record<number, any> = {
         id: League.ITALY_CUP,
         isDrawAvailable: true,
     },
+    [League.TENNIS_WTA]: {
+        sport: Sport.TENNIS,
+        id: League.TENNIS_WTA,
+        isDrawAvailable: false,
+    },
     [League.TENNIS_GS]: {
         sport: Sport.TENNIS,
         id: League.TENNIS_GS,
