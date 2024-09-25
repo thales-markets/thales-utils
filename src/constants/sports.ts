@@ -222,6 +222,11 @@ export const LeagueMap: Record<number, any> = {
         spread: ASIAN_HANDICAP,
         total: TOTAL_GOALS,
     },
+    [League.TENNIS_WTA]: {
+        sport: Sport.TENNIS,
+        id: League.TENNIS_WTA,
+        isDrawAvailable: false,
+    },
     [League.TENNIS_GS]: {
         sport: Sport.TENNIS,
         id: League.TENNIS_GS,
@@ -460,6 +465,26 @@ export const LeagueMap: Record<number, any> = {
         isDrawAvailable: true,
         spread: ASIAN_HANDICAP,
         total: TOTAL_GOALS,
+    },
+    [League.US_ELECTION]: {
+        sport: Sport.POLITICS,
+        id: League.US_ELECTION,
+        isDrawAvailable: false,
+    },
+    [League.UEFA_SUPER_CUP]: {
+        sport: Sport.SOCCER,
+        id: League.UEFA_SUPER_CUP,
+        isDrawAvailable: true,
+    },
+    [League.BRAZIL_CUP]: {
+        sport: Sport.SOCCER,
+        id: League.BRAZIL_CUP,
+        isDrawAvailable: true,
+    },
+    [League.ENGLAND_CHAMPIONSHIP]: {
+        sport: Sport.SOCCER,
+        id: League.ENGLAND_CHAMPIONSHIP,
+        isDrawAvailable: true,
     },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
