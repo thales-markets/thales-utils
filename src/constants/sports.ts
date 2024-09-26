@@ -1,5 +1,14 @@
 import { League, Sport } from '../enums/sports';
-import { ASIAN_HANDICAP, POINT_SPREAD, RUN_LINE, TOTAL_GOALS, TOTAL_POINTS, TOTAL_RUNS } from './constantsOpticodds';
+import {
+    ASIAN_HANDICAP,
+    GAME_SPREAD,
+    POINT_SPREAD,
+    RUN_LINE,
+    TOTAL_GAMES,
+    TOTAL_GOALS,
+    TOTAL_POINTS,
+    TOTAL_RUNS,
+} from './constantsOpticodds';
 
 export const LeagueMap: Record<number, any> = {
     [League.NCAAF]: {
@@ -226,16 +235,22 @@ export const LeagueMap: Record<number, any> = {
         sport: Sport.TENNIS,
         id: League.TENNIS_WTA,
         isDrawAvailable: false,
+        spread: GAME_SPREAD,
+        total: TOTAL_GAMES,
     },
     [League.TENNIS_GS]: {
         sport: Sport.TENNIS,
         id: League.TENNIS_GS,
         isDrawAvailable: false,
+        spread: GAME_SPREAD,
+        total: TOTAL_GAMES,
     },
     [League.TENNIS_MASTERS]: {
         sport: Sport.TENNIS,
         id: League.TENNIS_MASTERS,
         isDrawAvailable: false,
+        spread: GAME_SPREAD,
+        total: TOTAL_GAMES,
     },
     [League.SUMMER_OLYMPICS_TENNIS]: {
         sport: Sport.TENNIS,

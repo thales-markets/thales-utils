@@ -150,3 +150,6 @@ export const MONEYLINE_TOTAL_ROUNDS = 'Moneyline + Total Rounds';
 export const WILL_A_POINT_BE_DEDUCTED = 'Will A Point Be Deducted';
 export const WILL_FIGHT_END_IN_FIRST_MINUTE = 'Will Fight End In First Minute';
 export const WINNING_ROUND = 'Winning Round';
+
+export const TOTAL_GAMES = 'Total Games';
+export const GAME_SPREAD = 'Game Spread';
