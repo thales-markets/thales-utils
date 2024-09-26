@@ -37,60 +37,59 @@ export const processMarket = (
         maxPercentageDiffBetwenOdds
     );
 
-    const isZeroParentOdds =
-        moneylineOdds[0] == ZERO || moneylineOdds[1] == ZERO || (isDrawAvailable && moneylineOdds[2] == ZERO);
-
-    if (market.odds.length > 0) {
-        market.odds = market.odds.map((_odd, index) => {
-            let positionOdds;
-            if (index < 3) positionOdds = moneylineOdds[index];
-            if (positionOdds == 0) {
-                return {
-                    american: 0,
-                    decimal: 0,
-                    normalizedImplied: 0,
-                };
-            }
+    if (moneylineOdds.errorMessage) {
+        market.odds = market.odds.map(() => {
             return {
-                american: oddslib.from('impliedProbability', positionOdds).to('moneyline'),
-                decimal: oddslib.from('impliedProbability', positionOdds).to('decimal'),
-                normalizedImplied: positionOdds,
+                american: 0,
+                decimal: 0,
+                normalizedImplied: 0,
             };
         });
-    }
+        market.childMarkets = [];
+        market.errorMessage = moneylineOdds.errorMessage;
+        return market;
+    } else {
+        // Pack market odds for UI
+        market.odds = moneylineOdds.odds.map((odd) => {
+            return {
+                american: oddslib.from('impliedProbability', odd).to('moneyline'),
+                decimal: oddslib.from('impliedProbability', odd).to('decimal'),
+                normalizedImplied: odd,
+            };
+        });
 
-    const childMarkets = isZeroParentOdds
-        ? []
-        : getChildMarkets(
-              market.leagueId,
-              sportSpreadData,
-              apiResponseWithOdds,
-              liveOddsProviders,
-              defaultSpreadForLiveMarkets
-          );
-    const packedChildMarkets = childMarkets.map((childMarket: any) => {
-        const preparedMarket = { ...market, ...childMarket };
-        if (preparedMarket.odds.length > 0) {
-            preparedMarket.odds = preparedMarket.odds.map((_odd) => {
-                if (_odd == 0) {
+        const childMarkets = getChildMarkets(
+            market.leagueId,
+            sportSpreadData,
+            apiResponseWithOdds,
+            liveOddsProviders,
+            defaultSpreadForLiveMarkets
+        );
+
+        const packedChildMarkets = childMarkets.map((childMarket: any) => {
+            const preparedMarket = { ...market, ...childMarket };
+            if (preparedMarket.odds.length > 0) {
+                preparedMarket.odds = preparedMarket.odds.map((_odd) => {
+                    if (_odd == 0) {
+                        return {
+                            american: 0,
+                            decimal: 0,
+                            normalizedImplied: 0,
+                        };
+                    }
                     return {
-                        american: 0,
-                        decimal: 0,
-                        normalizedImplied: 0,
+                        american: oddslib.from('impliedProbability', _odd).to('moneyline'),
+                        decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
+                        normalizedImplied: _odd,
                     };
-                }
-                return {
-                    american: oddslib.from('impliedProbability', _odd).to('moneyline'),
-                    decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
-                    normalizedImplied: _odd,
-                };
-            });
-        }
-        return preparedMarket;
-    });
-    market.childMarkets = packedChildMarkets;
+                });
+            }
+            return preparedMarket;
+        });
+        market.childMarkets = packedChildMarkets;
 
-    return market;
+        return market;
+    }
 };
 
 /**
