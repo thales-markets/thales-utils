@@ -1,5 +1,5 @@
 import * as oddslib from 'oddslib';
-import { TAG_CHILD_SPREAD, TAG_CHILD_TOTALS, ZERO } from '../constants/common';
+import { TAG_CHILD_SPREAD, TAG_CHILD_TOTALS } from '../constants/common';
 import { filterOddsByMarketNameBookmaker, formatSpreadOdds, getParentOdds, processTotalOdds } from './odds';
 import { getLeagueSpreadType, getLeagueTotalType } from './sports';
 /**
@@ -50,11 +50,18 @@ export const processMarket = (
         return market;
     } else {
         // Pack market odds for UI
-        market.odds = moneylineOdds.odds.map((odd) => {
+        market.odds = moneylineOdds.odds.map((_odd) => {
+            if (_odd == 0) {
+                return {
+                    american: 0,
+                    decimal: 0,
+                    normalizedImplied: 0,
+                };
+            }
             return {
-                american: oddslib.from('impliedProbability', odd).to('moneyline'),
-                decimal: oddslib.from('impliedProbability', odd).to('decimal'),
-                normalizedImplied: odd,
+                american: oddslib.from('impliedProbability', _odd).to('moneyline'),
+                decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
+                normalizedImplied: _odd,
             };
         });
 
