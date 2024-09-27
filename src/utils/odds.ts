@@ -147,7 +147,9 @@ export const getParentOdds = (
             errorMessage: oddsObject.errorMessage,
         };
     }
-    const primaryBookmakerOdds = [oddsObject.homeOdds, oddsObject.awayOdds, oddsObject.drawOdds];
+    const primaryBookmakerOdds = isTwoPositionalSport
+        ? [oddsObject.homeOdds, oddsObject.awayOdds]
+        : [oddsObject.homeOdds, oddsObject.awayOdds, oddsObject.drawOdds];
 
     let parentOdds = primaryBookmakerOdds.map((odd) => convertOddsToImpl(odd));
     const spreadData = getSpreadData(sportSpreadData, sportId, LIVE_TYPE_ID_BASE, defaultSpreadForLiveMarkets);

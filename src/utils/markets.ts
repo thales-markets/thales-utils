@@ -50,20 +50,15 @@ export const processMarket = (
         return market;
     } else {
         // Pack market odds for UI
-        market.odds = moneylineOdds.odds.map((_odd) => {
-            if (_odd == 0) {
+        market.odds = moneylineOdds.odds
+            .filter((odd) => odd != 0)
+            .map((_odd) => {
                 return {
-                    american: 0,
-                    decimal: 0,
-                    normalizedImplied: 0,
+                    american: oddslib.from('impliedProbability', _odd).to('moneyline'),
+                    decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
+                    normalizedImplied: _odd,
                 };
-            }
-            return {
-                american: oddslib.from('impliedProbability', _odd).to('moneyline'),
-                decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
-                normalizedImplied: _odd,
-            };
-        });
+            });
 
         const childMarkets = getChildMarkets(
             market.leagueId,
