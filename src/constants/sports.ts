@@ -20,7 +20,7 @@ export const LeagueMap: Record<number, any> = {
         sport: Sport.FOOTBALL,
         id: League.NFL,
         isDrawAvailable: false,
-        spread: ASIAN_HANDICAP,
+        spread: POINT_SPREAD,
         total: TOTAL_POINTS,
     },
     [League.MLB]: {
