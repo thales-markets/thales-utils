@@ -245,32 +245,26 @@ export const formatSpreadOdds = (
             const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
             const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
 
-            console.log('From PRocess env: ', minOdds, maxOdds);
-            console.log('From api: ', homeTeamOdds, awayTeamOdds);
-
-            // const homeTeamOddsDecimal = convertOddsToDecimal(homeTeamOdds);
-            // const awayTeamOddsDecimal = convertOddsToDecimal(awayTeamOdds);
-
-            // if (
-            //     minOdds !== undefined &&  minOdds !== 0 &&
-            //     maxOdds !== undefined && maxOdds !== 0
-            //     (homeTeamOddsDecimal * MULTIPLIER_100 < minOdds ||
-            //         homeTeamOddsDecimal * MULTIPLIER_100 > maxOdds ||
-            //         awayTeamOddsDecimal * MULTIPLIER_100 < minOdds ||
-            //         awayTeamOddsDecimal * MULTIPLIER_100 > maxOdds)
-            // ) {
-            //     return null;
-            // }
-
-            return {
-                leagueId,
-                typeId: typeId,
-                type: 'spread',
-                results: [],
-                status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
-                line: line,
-                odds: [homeTeamOdds, awayTeamOdds],
-            };
+            if (
+                minOdds &&
+                maxOdds &&
+                (homeTeamOdds >= minOdds ||
+                    homeTeamOdds <= maxOdds ||
+                    awayTeamOdds >= minOdds ||
+                    awayTeamOdds <= maxOdds)
+            ) {
+                return null;
+            } else {
+                return {
+                    leagueId,
+                    typeId: typeId,
+                    type: 'spread',
+                    results: [],
+                    status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
+                    line: line,
+                    odds: [homeTeamOdds, awayTeamOdds],
+                };
+            }
         })
         .filter((market) => market !== null);
 };
@@ -379,6 +373,9 @@ export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId
             }
         }
 
+        const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
+        const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
+
         const childMarket = {
             leagueId,
             typeId: typeId,
@@ -386,10 +383,17 @@ export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId
             results: [],
             status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
             line: parseFloat(selection_points),
-
             odds: [overOdds, underOdds],
         };
-        childMarkets.push(childMarket);
+
+        if (
+            minOdds &&
+            maxOdds &&
+            (overOdds >= minOdds || overOdds <= maxOdds || underOdds >= minOdds || underOdds <= maxOdds)
+        ) {
+        } else {
+            childMarkets.push(childMarket);
+        }
     });
 
     return childMarkets;
