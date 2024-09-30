@@ -240,28 +240,20 @@ export const formatSpreadOdds = (
                         [homeTeamOdds, awayTeamOdds] = adjustedOdds;
                     }
                 }
-
-                // TODO CHECK IF ANYTHING NEEDS TO BE CUT
-                // const threshold = oddsThresholdChildMap[sportTypeIdKey];
-
-                // if (
-                //     configuration.fullSpreadAndTotalsCuttingSports.includes(String(market.leagueId)) ||
-                //     threshold !== undefined
-                // ) {
-                //     const defaultThreshold = parseFloat(process.env.ODDS_THRESHOLD_CUT_DEFAULT);
-                //     [homeTeamOdds, awayTeamOdds] = cutOddsCloseToValue(
-                //         [homeTeamOdds, awayTeamOdds],
-                //         threshold || defaultThreshold
-                //     );
-                // }
             }
+
+            const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
+            const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
+
+            console.log('From PRocess env: ', minOdds, maxOdds);
+            console.log('From api: ', homeTeamOdds, awayTeamOdds);
 
             // const homeTeamOddsDecimal = convertOddsToDecimal(homeTeamOdds);
             // const awayTeamOddsDecimal = convertOddsToDecimal(awayTeamOdds);
 
             // if (
-            //     minOdds !== undefined &&
-            //     maxOdds !== undefined &&
+            //     minOdds !== undefined &&  minOdds !== 0 &&
+            //     maxOdds !== undefined && maxOdds !== 0
             //     (homeTeamOddsDecimal * MULTIPLIER_100 < minOdds ||
             //         homeTeamOddsDecimal * MULTIPLIER_100 > maxOdds ||
             //         awayTeamOddsDecimal * MULTIPLIER_100 < minOdds ||
@@ -363,10 +355,6 @@ export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId
         let underOdds = convertOddsToImpl(under) || ZERO;
         let isZeroOddsChild = overOdds === ZERO || underOdds === ZERO;
 
-        // const sportTypeIdKey = `${sportIdApi}-${typeId}`;
-        // const minOdds = MIN_ODDS_RANGE_CHILDREN[sportTypeIdKey];
-        // const maxOdds = MAX_ODDS_RANGE_CHILDREN[sportTypeIdKey];
-
         if (!isZeroOddsChild) {
             const spreadData = getSpreadData(spreadDataForSport, leagueId, typeId, defaultSpreadForLiveMarkets);
             if (spreadData !== null) {
@@ -389,36 +377,7 @@ export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId
                     [overOdds, underOdds] = adjustedOdds;
                 }
             }
-
-            // const threshold = configuration.oddsThresholdChildMap[sportTypeIdKey];
-
-            // Apply cutOddsCloseToValue if the sport is in the list or if the threshold is defined
-            // if (
-            //     common.isElementInArray(configuration.fullSpreadAndTotalsCuttingSports, String(sportIdApi)) ||
-            //     threshold !== undefined
-            // ) {
-            //     const defaultThreshold = parseFloat(process.env.ODDS_THRESHOLD_CUT_DEFAULT);
-            //     [overOdds, underOdds] = common.cutOddsCloseToValue(
-            //         [overOdds, underOdds],
-            //         threshold || defaultThreshold
-            //     );
-            // }
         }
-
-        // const overOddsDecimal = convertOddsToDecimal(overOdds);
-        // const underOddsDecimal = convertOddsToDecimal(underOdds);
-
-        // // Validate if the odds are within the specified range
-        // if (
-        //     minOdds !== undefined &&
-        //     maxOdds !== undefined &&
-        //     (overOddsDecimal * MULTIPLIER_100 < minOdds ||
-        //         overOddsDecimal * MULTIPLIER_100 > maxOdds ||
-        //         underOddsDecimal * MULTIPLIER_100 < minOdds ||
-        //         underOddsDecimal * MULTIPLIER_100 > maxOdds)
-        // ) {
-        //     return;
-        // }
 
         const childMarket = {
             leagueId,
