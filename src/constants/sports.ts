@@ -97,6 +97,13 @@ export const LeagueMap: Record<number, any> = {
         spread: ASIAN_HANDICAP,
         total: TOTAL_GOALS,
     },
+    [League.TURKEY_SUPER_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.TURKEY_SUPER_LEAGUE,
+        isDrawAvailable: true,
+        spread: ASIAN_HANDICAP,
+        total: TOTAL_GOALS,
+    },
     [League.SERIE_A]: {
         sport: Sport.SOCCER,
         id: League.SERIE_A,
