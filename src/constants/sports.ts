@@ -271,6 +271,11 @@ export const LeagueMap: Record<number, any> = {
         spread: ASIAN_HANDICAP,
         total: TOTAL_GOALS,
     },
+    [League.LIGA_MX]: {
+        sport: Sport.SOCCER,
+        id: League.LIGA_MX,
+        isDrawAvailable: true,
+    },
     [League.BRAZIL_1]: {
         sport: Sport.SOCCER,
         id: League.BRAZIL_1,
@@ -508,6 +513,146 @@ export const LeagueMap: Record<number, any> = {
         id: League.ENGLAND_CHAMPIONSHIP,
         isDrawAvailable: true,
     },
+    [League.SCOTLAND_PREMIERSHIP]: {
+        sport: Sport.SOCCER,
+        id: League.SCOTLAND_PREMIERSHIP,
+        isDrawAvailable: true,
+    },
+    [League.BELGIUM_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.BELGIUM_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.CZECH_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.CZECH_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.CHILE_PRIMERA]: {
+        sport: Sport.SOCCER,
+        id: League.CHILE_PRIMERA,
+        isDrawAvailable: true,
+    },
+    [League.FINLAND_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.FINLAND_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.ARGENTINA_PRIMERA]: {
+        sport: Sport.SOCCER,
+        id: League.ARGENTINA_PRIMERA,
+        isDrawAvailable: true,
+    },
+    [League.RUSSIA_PREMIER]: {
+        sport: Sport.SOCCER,
+        id: League.RUSSIA_PREMIER,
+        isDrawAvailable: true,
+    },
+    [League.TURKEY_SUPER_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.TURKEY_SUPER_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.SERBIA_SUPER_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.SERBIA_SUPER_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.GREECE_SUPER_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.GREECE_SUPER_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.INDIA_PREMIER]: {
+        sport: Sport.SOCCER,
+        id: League.INDIA_PREMIER,
+        isDrawAvailable: true,
+    },
+    [League.CHINA_SUPER_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.CHINA_SUPER_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.AUSTRALIA_A_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.AUSTRALIA_A_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.SWITZERLAND_SUPER_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.SWITZERLAND_SUPER_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.BUNDESLIGA_2]: {
+        sport: Sport.SOCCER,
+        id: League.BUNDESLIGA_2,
+        isDrawAvailable: true,
+    },
+    [League.LA_LIGA_2]: {
+        sport: Sport.SOCCER,
+        id: League.LA_LIGA_2,
+        isDrawAvailable: true,
+    },
+    [League.SERIE_B]: {
+        sport: Sport.SOCCER,
+        id: League.SERIE_B,
+        isDrawAvailable: true,
+    },
+    [League.INDIA_SUPER_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.INDIA_SUPER_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.LIGUE_2]: {
+        sport: Sport.SOCCER,
+        id: League.LIGUE_2,
+        isDrawAvailable: true,
+    },
+    [League.AUSTRIA_BUNDESLIGA]: {
+        sport: Sport.SOCCER,
+        id: League.AUSTRIA_BUNDESLIGA,
+        isDrawAvailable: true,
+    },
+    [League.DENMARK_SUPER_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.DENMARK_SUPER_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.POLAND_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.POLAND_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.SWEDEN_LEAGUE]: {
+        sport: Sport.SOCCER,
+        id: League.SWEDEN_LEAGUE,
+        isDrawAvailable: true,
+    },
+    [League.COLOMBIA_PRIMERA_A]: {
+        sport: Sport.SOCCER,
+        id: League.COLOMBIA_PRIMERA_A,
+        isDrawAvailable: true,
+    },
+    [League.ENGLAND_EFL_CUP]: {
+        sport: Sport.SOCCER,
+        id: League.ENGLAND_EFL_CUP,
+        isDrawAvailable: true,
+    },
+    [League.ENGLAND_LEGAUE_1]: {
+        sport: Sport.SOCCER,
+        id: League.ENGLAND_LEGAUE_1,
+        isDrawAvailable: true,
+    },
+    [League.URUGUAY_PRIMERA_DIVISION]: {
+        sport: Sport.SOCCER,
+        id: League.URUGUAY_PRIMERA_DIVISION,
+        isDrawAvailable: true,
+    },
+    [League.EUROCUP]: {
+        sport: Sport.BASKETBALL,
+        id: League.EUROCUP,
+        isDrawAvailable: false,
+    },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
         id: League.GOLF_H2H,
@@ -517,13 +662,6 @@ export const LeagueMap: Record<number, any> = {
         sport: Sport.GOLF,
         id: League.GOLF_WINNER,
         isDrawAvailable: false,
-    },
-    [League.LIGA_MX]: {
-        sport: Sport.SOCCER,
-        id: League.LIGA_MX,
-        isDrawAvailable: true,
-        spread: ASIAN_HANDICAP,
-        total: TOTAL_GOALS,
     },
 };
 
