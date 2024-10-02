@@ -202,22 +202,18 @@ export const formatSpreadOdds = (
 
     const formattedSpreadOdds = groupAndFormatSpreadOdds(validSpreadOdds, commonData);
 
+    // TODO: change to for each
     return formattedSpreadOdds
         .map(({ line, odds }) => {
-            // const sportTypeIdKey = `${market.leagueId}-${typeId}`;
-
             let homeTeamOdds = convertOddsToImpl(odds[0]) || ZERO;
             let awayTeamOdds = convertOddsToImpl(odds[1]) || ZERO;
             let isZeroOddsChild = homeTeamOdds === ZERO || awayTeamOdds === ZERO;
-
-            // const minOdds = MIN_ODDS_RANGE_CHILDREN[sportTypeIdKey];
-            // const maxOdds = MAX_ODDS_RANGE_CHILDREN[sportTypeIdKey];
 
             if (!isZeroOddsChild) {
                 const spreadData = getSpreadData(
                     spreadDataForSport,
                     leagueId,
-                    // TODO SREDITI TYPEID KOJI TREBA DA BUDE
+                    // TODO: SREDITI TYPEID KOJI TREBA DA BUDE
                     typeId,
                     defaultSpreadForLiveMarkets
                 );
@@ -312,20 +308,6 @@ export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
 };
 
 /**
- * Processes an array of numerical odds values, setting any values greater than
- * a specified threshold to zero. This is useful for normalizing odds values in
- * contexts where excessively high odds are not desired.
- *
- * @param {Array<number>} oddsArray - An array containing numerical odds values to be processed.
- * @param {number} [threshold=0.952] - The threshold value. Any absolute value in the oddsArray greater than this threshold will be set to zero. The default threshold is 0.952 (1.05).
- * @returns {Array<number>} - An array of numerical odds where any values greater than the specified threshold have been set to zero.
- *
- */
-export const cutOddsCloseToValue = (oddsArray, threshold = 0.952) => {
-    return oddsArray.map((odds) => (Math.abs(odds) > threshold ? ZERO : odds));
-};
-
-/**
  * Processes total odds to create market objects.
  *
  * @param {Array} totalOdds - The total odds array.
@@ -387,11 +369,12 @@ export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId
         };
 
         if (
-            minOdds &&
-            maxOdds &&
-            (overOdds >= minOdds || overOdds <= maxOdds || underOdds >= minOdds || underOdds <= maxOdds)
+            !(
+                minOdds &&
+                maxOdds &&
+                (overOdds >= minOdds || overOdds <= maxOdds || underOdds >= minOdds || underOdds <= maxOdds)
+            )
         ) {
-        } else {
             childMarkets.push(childMarket);
         }
     });

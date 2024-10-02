@@ -64,6 +64,7 @@ export const checkOddsFromBookmakers = (
             awayOdds: 0,
             drawOdds: 0,
             errorMessage: 'Returning zero odds cause bookmakers have 0 or 1 odds',
+            // TODO: Return sportsbook name with zero odds
         };
     }
 
