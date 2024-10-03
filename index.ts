@@ -8,7 +8,7 @@ export * from './src/utils/spread';
 
 // constants
 export * from './src/constants/common';
-export * from './src/constants/constantsOpticodds';
+// export * from './src/constants/constantsOpticodds';
 export * from './src/constants/sports';
 
 export * from './src/enums/sports';
