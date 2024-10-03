@@ -53,23 +53,23 @@ export const getLeaguePeriodType = (league: League) => {
 };
 
 export const getLeagueSpreadType = (league: League, testnet?: boolean) => {
-    const leagueInfo = LeagueMap[league];
-    const liveBetTypesForLeague = testnet ? leagueInfo.betTypesForLiveTestnet : leagueInfo.betTypesForLive;
+    const liveBetTypesForLeague = getBetTypesForLeague(league, testnet);
+    let result;
     liveBetTypesForLeague.forEach((betType) => {
-        if (Object.values(SpreadTypes).includes(betType)) {
-            return betType;
+        if (Object.values(SpreadTypes).find((spreadType) => spreadType == betType)) {
+            result = betType;
         }
     });
-    return undefined;
+    return result;
 };
 
 export const getLeagueTotalType = (league: League, testnet?: boolean) => {
-    const leagueInfo = LeagueMap[league];
-    const liveBetTypesForLeague = testnet ? leagueInfo.betTypesForLiveTestnet : leagueInfo.betTypesForLive;
+    const liveBetTypesForLeague = getBetTypesForLeague(league, testnet);
+    let result;
     liveBetTypesForLeague.forEach((betType) => {
-        if (Object.values(TotalTypes).includes(betType)) {
-            return betType;
+        if (Object.values(TotalTypes).find((totalType) => totalType == betType)) {
+            result = betType;
         }
     });
-    return undefined;
+    return result;
 };
