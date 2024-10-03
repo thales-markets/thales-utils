@@ -198,71 +198,63 @@ export const formatSpreadOdds = (
     typeId,
     defaultSpreadForLiveMarkets
 ) => {
+    const childMarkets = [] as any;
     const validSpreadOdds = spreadOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5) as any;
-
     const formattedSpreadOdds = groupAndFormatSpreadOdds(validSpreadOdds, commonData);
 
-    // TODO: change to for each
-    return formattedSpreadOdds
-        .map(({ line, odds }) => {
-            let homeTeamOdds = convertOddsToImpl(odds[0]) || ZERO;
-            let awayTeamOdds = convertOddsToImpl(odds[1]) || ZERO;
-            let isZeroOddsChild = homeTeamOdds === ZERO || awayTeamOdds === ZERO;
+    formattedSpreadOdds.forEach(({ line, odds }) => {
+        let homeTeamOdds = convertOddsToImpl(odds[0]) || ZERO;
+        let awayTeamOdds = convertOddsToImpl(odds[1]) || ZERO;
+        let isZeroOddsChild = homeTeamOdds === ZERO || awayTeamOdds === ZERO;
 
-            if (!isZeroOddsChild) {
-                const spreadData = getSpreadData(
-                    spreadDataForSport,
-                    leagueId,
-                    // TODO: SREDITI TYPEID KOJI TREBA DA BUDE
-                    typeId,
-                    defaultSpreadForLiveMarkets
+        if (!isZeroOddsChild) {
+            const spreadData = getSpreadData(spreadDataForSport, leagueId, typeId, defaultSpreadForLiveMarkets);
+            if (spreadData !== null) {
+                let adjustedOdds = adjustSpreadOnOdds(
+                    [homeTeamOdds, awayTeamOdds],
+                    spreadData.minSpread,
+                    spreadData.targetSpread
                 );
-                if (spreadData !== null) {
-                    let adjustedOdds = adjustSpreadOnOdds(
-                        [homeTeamOdds, awayTeamOdds],
-                        spreadData.minSpread,
-                        spreadData.targetSpread
-                    );
-                    if (adjustedOdds.some((prob) => prob === ZERO)) {
-                        isZeroOddsChild = true;
-                    } else {
-                        [homeTeamOdds, awayTeamOdds] = adjustedOdds;
-                    }
+                if (adjustedOdds.some((prob) => prob === ZERO)) {
+                    isZeroOddsChild = true;
                 } else {
-                    let adjustedOdds = adjustSpreadOnOdds([homeTeamOdds, awayTeamOdds], defaultSpreadForLiveMarkets, 0);
-                    if (adjustedOdds.some((prob) => prob === ZERO)) {
-                        isZeroOddsChild = true;
-                    } else {
-                        [homeTeamOdds, awayTeamOdds] = adjustedOdds;
-                    }
+                    [homeTeamOdds, awayTeamOdds] = adjustedOdds;
+                }
+            } else {
+                let adjustedOdds = adjustSpreadOnOdds([homeTeamOdds, awayTeamOdds], defaultSpreadForLiveMarkets, 0);
+                if (adjustedOdds.some((prob) => prob === ZERO)) {
+                    isZeroOddsChild = true;
+                } else {
+                    [homeTeamOdds, awayTeamOdds] = adjustedOdds;
                 }
             }
+        }
 
-            const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
-            const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
+        const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
+        const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
 
-            if (
+        if (
+            !(
                 minOdds &&
                 maxOdds &&
                 (homeTeamOdds >= minOdds ||
                     homeTeamOdds <= maxOdds ||
                     awayTeamOdds >= minOdds ||
                     awayTeamOdds <= maxOdds)
-            ) {
-                return null;
-            } else {
-                return {
-                    leagueId,
-                    typeId: typeId,
-                    type: 'spread',
-                    results: [],
-                    status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
-                    line: line,
-                    odds: [homeTeamOdds, awayTeamOdds],
-                };
-            }
-        })
-        .filter((market) => market !== null);
+            )
+        ) {
+            childMarkets.push({
+                leagueId,
+                typeId: typeId,
+                type: 'spread',
+                results: [],
+                status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
+                line: line,
+                odds: [homeTeamOdds, awayTeamOdds],
+            });
+        }
+    });
+    return childMarkets;
 };
 
 /**
