@@ -1,5 +1,5 @@
 import { LeagueMap } from '../constants/sports';
-import { League, Sport } from '../enums/sports';
+import { League, Sport, SpreadTypes, TotalTypes } from '../enums/sports';
 
 export const getLeagueSport = (league: League) => {
     const leagueInfo = LeagueMap[league];
@@ -52,13 +52,24 @@ export const getLeaguePeriodType = (league: League) => {
     return leagueInfo ? leagueInfo.periodType : '';
 };
 
-// TODO: Refactor
-export const getLeagueSpreadType = (league: League) => {
+export const getLeagueSpreadType = (league: League, testnet?: boolean) => {
     const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.spread : undefined;
+    const liveBetTypesForLeague = testnet ? leagueInfo.betTypesForLiveTestnet : leagueInfo.betTypesForLive;
+    liveBetTypesForLeague.forEach((betType) => {
+        if (Object.values(SpreadTypes).includes(betType)) {
+            return betType;
+        }
+    });
+    return undefined;
 };
 
-export const getLeagueTotalType = (league: League) => {
+export const getLeagueTotalType = (league: League, testnet?: boolean) => {
     const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.total : undefined;
+    const liveBetTypesForLeague = testnet ? leagueInfo.betTypesForLiveTestnet : leagueInfo.betTypesForLive;
+    liveBetTypesForLeague.forEach((betType) => {
+        if (Object.values(TotalTypes).includes(betType)) {
+            return betType;
+        }
+    });
+    return undefined;
 };

@@ -60,6 +60,8 @@ export const processMarket = (
                 };
             });
 
+        market.live = true;
+
         const childMarkets = getChildMarkets(
             market.leagueId,
             sportSpreadData,
@@ -79,6 +81,7 @@ export const processMarket = (
                             normalizedImplied: 0,
                         };
                     }
+                    preparedMarket.live = true;
                     return {
                         american: oddslib.from('impliedProbability', _odd).to('moneyline'),
                         decimal: oddslib.from('impliedProbability', _odd).to('decimal'),

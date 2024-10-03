@@ -1,4 +1,4 @@
-export const enum Sport {
+export enum Sport {
     SOCCER = 'Soccer',
     FOOTBALL = 'Football',
     BASKETBALL = 'Basketball',
@@ -19,7 +19,7 @@ export const enum Sport {
     EMPTY = '',
 }
 
-export const enum League {
+export enum League {
     NCAAF = 1,
     NFL = 2,
     MLB = 3,
@@ -168,25 +168,25 @@ export const enum League {
     TENNIS_WTA_LIVE_MAPPING_V2_7 = 15328,
 }
 
-export const enum MoneylineTypes {
+export enum MoneylineTypes {
     MONEYLINE = 'Moneyline',
 }
 
-export const enum SpreadTypes {
+export enum SpreadTypes {
     ASIAN_HANDICAP = 'Asian Handicap',
     GAME_SPREAD = 'Game Spread',
     POINT_SPREAD = 'Point Spread',
     RUN_LINE = 'Run Line',
 }
 
-export const enum TotalTypes {
+export enum TotalTypes {
     TOTAL_GAMES = 'Total Games',
     TOTAL_GOALS = 'Total Goals',
     TOTAL_POINTS = 'Total Points',
     TOTAL_RUNS = 'Total Runs',
 }
 
-export const enum ScoringType {
+export enum ScoringType {
     POINTS = 'points',
     GOALS = 'goals',
     ROUNDS = 'rounds',
@@ -194,13 +194,13 @@ export const enum ScoringType {
     EMPTY = '',
 }
 
-export const enum MatchResolveType {
+export enum MatchResolveType {
     OVERTIME = 'overtime',
     REGULAR = 'regular',
     EMPTY = '',
 }
 
-export const enum PeriodType {
+export enum PeriodType {
     QUARTER = 'quarter',
     HALF = 'half',
     PERIOD = 'period',
@@ -210,7 +210,7 @@ export const enum PeriodType {
     EMPTY = '',
 }
 
-export const enum Provider {
+export enum Provider {
     RUNDOWN = 'rundown',
     ENETPULSE = 'enetpulse',
     JSONODDS = 'jsonOdds',
