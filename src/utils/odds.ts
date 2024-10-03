@@ -3,7 +3,7 @@ import { DRAW, LIVE_TYPE_ID_BASE, MIN_ODDS_FOR_DIFF_CHECKING, ZERO } from '../co
 import { statusCodes } from '../enums/statuses';
 import { checkOddsFromBookmakers } from './bookmakers';
 import { adjustSpreadOnOdds, getSpreadData } from './spread';
-import { MONEYLINE } from '../constants/constantsOpticodds';
+import { MoneylineTypes } from '../enums/sports';
 
 /**
  * Converts a given odds value from one format to another.
@@ -126,7 +126,7 @@ export const getParentOdds = (
     // EXTRACTING ODDS FROM THE RESPONSE PER MARKET NAME AND BOOKMAKER
     const moneylineOddsMap = filterOddsByMarketNameTeamNameBookmaker(
         oddsApiObject.odds,
-        MONEYLINE,
+        MoneylineTypes.MONEYLINE,
         liveOddsProviders,
         commonData,
         isTwoPositionalSport
