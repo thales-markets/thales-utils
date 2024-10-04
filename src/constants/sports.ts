@@ -435,6 +435,7 @@ export const LeagueMap = {
         sport: Sport.TENNIS,
         id: League.TENNIS_WTA,
         label: 'WTA Events',
+        opticOddsName: 'WTA',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.SETS,
         matchResolveType: MatchResolveType.REGULAR,
@@ -447,7 +448,7 @@ export const LeagueMap = {
         sport: Sport.TENNIS,
         id: League.TENNIS_GS,
         label: 'Grand Slam',
-        opticOddsName: 'atp',
+        opticOddsName: 'ATP,WTA',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.SETS,
         matchResolveType: MatchResolveType.REGULAR,
@@ -460,6 +461,7 @@ export const LeagueMap = {
         sport: Sport.TENNIS,
         id: League.TENNIS_MASTERS,
         label: 'ATP Events',
+        opticOddsName: 'ATP',
         provider: Provider.ENETPULSE,
         scoringType: ScoringType.SETS,
         matchResolveType: MatchResolveType.REGULAR,
@@ -1474,7 +1476,7 @@ export const AMERICAN_LEAGUES = [
 
 export const UFC_LEAGUE_IDS = [701, 702, 703, 704];
 
-export const SportIdMapRundown = {
+export const LeagueIdMapRundown = {
     1: 1, // NCAAF
     2: 2, // NFL
     3: 3, // MLB
@@ -1497,7 +1499,7 @@ export const SportIdMapRundown = {
     21: 21, // T20
 };
 
-export const SportIdMapEnetpulse = {
+export const LeagueIdMapEnetpulse = {
     320: 18, // Hockey Norway
     6: 24, // NHL
     33: 33, // Hockey World Championship
@@ -1569,7 +1571,7 @@ export const SportIdMapEnetpulse = {
     10615: 10615, // Conference League Qualification
 };
 
-export const SportIdMapOpticOdds = {
+export const LeagueIdMapOpticOdds = {
     1: 'NCAAF',
     2: 'NFL',
     3: 'MLB',
