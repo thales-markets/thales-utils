@@ -48,6 +48,7 @@ export const processMarket = (
             };
         });
         market.childMarkets = [];
+        market.live = true;
         market.errorMessage = moneylineOdds.errorMessage;
         return market;
     } else {
