@@ -54,7 +54,7 @@ export const LeagueMap = {
         id: League.NBA,
         label: 'NBA',
         opticOddsName: 'NBA',
-        provider: Provider.RUNDOWN,
+        provider: Provider.OPTICODDS,
         scoringType: ScoringType.POINTS,
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
