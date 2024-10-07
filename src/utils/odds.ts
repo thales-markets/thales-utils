@@ -163,6 +163,7 @@ export const getParentOdds = (
     return { odds: parentOdds };
 };
 
+// TODO: Expand this method to support multiple marketNames
 /**
  * Filters the odds array to find entries matching the specified market name.
  *
@@ -179,6 +180,7 @@ export const filterOddsByMarketNameBookmaker = (oddsArray, marketName, oddsProvi
     );
 };
 
+// TODO: Unify the same code from formatSpreadOdds method and from processTotalOdds method
 /**
  * Formats the spread odds and creates market objects.
  *
