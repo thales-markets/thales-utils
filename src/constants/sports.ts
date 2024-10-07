@@ -441,7 +441,7 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.SET,
         isDrawAvailable: false,
-        betTypesForLive: [MoneylineTypes.MONEYLINE],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GAME_SPREAD, TotalTypes.TOTAL_GAMES],
         betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GAME_SPREAD, TotalTypes.TOTAL_GAMES],
     },
     [League.TENNIS_GS]: {
@@ -454,7 +454,7 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.SET,
         isDrawAvailable: false,
-        betTypesForLive: [MoneylineTypes.MONEYLINE],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GAME_SPREAD, TotalTypes.TOTAL_GAMES],
         betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GAME_SPREAD, TotalTypes.TOTAL_GAMES],
     },
     [League.TENNIS_MASTERS]: {
@@ -467,7 +467,7 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.SET,
         isDrawAvailable: false,
-        betTypesForLive: [MoneylineTypes.MONEYLINE],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GAME_SPREAD, TotalTypes.TOTAL_GAMES],
         betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GAME_SPREAD, TotalTypes.TOTAL_GAMES],
     },
     [League.SUMMER_OLYMPICS_TENNIS]: {
