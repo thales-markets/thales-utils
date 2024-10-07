@@ -17,3 +17,5 @@ export const statusCodes = {
     /** Game has been canceled and will not be finished. */
     CANCELED: 255,
 };
+
+// TODO: Check if this file can be deleted
