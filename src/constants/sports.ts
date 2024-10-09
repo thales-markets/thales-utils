@@ -580,7 +580,7 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        betTypesForLive: [MoneylineTypes.MONEYLINE],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.POINT_SPREAD, TotalTypes.TOTAL_POINTS],
         betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.POINT_SPREAD, TotalTypes.TOTAL_POINTS],
     },
     [League.SUMMER_OLYMPICS_BASKETBALL]: {
