@@ -1,5 +1,6 @@
 import { LeagueMap } from '../constants/sports';
-import { League, Sport, SpreadTypes, TotalTypes } from '../enums/sports';
+import { League, Sport } from '../enums/sports';
+import { LeagueInfo } from '../types/sports';
 
 export const getLeagueSport = (league: League) => {
     const leagueInfo = LeagueMap[league];
@@ -21,25 +22,16 @@ export const getLeagueIsDrawAvailable = (league: League) => {
     return leagueInfo ? leagueInfo.isDrawAvailable : false;
 };
 
-export const getLiveSupportedLeagues = (testnet?: boolean) => {
-    const allLeagues = Object.values(LeagueMap);
-    return allLeagues
-        .filter((league) => (testnet ? league.betTypesForLiveTestnet.length > 0 : league.betTypesForLive.length > 0))
-        .map((league) => league.id);
+export const getLiveSupportedLeagues = (leagueMap: LeagueInfo[]) => {
+    return leagueMap.map((league) => Number(league.sportId));
 };
 
-export const getBetTypesForLeague = (league: League, testnet?: boolean) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo ? (testnet ? leagueInfo.betTypesForLiveTestnet : leagueInfo.betTypesForLive) : [];
-};
+export const getBetTypesForLeague = (league: League, leagueMap: LeagueInfo[]) => {
+    const betTypes = leagueMap
+        .filter((leagueInfo) => Number(leagueInfo.sportId) === league)
+        .map((leagueInfo) => leagueInfo.marketName);
 
-export const getIsLiveSupported = (league: League, testnet?: boolean) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo
-        ? testnet
-            ? leagueInfo.betTypesForLiveTestnet.length > 0
-            : leagueInfo.betTypesForLive.length > 0
-        : false;
+    return betTypes;
 };
 
 export const getLeagueOpticOddsName = (league: League) => {
@@ -52,24 +44,18 @@ export const getLeaguePeriodType = (league: League) => {
     return leagueInfo ? leagueInfo.periodType : '';
 };
 
-export const getLeagueSpreadType = (league: League, testnet?: boolean) => {
-    const liveBetTypesForLeague = getBetTypesForLeague(league, testnet);
-    let result;
-    liveBetTypesForLeague.forEach((betType) => {
-        if (Object.values(SpreadTypes).find((spreadType) => spreadType == betType)) {
-            result = betType;
-        }
-    });
-    return result;
+export const getLeagueSpreadType = (league: League, leagueMap: LeagueInfo[]) => {
+    const betTypes = leagueMap
+        .filter((leagueInfo) => Number(leagueInfo.sportId) === league && leagueInfo.type === 'Spread')
+        .map((leagueInfo) => leagueInfo.marketName);
+
+    return betTypes[0];
 };
 
-export const getLeagueTotalType = (league: League, testnet?: boolean) => {
-    const liveBetTypesForLeague = getBetTypesForLeague(league, testnet);
-    let result;
-    liveBetTypesForLeague.forEach((betType) => {
-        if (Object.values(TotalTypes).find((totalType) => totalType == betType)) {
-            result = betType;
-        }
-    });
-    return result;
+export const getLeagueTotalType = (league: League, leagueMap: LeagueInfo[]) => {
+    const betTypes = leagueMap
+        .filter((leagueInfo) => Number(leagueInfo.sportId) === league && leagueInfo.type === 'Total')
+        .map((leagueInfo) => leagueInfo.marketName);
+
+    return betTypes[0];
 };

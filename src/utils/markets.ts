@@ -25,7 +25,7 @@ export const processMarket = (
     isDrawAvailable,
     defaultSpreadForLiveMarkets,
     maxPercentageDiffBetwenOdds,
-    isTestnet
+    leagueMap
 ) => {
     const sportSpreadData = spreadData.filter((data) => data.sportId === String(market.leagueId));
 
@@ -68,7 +68,7 @@ export const processMarket = (
         apiResponseWithOdds,
         liveOddsProviders,
         defaultSpreadForLiveMarkets,
-        isTestnet
+        leagueMap
     );
 
     const packedChildMarkets = childMarkets.map((childMarket: any) => {
@@ -113,7 +113,7 @@ const getChildMarkets = (
     apiResponseWithOdds,
     liveOddsProviders,
     defaultSpreadForLiveMarkets,
-    isTestnet
+    leagueMap
 ) => {
     let childMarkets = [];
 
@@ -125,7 +125,7 @@ const getChildMarkets = (
             spreadDataForSport,
             liveOddsProviders,
             defaultSpreadForLiveMarkets,
-            isTestnet
+            leagueMap
         )
     );
 
@@ -137,7 +137,7 @@ const getChildMarkets = (
             spreadDataForSport,
             liveOddsProviders,
             defaultSpreadForLiveMarkets,
-            isTestnet
+            leagueMap
         )
     );
 
@@ -161,10 +161,10 @@ export const createSpreadChildMarkets = (
     spreadDataForSport,
     liveOddsProviders,
     defaultSpreadForLiveMarkets,
-    isTestnet
+    leagueMap
 ) => {
     const childMarkets = [] as any;
-    const spreadType = getLeagueSpreadType(leagueId, isTestnet);
+    const spreadType = getLeagueSpreadType(leagueId, leagueMap);
     const commonData = {
         homeTeam: apiResponseWithOdds.home_team,
         awayTeam: apiResponseWithOdds.away_team,
@@ -212,10 +212,10 @@ export const createTotalChildMarkets = (
     spreadDataForSport,
     liveOddsProviders,
     defaultSpreadForLiveMarkets,
-    isTestnet
+    leagueMap
 ) => {
     const childMarkets = [] as any;
-    const totalType = getLeagueTotalType(leagueId, isTestnet);
+    const totalType = getLeagueTotalType(leagueId, leagueMap);
 
     if (totalType) {
         // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
