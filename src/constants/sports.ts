@@ -227,7 +227,7 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
         betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
     },
     [League.J1_LEAGUE]: {
@@ -805,7 +805,7 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
         betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
     },
     [League.CONCACAF_NATIONS_LEAGUE]: {
