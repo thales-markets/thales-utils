@@ -33,7 +33,7 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        betTypesForLive: [MoneylineTypes.MONEYLINE],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.POINT_SPREAD, TotalTypes.TOTAL_POINTS],
         betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.POINT_SPREAD, TotalTypes.TOTAL_POINTS],
     },
     [League.MLB]: {
@@ -59,7 +59,7 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        betTypesForLive: [MoneylineTypes.MONEYLINE],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.POINT_SPREAD, TotalTypes.TOTAL_POINTS],
         betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.POINT_SPREAD, TotalTypes.TOTAL_POINTS],
     },
     [League.NCAAB]: {
@@ -109,7 +109,7 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.OVERTIME,
         periodType: PeriodType.QUARTER,
         isDrawAvailable: false,
-        betTypesForLive: [MoneylineTypes.MONEYLINE],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.POINT_SPREAD, TotalTypes.TOTAL_POINTS],
         betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.POINT_SPREAD, TotalTypes.TOTAL_POINTS],
     },
     [League.MLS]: {
