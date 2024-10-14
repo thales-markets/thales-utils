@@ -23,12 +23,11 @@ export const getLeagueIsDrawAvailable = (league: League) => {
 };
 
 export const getLiveSupportedLeagues = (leagueMap: LeagueInfo[]) => {
-    return leagueMap.map((league) => Number(league.sportId));
+    return leagueMap.filter((league) => Boolean(league.enabled)).map((league) => Number(league.sportId));
 };
-
 export const getBetTypesForLeague = (league: League, leagueMap: LeagueInfo[]) => {
     const betTypes = leagueMap
-        .filter((leagueInfo) => Number(leagueInfo.sportId) === league)
+        .filter((leagueInfo) => Number(leagueInfo.sportId) === league && Boolean(leagueInfo.enabled))
         .map((leagueInfo) => leagueInfo.marketName);
 
     return betTypes;
@@ -44,18 +43,24 @@ export const getLeaguePeriodType = (league: League) => {
     return leagueInfo ? leagueInfo.periodType : '';
 };
 
-export const getLeagueSpreadType = (league: League, leagueMap: LeagueInfo[]) => {
+export const getLeagueSpreadTypes = (league: League, leagueMap: LeagueInfo[]) => {
     const betTypes = leagueMap
-        .filter((leagueInfo) => Number(leagueInfo.sportId) === league && leagueInfo.type === 'Spread')
-        .map((leagueInfo) => leagueInfo.marketName);
+        .filter(
+            (leagueInfo) =>
+                Number(leagueInfo.sportId) === league && leagueInfo.type === 'Spread' && Boolean(leagueInfo.enabled)
+        )
+        .map((leagueInfo) => leagueInfo.marketName.toLowerCase());
 
-    return betTypes[0];
+    return betTypes;
 };
 
-export const getLeagueTotalType = (league: League, leagueMap: LeagueInfo[]) => {
+export const getLeagueTotalTypes = (league: League, leagueMap: LeagueInfo[]) => {
     const betTypes = leagueMap
-        .filter((leagueInfo) => Number(leagueInfo.sportId) === league && leagueInfo.type === 'Total')
-        .map((leagueInfo) => leagueInfo.marketName);
+        .filter(
+            (leagueInfo) =>
+                Number(leagueInfo.sportId) === league && leagueInfo.type === 'Total' && Boolean(leagueInfo.enabled)
+        )
+        .map((leagueInfo) => leagueInfo.marketName.toLowerCase());
 
-    return betTypes[0];
+    return betTypes;
 };

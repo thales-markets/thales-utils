@@ -3,4 +3,5 @@ export type LeagueInfo = {
     typeId: number;
     marketName: string;
     type: string;
+    enabled: boolean;
 };

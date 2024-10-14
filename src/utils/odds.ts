@@ -163,19 +163,18 @@ export const getParentOdds = (
     return { odds: parentOdds };
 };
 
-// TODO: Expand this method to support multiple marketNames
 /**
  * Filters the odds array to find entries matching the specified market name.
  *
  * @param {Array} oddsArray - The array of odds objects.
- * @param {string} marketName - The market name to filter by.
+ * @param {string} marketNames - The market names to filter by.
  * @param {string} oddsProvider - The main odds provider to filter by.
  * @returns {Array} The filtered odds array.
  */
-export const filterOddsByMarketNameBookmaker = (oddsArray, marketName, oddsProvider) => {
+export const filterOddsByMarketNameBookmaker = (oddsArray, marketNames, oddsProvider) => {
     return oddsArray.filter(
         (odd) =>
-            odd.market_name.toLowerCase() === marketName.toLowerCase() &&
+            marketNames.includes(odd.market_name.toLowerCase()) &&
             odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
     );
 };

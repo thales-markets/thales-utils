@@ -1,7 +1,7 @@
 import * as oddslib from 'oddslib';
 import { TAG_CHILD_SPREAD, TAG_CHILD_TOTALS } from '../constants/common';
 import { filterOddsByMarketNameBookmaker, formatSpreadOdds, getParentOdds, processTotalOdds } from './odds';
-import { getLeagueSpreadType, getLeagueTotalType } from './sports';
+import { getLeagueSpreadTypes, getLeagueTotalTypes } from './sports';
 /**
  * Processes a single sports event. This function maps event data to a specific format,
  * filters invalid events, and optionally fetches player properties if the sport supports it.
@@ -164,16 +164,16 @@ export const createSpreadChildMarkets = (
     leagueMap
 ) => {
     const childMarkets = [] as any;
-    const spreadType = getLeagueSpreadType(leagueId, leagueMap);
+    const spreadTypes = getLeagueSpreadTypes(leagueId, leagueMap);
     const commonData = {
         homeTeam: apiResponseWithOdds.home_team,
         awayTeam: apiResponseWithOdds.away_team,
     };
-    if (spreadType) {
+    if (spreadTypes.length > 0) {
         // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
         const allSpreadOdds = filterOddsByMarketNameBookmaker(
             apiResponseWithOdds.odds,
-            spreadType,
+            spreadTypes,
             liveOddsProviders[0]
         );
 
@@ -215,11 +215,11 @@ export const createTotalChildMarkets = (
     leagueMap
 ) => {
     const childMarkets = [] as any;
-    const totalType = getLeagueTotalType(leagueId, leagueMap);
+    const totalTypes = getLeagueTotalTypes(leagueId, leagueMap);
 
-    if (totalType) {
+    if (totalTypes.length > 0) {
         // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
-        const totalOdds = filterOddsByMarketNameBookmaker(apiResponseWithOdds.odds, totalType, liveOddsProviders[0]);
+        const totalOdds = filterOddsByMarketNameBookmaker(apiResponseWithOdds.odds, totalTypes, liveOddsProviders[0]);
 
         if (totalOdds.length > 0) {
             childMarkets.push(
