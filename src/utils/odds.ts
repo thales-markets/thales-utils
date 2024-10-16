@@ -167,7 +167,7 @@ export const getParentOdds = (
 /**
  * Creates  child markets based on the given parameters.
  *
- * @param {Object} market - The market object from the API
+ * @param {Object} leagueId - leagueId AKA sportId
  * @param {Array} spreadDataForSport - Spread data for sport.
  * @param {Object} apiResponseWithOdds - API response from the provider
  * @param {Array} liveOddsProviders - Odds providers for live odds
@@ -177,14 +177,14 @@ export const getParentOdds = (
  */
 export const createChildMarkets = (
     apiResponseWithOdds,
-    market,
+    leagueId,
     spreadDataForSport,
     liveOddsProviders,
     defaultSpreadForLiveMarkets,
     leagueMap
 ) => {
     const [spreadOdds, totalOdds, childMarkets] = [[], [], []]; // placeholders for
-    const leagueInfo = getLeagueInfo(market.leagueId, leagueMap);
+    const leagueInfo = getLeagueInfo(leagueId, leagueMap);
     const commonData = {
         homeTeam: apiResponseWithOdds.home_team,
         awayTeam: apiResponseWithOdds.away_team,
@@ -220,10 +220,9 @@ export const createChildMarkets = (
             defaultSpreadForLiveMarkets
         );
 
+        const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
+        const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
         oddsWithSpreadAdjusted.forEach((data) => {
-            const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
-            const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
-
             const childMarket = {
                 leagueId: data.sportId,
                 typeId: data.typeId,
@@ -246,7 +245,7 @@ export const createChildMarkets = (
             }
         });
     } else {
-        console.warn(`No child markets for leagueID: ${market.leagueId}`);
+        console.warn(`No child markets for leagueID: ${leagueId}`);
     }
     return childMarkets;
 };
