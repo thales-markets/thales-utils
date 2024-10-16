@@ -33,6 +33,11 @@ export const getBetTypesForLeague = (league: League, leagueMap: LeagueInfo[]) =>
     return betTypes;
 };
 
+export const getLeagueInfo = (league: League, leagueMap: LeagueInfo[]) => {
+    const leagueInfos = leagueMap.filter((leagueInfo) => Number(leagueInfo.sportId) === league);
+    return leagueInfos;
+};
+
 export const getLeagueOpticOddsName = (league: League) => {
     const leagueInfo = LeagueMap[league];
     return leagueInfo ? leagueInfo.opticOddsName : undefined;

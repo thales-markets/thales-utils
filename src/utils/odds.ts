@@ -1,9 +1,10 @@
 import * as oddslib from 'oddslib';
 import { DRAW, LIVE_TYPE_ID_BASE, MIN_ODDS_FOR_DIFF_CHECKING, ZERO } from '../constants/common';
-import { statusCodes } from '../enums/statuses';
 import { checkOddsFromBookmakers } from './bookmakers';
 import { adjustSpreadOnOdds, getSpreadData } from './spread';
 import { MoneylineTypes } from '../enums/sports';
+import { LeagueInfo } from '../types/sports';
+import { getLeagueInfo } from './sports';
 
 /**
  * Converts a given odds value from one format to another.
@@ -164,98 +165,115 @@ export const getParentOdds = (
 };
 
 /**
+ * Creates  child markets based on the given parameters.
+ *
+ * @param {Object} market - The market object from the API
+ * @param {Array} spreadDataForSport - Spread data for sport.
+ * @param {Object} apiResponseWithOdds - API response from the provider
+ * @param {Array} liveOddsProviders - Odds providers for live odds
+ * @param {Number} defaultSpreadForLiveMarkets - Default spread for live markets
+ * @param {Boolean} leagueMap - League Map info
+ * @returns {Array} The child markets.
+ */
+export const createChildMarkets = (
+    apiResponseWithOdds,
+    market,
+    spreadDataForSport,
+    liveOddsProviders,
+    defaultSpreadForLiveMarkets,
+    leagueMap
+) => {
+    const [spreadOdds, totalOdds, childMarkets] = [[], [], []]; // placeholders for
+    const leagueInfo = getLeagueInfo(market.leagueId, leagueMap);
+    const commonData = {
+        homeTeam: apiResponseWithOdds.home_team,
+        awayTeam: apiResponseWithOdds.away_team,
+    };
+    if (leagueInfo.length > 0) {
+        // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
+        const allChildOdds = filterOddsByMarketNameBookmaker(
+            apiResponseWithOdds.odds,
+            leagueInfo,
+            liveOddsProviders[0]
+        );
+
+        const allValidOdds = allChildOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5) as any;
+
+        allValidOdds.forEach((odd) => {
+            if (odd && Math.abs(odd.selection_points % 1) === 0.5) {
+                if (odd.type === 'Total') {
+                    totalOdds.push(odd);
+                } else if (odd.type === 'Spread') {
+                    spreadOdds.push(odd);
+                }
+            }
+        });
+
+        const formattedOdds = [
+            ...groupAndFormatSpreadOdds(spreadOdds, commonData),
+            ...groupOddsBySelectionAndPoints(totalOdds),
+        ];
+
+        const oddsWithSpreadAdjusted = adjustSpreadOnChildOdds(
+            formattedOdds,
+            spreadDataForSport,
+            defaultSpreadForLiveMarkets
+        );
+
+        oddsWithSpreadAdjusted.forEach((data) => {
+            const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
+            const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
+
+            const childMarket = {
+                leagueId: data.sportId,
+                typeId: data.typeId,
+                type: data.type,
+                line: data.line,
+                odds: data.odds,
+            };
+
+            if (
+                !(
+                    minOdds &&
+                    maxOdds &&
+                    (data.odds[0] >= minOdds ||
+                        data.odds[0] <= maxOdds ||
+                        data.odds[1] >= minOdds ||
+                        data.odds[1] <= maxOdds)
+                )
+            ) {
+                childMarkets.push(childMarket);
+            }
+        });
+    } else {
+        console.warn(`No child markets for leagueID: ${market.leagueId}`);
+    }
+    return childMarkets;
+};
+
+/**
  * Filters the odds array to find entries matching the specified market name.
  *
  * @param {Array} oddsArray - The array of odds objects.
- * @param {string} marketNames - The market names to filter by.
+ * @param {string} leagueInfos - The market names to filter by.
  * @param {string} oddsProvider - The main odds provider to filter by.
  * @returns {Array} The filtered odds array.
  */
-export const filterOddsByMarketNameBookmaker = (oddsArray, marketNames, oddsProvider) => {
-    return oddsArray.filter(
-        (odd) =>
-            marketNames.includes(odd.market_name.toLowerCase()) &&
-            odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
-    );
-};
-
-// TODO: Unify the same code from formatSpreadOdds method and from processTotalOdds method
-/**
- * Formats the spread odds and creates market objects.
- *
- * @param {Array} spreadOdds - The spread odds array.
- * @param {Object} commonData - The common data object.
- * @param {Object} market - The sport ID from the API.
- * @param {Array} spreadDataForSport - Spread data for the sport.
- * @param {Number} typeId - typeID
- * @param {Number} defaultSpreadForLiveMarkets - Default spread for live markets,
- * @returns {Array} The formatted spread markets.
- */
-export const formatSpreadOdds = (
-    spreadOdds,
-    commonData,
-    leagueId,
-    spreadDataForSport,
-    typeId,
-    defaultSpreadForLiveMarkets
-) => {
-    const childMarkets = [] as any;
-    const validSpreadOdds = spreadOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5) as any;
-    const formattedSpreadOdds = groupAndFormatSpreadOdds(validSpreadOdds, commonData);
-
-    formattedSpreadOdds.forEach(({ line, odds }) => {
-        let homeTeamOdds = convertOddsToImpl(odds[0]) || ZERO;
-        let awayTeamOdds = convertOddsToImpl(odds[1]) || ZERO;
-        let isZeroOddsChild = homeTeamOdds === ZERO || awayTeamOdds === ZERO;
-
-        if (!isZeroOddsChild) {
-            const spreadData = getSpreadData(spreadDataForSport, leagueId, typeId, defaultSpreadForLiveMarkets);
-            if (spreadData !== null) {
-                let adjustedOdds = adjustSpreadOnOdds(
-                    [homeTeamOdds, awayTeamOdds],
-                    spreadData.minSpread,
-                    spreadData.targetSpread
-                );
-                if (adjustedOdds.some((prob) => prob === ZERO)) {
-                    isZeroOddsChild = true;
-                } else {
-                    [homeTeamOdds, awayTeamOdds] = adjustedOdds;
-                }
-            } else {
-                let adjustedOdds = adjustSpreadOnOdds([homeTeamOdds, awayTeamOdds], defaultSpreadForLiveMarkets, 0);
-                if (adjustedOdds.some((prob) => prob === ZERO)) {
-                    isZeroOddsChild = true;
-                } else {
-                    [homeTeamOdds, awayTeamOdds] = adjustedOdds;
-                }
-            }
-        }
-
-        const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
-        const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
-
-        if (
-            !(
-                minOdds &&
-                maxOdds &&
-                (homeTeamOdds >= minOdds ||
-                    homeTeamOdds <= maxOdds ||
-                    awayTeamOdds >= minOdds ||
-                    awayTeamOdds <= maxOdds)
-            )
-        ) {
-            childMarkets.push({
-                leagueId,
-                typeId: typeId,
-                type: 'spread',
-                results: [],
-                status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
-                line: line,
-                odds: [homeTeamOdds, awayTeamOdds],
-            });
-        }
-    });
-    return childMarkets;
+export const filterOddsByMarketNameBookmaker = (oddsArray, leagueInfos: LeagueInfo[], oddsProvider) => {
+    const allChildMarketsTypes = leagueInfos.map((leagueInfo) => leagueInfo.marketName);
+    return oddsArray
+        .filter(
+            (odd) =>
+                allChildMarketsTypes.includes(odd.market_name.toLowerCase()) &&
+                odd.market_name.toLowerCase() !== MoneylineTypes.MONEYLINE.toLowerCase() &&
+                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
+        )
+        .map((odd) => {
+            return {
+                ...odd,
+                ...leagueInfos.find((leagueInfo) => leagueInfo.marketName === odd.market_name),
+            };
+        });
 };
 
 /**
@@ -268,13 +286,13 @@ export const formatSpreadOdds = (
 export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
     // Group odds by their selection points and selection
     const groupedOdds = oddsArray.reduce((acc: any, odd: any) => {
-        const { selection_points, price, selection } = odd;
+        const { selection_points, price, selection, typeId, sportId, type } = odd;
         const isHomeTeam = selection === commonData.homeTeam;
 
         const key = isHomeTeam ? selection_points : -selection_points;
 
         if (!acc[key]) {
-            acc[key] = { home: null, away: null };
+            acc[key] = { home: null, away: null, typeId: null, sportId: null };
         }
 
         if (isHomeTeam) {
@@ -282,6 +300,10 @@ export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
         } else {
             acc[key].away = price;
         }
+
+        acc[key].typeId = typeId;
+        acc[key].type = type;
+        acc[key].sportId = sportId;
 
         return acc;
     }, {}) as any;
@@ -292,6 +314,9 @@ export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
             acc.push({
                 line: line as any,
                 odds: [(value as any).home, (value as any).away],
+                typeId: value.typeId,
+                sportId: value.sportId,
+                type: value.type,
             });
         }
         return acc;
@@ -301,88 +326,14 @@ export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
 };
 
 /**
- * Processes total odds to create market objects.
- *
- * @param {Array} totalOdds - The total odds array.
- * @param {Object} commonData - The common data object.
- * @param {Object} market - The sport ID from the API.
- * @param {Array} spreadDataForSport - Spread data for the sport.
- * @param {Number} typeId - typeID
- * @param {Number} defaultSpreadForLiveMarkets - Default spread for live markets,
- * @returns {Array} The processed total odds market objects.
- */
-export const processTotalOdds = (totalOdds, leagueId, spreadDataForSport, typeId, defaultSpreadForLiveMarkets) => {
-    const childMarkets = [] as any;
-    const validTotalOdds = totalOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5);
-    const groupedOdds = groupOddsBySelectionAndPoints(validTotalOdds);
-    const iterableGroupedOdds = Object.entries(groupedOdds) as any;
-
-    iterableGroupedOdds.forEach(([key, { over, under }]) => {
-        const [_, selection_points] = key.split('_');
-
-        let overOdds = convertOddsToImpl(over) || ZERO;
-        let underOdds = convertOddsToImpl(under) || ZERO;
-        let isZeroOddsChild = overOdds === ZERO || underOdds === ZERO;
-
-        if (!isZeroOddsChild) {
-            const spreadData = getSpreadData(spreadDataForSport, leagueId, typeId, defaultSpreadForLiveMarkets);
-            if (spreadData !== null) {
-                let adjustedOdds = adjustSpreadOnOdds(
-                    [overOdds, underOdds],
-                    spreadData.minSpread,
-                    spreadData.targetSpread
-                );
-                if (adjustedOdds.some((prob) => prob === ZERO)) {
-                    isZeroOddsChild = true;
-                } else {
-                    [overOdds, underOdds] = adjustedOdds;
-                }
-            } else {
-                // Use min spread by sport if available, otherwise use default min spread
-                let adjustedOdds = adjustSpreadOnOdds([overOdds, underOdds], defaultSpreadForLiveMarkets, 0);
-                if (adjustedOdds.some((prob) => prob === ZERO)) {
-                    isZeroOddsChild = true;
-                } else {
-                    [overOdds, underOdds] = adjustedOdds;
-                }
-            }
-        }
-
-        const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
-        const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
-
-        const childMarket = {
-            leagueId,
-            typeId: typeId,
-            type: 'total',
-            results: [],
-            status: isZeroOddsChild ? statusCodes.PAUSED : statusCodes.OPEN,
-            line: parseFloat(selection_points),
-            odds: [overOdds, underOdds],
-        };
-
-        if (
-            !(
-                minOdds &&
-                maxOdds &&
-                (overOdds >= minOdds || overOdds <= maxOdds || underOdds >= minOdds || underOdds <= maxOdds)
-            )
-        ) {
-            childMarkets.push(childMarket);
-        }
-    });
-
-    return childMarkets;
-};
-
-/**
  * Groups odds by selection and points over/under.
  *
  * @param {Array} oddsArray - The array of odds objects.
  * @returns {Object} The grouped odds.
  */
 export const groupOddsBySelectionAndPoints = (oddsArray) => {
-    return oddsArray.reduce((acc, odd) => {
+    // Group odds by their selection points and selection
+    const groupedOdds = oddsArray.reduce((acc, odd) => {
         if (odd) {
             const key = `${odd.selection}_${odd.selection_points}`;
             if (!acc[key]) {
@@ -393,8 +344,62 @@ export const groupOddsBySelectionAndPoints = (oddsArray) => {
             } else if (odd.selection_line === 'under') {
                 acc[key].under = odd.price;
             }
+
+            acc[key].typeId = odd.typeId;
+            acc[key].type = odd.type;
+            acc[key].sportId = odd.sportId;
         }
 
         return acc;
     }, {});
+
+    // Format the grouped odds into the desired output
+    const formattedOdds = (Object.entries(groupedOdds as any) as any).reduce((acc, [key, value]) => {
+        const line = parseFloat(key);
+        if ((value as any).over !== null && (value as any).under !== null) {
+            acc.push({
+                line: line as any,
+                odds: [(value as any).over, (value as any).under],
+                typeId: value.typeId,
+                sportId: value.sportId,
+                type: value.type,
+            });
+        }
+        return acc;
+    }, []);
+
+    return formattedOdds;
+};
+
+export const adjustSpreadOnChildOdds = (iterableGroupedOdds, spreadDataForSport, defaultSpreadForLiveMarkets) => {
+    const result = [];
+    iterableGroupedOdds.forEach((data) => {
+        let homeTeamOdds = convertOddsToImpl(data.odds[0]) || ZERO;
+        let awayTeamOdds = convertOddsToImpl(data.odds[1]) || ZERO;
+        let isZeroOddsChild = homeTeamOdds === ZERO || awayTeamOdds === ZERO;
+        if (!isZeroOddsChild) {
+            const spreadData = getSpreadData(
+                spreadDataForSport,
+                data.sportId,
+                data.typeId,
+                defaultSpreadForLiveMarkets
+            );
+            let adjustedOdds;
+            if (spreadData !== null) {
+                adjustedOdds = adjustSpreadOnOdds(
+                    [homeTeamOdds, awayTeamOdds],
+                    spreadData.minSpread,
+                    spreadData.targetSpread
+                );
+            } else {
+                adjustedOdds = adjustSpreadOnOdds([homeTeamOdds, awayTeamOdds], defaultSpreadForLiveMarkets, 0);
+            }
+            [homeTeamOdds, awayTeamOdds] = adjustedOdds;
+            result.push({
+                ...data,
+                odds: adjustedOdds,
+            });
+        }
+    });
+    return result;
 };
