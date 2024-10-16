@@ -177,8 +177,8 @@ export const getParentOdds = (
  */
 export const createChildMarkets = (
     apiResponseWithOdds,
-    leagueId,
     spreadDataForSport,
+    leagueId,
     liveOddsProviders,
     defaultSpreadForLiveMarkets,
     leagueMap
@@ -197,7 +197,9 @@ export const createChildMarkets = (
             liveOddsProviders[0]
         );
 
+        console.log('all Child Odds: ', allChildOdds);
         const allValidOdds = allChildOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5) as any;
+        console.log('all valid odds: ', allValidOdds);
 
         allValidOdds.forEach((odd) => {
             if (odd && Math.abs(odd.selection_points % 1) === 0.5) {
@@ -208,6 +210,9 @@ export const createChildMarkets = (
                 }
             }
         });
+
+        console.log('all totalOdds odds: ', totalOdds);
+        console.log('all spreadOdds odds: ', spreadOdds);
 
         const formattedOdds = [
             ...groupAndFormatSpreadOdds(spreadOdds, commonData),
@@ -245,7 +250,7 @@ export const createChildMarkets = (
             }
         });
     } else {
-        console.warn(`No child markets for leagueID: ${leagueId}`);
+        console.warn(`No child markets for leagueID: ${Number(leagueId)}`);
     }
     return childMarkets;
 };
@@ -354,7 +359,9 @@ export const groupOddsBySelectionAndPoints = (oddsArray) => {
 
     // Format the grouped odds into the desired output
     const formattedOdds = (Object.entries(groupedOdds as any) as any).reduce((acc, [key, value]) => {
+        console.log('key for totals: ', key);
         const line = parseFloat(key);
+
         if ((value as any).over !== null && (value as any).under !== null) {
             acc.push({
                 line: line as any,

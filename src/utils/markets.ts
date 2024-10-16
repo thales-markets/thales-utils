@@ -61,9 +61,9 @@ export const processMarket = (
     }
 
     const childMarkets = createChildMarkets(
-        market.leagueId,
-        sportSpreadData,
         apiResponseWithOdds,
+        sportSpreadData,
+        market.leagueId,
         liveOddsProviders,
         defaultSpreadForLiveMarkets,
         leagueMap
