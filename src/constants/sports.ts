@@ -1575,6 +1575,7 @@ export const LeagueIdMapOpticOdds = {
     1: 'NCAAF',
     2: 'NFL',
     3: 'MLB',
+    4: 'NBA',
     6: 'NHL',
     7: 'UFC',
     8: 'WNBA',
