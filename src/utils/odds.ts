@@ -197,9 +197,7 @@ export const createChildMarkets = (
             liveOddsProviders[0]
         );
 
-        console.log('all Child Odds: ', allChildOdds);
         const allValidOdds = allChildOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5) as any;
-        console.log('all valid odds: ', allValidOdds);
 
         allValidOdds.forEach((odd) => {
             if (odd && Math.abs(odd.selection_points % 1) === 0.5) {
@@ -211,12 +209,9 @@ export const createChildMarkets = (
             }
         });
 
-        console.log('all totalOdds odds: ', totalOdds);
-        console.log('all spreadOdds odds: ', spreadOdds);
-
         const formattedOdds = [
             ...groupAndFormatSpreadOdds(spreadOdds, commonData),
-            ...groupOddsBySelectionAndPoints(totalOdds),
+            ...groupAndFormatTotalOdds(totalOdds, commonData),
         ];
 
         const oddsWithSpreadAdjusted = adjustSpreadOnChildOdds(
@@ -229,10 +224,10 @@ export const createChildMarkets = (
         const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
         oddsWithSpreadAdjusted.forEach((data) => {
             const childMarket = {
-                leagueId: data.sportId,
-                typeId: data.typeId,
-                type: data.type,
-                line: data.line,
+                leagueId: Number(data.sportId),
+                typeId: Number(data.typeId),
+                type: data.type.toLowerCase(),
+                line: Number(data.line),
                 odds: data.odds,
             };
 
@@ -264,12 +259,13 @@ export const createChildMarkets = (
  * @returns {Array} The filtered odds array.
  */
 export const filterOddsByMarketNameBookmaker = (oddsArray, leagueInfos: LeagueInfo[], oddsProvider) => {
-    const allChildMarketsTypes = leagueInfos.map((leagueInfo) => leagueInfo.marketName);
+    const allChildMarketsTypes = leagueInfos
+        .filter((leagueInfo) => leagueInfo.marketName.toLowerCase() !== MoneylineTypes.MONEYLINE.toLowerCase())
+        .map((leagueInfo) => leagueInfo.marketName.toLowerCase());
     return oddsArray
         .filter(
             (odd) =>
                 allChildMarketsTypes.includes(odd.market_name.toLowerCase()) &&
-                odd.market_name.toLowerCase() !== MoneylineTypes.MONEYLINE.toLowerCase() &&
                 odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
         )
         .map((odd) => {
@@ -335,7 +331,7 @@ export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
  * @param {Array} oddsArray - The array of odds objects.
  * @returns {Object} The grouped odds.
  */
-export const groupOddsBySelectionAndPoints = (oddsArray) => {
+export const groupAndFormatTotalOdds = (oddsArray, commonData) => {
     // Group odds by their selection points and selection
     const groupedOdds = oddsArray.reduce((acc, odd) => {
         if (odd) {
@@ -359,14 +355,15 @@ export const groupOddsBySelectionAndPoints = (oddsArray) => {
 
     // Format the grouped odds into the desired output
     const formattedOdds = (Object.entries(groupedOdds as any) as any).reduce((acc, [key, value]) => {
-        console.log('key for totals: ', key);
-        const line = parseFloat(key);
+        const [selection, selectionLine] = key.split('_');
+        const line = parseFloat(selectionLine);
+        const isAwayTeam = selection === commonData.awayTeam;
 
         if ((value as any).over !== null && (value as any).under !== null) {
             acc.push({
                 line: line as any,
                 odds: [(value as any).over, (value as any).under],
-                typeId: value.typeId,
+                typeId: !isAwayTeam ? value.typeId : Number(value.typeId) + 1,
                 sportId: value.sportId,
                 type: value.type,
             });
