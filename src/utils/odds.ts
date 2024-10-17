@@ -190,7 +190,7 @@ export const createChildMarkets: (
     defaultSpreadForLiveMarkets,
     leagueMap
 ) => {
-    const [spreadOdds, totalOdds, childMarkets] = [[], [], []]; // placeholders for
+    const [spreadOdds, totalOdds, childMarkets]: any[] = [[], [], []];
     const leagueInfo = getLeagueInfo(leagueId, leagueMap);
     const commonData = {
         homeTeam: apiResponseWithOdds.home_team,
@@ -382,7 +382,7 @@ export const groupAndFormatTotalOdds = (oddsArray, commonData) => {
 };
 
 export const adjustSpreadOnChildOdds = (iterableGroupedOdds, spreadDataForSport, defaultSpreadForLiveMarkets) => {
-    const result = [];
+    const result: any[] = [];
     iterableGroupedOdds.forEach((data) => {
         let homeTeamOdds = convertOddsToImpl(data.odds[0]) || ZERO;
         let awayTeamOdds = convertOddsToImpl(data.odds[1]) || ZERO;
