@@ -3,7 +3,7 @@ import { DRAW, LIVE_TYPE_ID_BASE, MIN_ODDS_FOR_DIFF_CHECKING, ZERO } from '../co
 import { checkOddsFromBookmakers } from './bookmakers';
 import { adjustSpreadOnOdds, getSpreadData } from './spread';
 import { MoneylineTypes } from '../enums/sports';
-import { LeagueInfo } from '../types/sports';
+import { ChildMarket, LeagueInfo } from '../types/sports';
 import { getLeagueInfo } from './sports';
 
 /**
@@ -175,7 +175,14 @@ export const getParentOdds = (
  * @param {Boolean} leagueMap - League Map info
  * @returns {Array} The child markets.
  */
-export const createChildMarkets = (
+export const createChildMarkets: (
+    apiResponseWithOdds: any,
+    spreadDataForSport: any,
+    leagueId: number,
+    liveOddsProviders: any,
+    defaultSpreadForLiveMarkets: any,
+    leagueMap: any
+) => ChildMarket[] = (
     apiResponseWithOdds,
     spreadDataForSport,
     leagueId,

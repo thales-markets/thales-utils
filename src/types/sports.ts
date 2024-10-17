@@ -5,3 +5,11 @@ export type LeagueInfo = {
     type: string;
     enabled: string;
 };
+
+export type ChildMarket = {
+    leagueId: number;
+    typeId: number;
+    type: string;
+    line: number;
+    odds: Array<number>;
+};
