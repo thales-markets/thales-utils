@@ -15,6 +15,7 @@ export const LeagueMap = {
         sport: Sport.FOOTBALL,
         id: League.NCAAF,
         label: 'NCAA Football',
+        opticOddsName: 'NCAAF',
         provider: Provider.OPTICODDS,
         scoringType: ScoringType.POINTS,
         matchResolveType: MatchResolveType.OVERTIME,
