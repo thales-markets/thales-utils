@@ -124,7 +124,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.EPL]: {
         sport: Sport.SOCCER,
@@ -136,8 +136,8 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.LIGUE_ONE]: {
         sport: Sport.SOCCER,
@@ -149,8 +149,8 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.BUNDESLIGA]: {
         sport: Sport.SOCCER,
@@ -162,8 +162,8 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.LA_LIGA]: {
         sport: Sport.SOCCER,
@@ -175,8 +175,8 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.SERIE_A]: {
         sport: Sport.SOCCER,
@@ -188,8 +188,8 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
 
     [League.UEFA_CL]: {
@@ -202,8 +202,8 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.UEFA_EL]: {
         sport: Sport.SOCCER,
@@ -215,8 +215,8 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.FIFA_WC]: {
         sport: Sport.SOCCER,
@@ -228,8 +228,8 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.J1_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -242,7 +242,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.IPL]: {
         sport: Sport.CRICKET,
@@ -291,7 +291,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.COPA_LIBERTADORES]: {
         sport: Sport.SOCCER,
@@ -304,7 +304,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.UEFA_EURO]: {
         sport: Sport.SOCCER,
@@ -317,7 +317,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.EREDIVISIE]: {
         sport: Sport.SOCCER,
@@ -330,7 +330,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.PRIMEIRA_LIGA]: {
         sport: Sport.SOCCER,
@@ -343,7 +343,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.SUMMER_OLYMPICS_SOCCER_WOMEN]: {
         sport: Sport.SOCCER,
@@ -356,7 +356,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.SUMMER_OLYMPICS_SOCCER]: {
         sport: Sport.SOCCER,
@@ -369,7 +369,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.FIFA_WC_WOMEN]: {
         sport: Sport.SOCCER,
@@ -506,7 +506,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.BRAZIL_1]: {
         sport: Sport.SOCCER,
@@ -519,7 +519,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.UEFA_EURO_U21]: {
         sport: Sport.SOCCER,
@@ -531,7 +531,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.FIFA_WORLD_CUP_U20]: {
         sport: Sport.SOCCER,
@@ -693,7 +693,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.SUMMER_OLYMPICS_WATERPOLO]: {
         sport: Sport.WATERPOLO,
@@ -806,8 +806,8 @@ export const LeagueMap = {
         matchResolveType: MatchResolveType.REGULAR,
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
-        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLive: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.CONCACAF_NATIONS_LEAGUE]: {
         sport: Sport.SOCCER,
@@ -921,7 +921,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.NON_TITLE_BOXING]: {
         sport: Sport.FIGHTING,
@@ -946,7 +946,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.UEFA_EUROPA_LEAGUE_QUALIFICATION]: {
         sport: Sport.SOCCER,
@@ -959,7 +959,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.UEFA_CONFERENCE_LEAGUE_QUALIFICATION]: {
         sport: Sport.SOCCER,
@@ -972,7 +972,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.US_ELECTION]: {
         sport: Sport.POLITICS,
@@ -997,7 +997,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.BRAZIL_CUP]: {
         sport: Sport.SOCCER,
@@ -1010,7 +1010,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.ENGLAND_CHAMPIONSHIP]: {
         sport: Sport.SOCCER,
@@ -1023,7 +1023,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.SCOTLAND_PREMIERSHIP]: {
         sport: Sport.SOCCER,
@@ -1348,7 +1348,7 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
         betTypesForLive: [MoneylineTypes.MONEYLINE],
-        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.ASIAN_HANDICAP, TotalTypes.TOTAL_GOALS],
+        betTypesForLiveTestnet: [MoneylineTypes.MONEYLINE, SpreadTypes.GOAL_SPREAD, TotalTypes.TOTAL_GOALS],
     },
     [League.ENGLAND_LEGAUE_1]: {
         sport: Sport.SOCCER,
