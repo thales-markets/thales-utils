@@ -1,5 +1,5 @@
 import * as oddslib from 'oddslib';
-import { DRAW, LIVE_TYPE_ID_BASE, MIN_ODDS_FOR_DIFF_CHECKING, ZERO } from '../constants/common';
+import { DRAW, MIN_ODDS_FOR_DIFF_CHECKING, MONEYLINE_TYPE_ID, ZERO } from '../constants/common';
 import { checkOddsFromBookmakers } from './bookmakers';
 import { adjustSpreadOnOdds, getSpreadData } from './spread';
 import { MoneylineTypes } from '../enums/sports';
@@ -153,7 +153,7 @@ export const getParentOdds = (
         : [oddsObject.homeOdds, oddsObject.awayOdds, oddsObject.drawOdds];
 
     let parentOdds = primaryBookmakerOdds.map((odd) => convertOddsToImpl(odd));
-    const spreadData = getSpreadData(sportSpreadData, sportId, LIVE_TYPE_ID_BASE, defaultSpreadForLiveMarkets);
+    const spreadData = getSpreadData(sportSpreadData, sportId, MONEYLINE_TYPE_ID, defaultSpreadForLiveMarkets);
 
     if (spreadData !== null) {
         parentOdds = adjustSpreadOnOdds(parentOdds, spreadData.minSpread, spreadData.targetSpread);
