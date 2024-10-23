@@ -176,6 +176,7 @@ export enum SpreadTypes {
     ASIAN_HANDICAP = 'Asian Handicap',
     GAME_SPREAD = 'Game Spread',
     POINT_SPREAD = 'Point Spread',
+    GOAL_SPREAD = 'Goal Spread',
     RUN_LINE = 'Run Line',
     PUCK_LINE = 'Puck Line',
 }
