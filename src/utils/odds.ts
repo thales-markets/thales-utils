@@ -207,12 +207,10 @@ export const createChildMarkets: (
         const allValidOdds = allChildOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5) as any;
 
         allValidOdds.forEach((odd) => {
-            if (odd && Math.abs(odd.selection_points % 1) === 0.5) {
-                if (odd.type === 'Total') {
-                    totalOdds.push(odd);
-                } else if (odd.type === 'Spread') {
-                    spreadOdds.push(odd);
-                }
+            if (odd.type === 'Total') {
+                totalOdds.push(odd);
+            } else if (odd.type === 'Spread') {
+                spreadOdds.push(odd);
             }
         });
 
@@ -278,7 +276,7 @@ export const filterOddsByMarketNameBookmaker = (oddsArray, leagueInfos: LeagueIn
         .map((odd) => {
             return {
                 ...odd,
-                ...leagueInfos.find((leagueInfo) => leagueInfo.marketName === odd.market_name),
+                ...leagueInfos.find((leagueInfo) => leagueInfo.marketName === odd.market_name), // using .find() for team totals means that we will always assign 10017 as typeID at this point
             };
         });
 };
@@ -364,8 +362,10 @@ export const groupAndFormatTotalOdds = (oddsArray, commonData) => {
     const formattedOdds = (Object.entries(groupedOdds as any) as any).reduce((acc, [key, value]) => {
         const [selection, selectionLine] = key.split('_');
         const line = parseFloat(selectionLine);
-        const isAwayTeam = selection === commonData.awayTeam;
 
+        // if we have away team in total odds we know the market is team total and we need to increase typeId by one.
+        // if this is false typeId is already mapped correctly
+        const isAwayTeam = selection === commonData.awayTeam;
         if ((value as any).over !== null && (value as any).under !== null) {
             acc.push({
                 line: line as any,
