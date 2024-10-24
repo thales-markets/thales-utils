@@ -227,8 +227,6 @@ export const createChildMarkets: (
             defaultSpreadForLiveMarkets
         );
 
-        const minOdds = process.env.MIN_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
-        const maxOdds = process.env.MAX_ODDS_FOR_CHILD_MARKETS_FOR_LIVE;
         oddsWithSpreadAdjusted.forEach((data) => {
             const childMarket = {
                 leagueId: Number(data.sportId),
@@ -237,7 +235,9 @@ export const createChildMarkets: (
                 line: Number(data.line),
                 odds: data.odds,
             };
-
+            const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(data.typeId));
+            const minOdds = leagueInfoByTypeId.minOdds;
+            const maxOdds = leagueInfoByTypeId.maxOdds;
             if (
                 !(
                     minOdds &&

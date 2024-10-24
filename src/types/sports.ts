@@ -4,6 +4,8 @@ export type LeagueInfo = {
     marketName: string;
     type: string;
     enabled: string;
+    minOdds: number;
+    maxOdds: number;
 };
 
 export type ChildMarket = {
