@@ -234,8 +234,8 @@ export const createChildMarkets: (
                 odds: data.odds,
             };
             const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(data.typeId));
-            const minOdds = leagueInfoByTypeId.minOdds;
-            const maxOdds = leagueInfoByTypeId.maxOdds;
+            const minOdds = leagueInfoByTypeId?.minOdds;
+            const maxOdds = leagueInfoByTypeId?.maxOdds;
             if (
                 !(
                     minOdds &&
