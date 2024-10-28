@@ -13,4 +13,3 @@ export * from './src/constants/common';
 export * from './src/constants/sports';
 
 export * from './src/enums/sports';
-export * from './src/enums/statuses';

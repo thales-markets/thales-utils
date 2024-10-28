@@ -1,7 +1,5 @@
 import * as oddslib from 'oddslib';
-import { TAG_CHILD_SPREAD, TAG_CHILD_TOTALS } from '../constants/common';
-import { filterOddsByMarketNameBookmaker, formatSpreadOdds, getParentOdds, processTotalOdds } from './odds';
-import { getLeagueSpreadType, getLeagueTotalType } from './sports';
+import { createChildMarkets, getParentOdds } from './odds';
 /**
  * Processes a single sports event. This function maps event data to a specific format,
  * filters invalid events, and optionally fetches player properties if the sport supports it.
@@ -25,7 +23,7 @@ export const processMarket = (
     isDrawAvailable,
     defaultSpreadForLiveMarkets,
     maxPercentageDiffBetwenOdds,
-    isTestnet
+    leagueMap
 ) => {
     const sportSpreadData = spreadData.filter((data) => data.sportId === String(market.leagueId));
 
@@ -62,13 +60,13 @@ export const processMarket = (
             });
     }
 
-    const childMarkets = getChildMarkets(
-        market.leagueId,
-        sportSpreadData,
+    const childMarkets = createChildMarkets(
         apiResponseWithOdds,
+        sportSpreadData,
+        market.leagueId,
         liveOddsProviders,
         defaultSpreadForLiveMarkets,
-        isTestnet
+        leagueMap
     );
 
     const packedChildMarkets = childMarkets.map((childMarket: any) => {
@@ -95,145 +93,4 @@ export const processMarket = (
     market.childMarkets = packedChildMarkets;
 
     return market;
-};
-
-/**
- * Retrieves the child markets for the given event.
- *
- * @param {Object} market - The market object from the API
- * @param {Array} spreadDataForSport - Spread data for sport.
- * @param {Object} apiResponseWithOdds - API response from the provider
- * @param {Number} defaultSpreadForLiveMarkets - Default spread for live markets
- * @param {Boolean} isTestnet - Flag showing should we process for testnet or mainnet
- * @returns {Array} The child markets for the event.
- */
-const getChildMarkets = (
-    leagueId,
-    spreadDataForSport,
-    apiResponseWithOdds,
-    liveOddsProviders,
-    defaultSpreadForLiveMarkets,
-    isTestnet
-) => {
-    let childMarkets = [];
-
-    // Create Spread Child Markets
-    childMarkets = childMarkets.concat(
-        createSpreadChildMarkets(
-            apiResponseWithOdds,
-            leagueId,
-            spreadDataForSport,
-            liveOddsProviders,
-            defaultSpreadForLiveMarkets,
-            isTestnet
-        )
-    );
-
-    // Create Total Child Markets
-    childMarkets = childMarkets.concat(
-        createTotalChildMarkets(
-            apiResponseWithOdds,
-            leagueId,
-            spreadDataForSport,
-            liveOddsProviders,
-            defaultSpreadForLiveMarkets,
-            isTestnet
-        )
-    );
-
-    return childMarkets;
-};
-
-/**
- * Creates spread child markets based on the given parameters.
- *
- * @param {Object} market - The market object from the API
- * @param {Array} spreadDataForSport - Spread data for sport.
- * @param {Object} apiResponseWithOdds - API response from the provider
- * @param {Array} liveOddsProviders - Odds providers for live odds
- * @param {Number} defaultSpreadForLiveMarkets - Default spread for live markets
- * @param {Boolean} isTestnet - Flag showing should we process for testnet or mainnet
- * @returns {Array} The spread child markets.
- */
-export const createSpreadChildMarkets = (
-    apiResponseWithOdds,
-    leagueId,
-    spreadDataForSport,
-    liveOddsProviders,
-    defaultSpreadForLiveMarkets,
-    isTestnet
-) => {
-    const childMarkets = [] as any;
-    const spreadType = getLeagueSpreadType(leagueId, isTestnet);
-    const commonData = {
-        homeTeam: apiResponseWithOdds.home_team,
-        awayTeam: apiResponseWithOdds.away_team,
-    };
-    if (spreadType) {
-        // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
-        const allSpreadOdds = filterOddsByMarketNameBookmaker(
-            apiResponseWithOdds.odds,
-            spreadType,
-            liveOddsProviders[0]
-        );
-
-        if (allSpreadOdds.length > 0) {
-            const formattedSpreadOdds = formatSpreadOdds(
-                allSpreadOdds,
-                commonData,
-                leagueId,
-                spreadDataForSport,
-                TAG_CHILD_SPREAD,
-                defaultSpreadForLiveMarkets
-            );
-
-            childMarkets.push(...formattedSpreadOdds);
-        }
-    } else {
-        console.warn(`Spread type for sport ID ${leagueId} not found.`);
-    }
-    return childMarkets;
-};
-
-/**
- * Creates total child markets based on the given parameters.
- *
- * @param {Object} market - The market object from the API
- * @param {Array} spreadDataForSport - Spread data for sport.
- * @param {Object} apiResponseWithOdds - API response from the provider
- * @param {Array} liveOddsProviders - Odds providers for live odds
- * @param {Number} defaultSpreadForLiveMarkets - Default spread for live markets
- * @param {Boolean} isTestnet - Flag showing should we process for testnet or mainnet
- * @returns {Array} The total child markets.
- */
-export const createTotalChildMarkets = (
-    apiResponseWithOdds,
-    leagueId,
-    spreadDataForSport,
-    liveOddsProviders,
-    defaultSpreadForLiveMarkets,
-    isTestnet
-) => {
-    const childMarkets = [] as any;
-    const totalType = getLeagueTotalType(leagueId, isTestnet);
-
-    if (totalType) {
-        // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
-        const totalOdds = filterOddsByMarketNameBookmaker(apiResponseWithOdds.odds, totalType, liveOddsProviders[0]);
-
-        if (totalOdds.length > 0) {
-            childMarkets.push(
-                ...processTotalOdds(
-                    totalOdds,
-                    leagueId,
-                    spreadDataForSport,
-                    TAG_CHILD_TOTALS,
-                    defaultSpreadForLiveMarkets
-                )
-            );
-        }
-    } else {
-        console.warn(`Configuration (totals) for sport ID ${leagueId} not found.`);
-    }
-    return childMarkets;
 };
