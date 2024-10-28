@@ -27,7 +27,7 @@ export const getLiveSupportedLeagues = (leagueMap: LeagueInfo[]) => {
 };
 export const getBetTypesForLeague = (league: League, leagueMap: LeagueInfo[]) => {
     const betTypes = leagueMap
-        .filter((leagueInfo) => Number(leagueInfo.sportId) === league && leagueInfo.enabled === 'true')
+        .filter((leagueInfo) => Number(leagueInfo.sportId) === Number(league) && leagueInfo.enabled === 'true')
         .map((leagueInfo) => leagueInfo.marketName);
 
     return betTypes;
@@ -52,7 +52,9 @@ export const getLeagueSpreadTypes = (league: League, leagueMap: LeagueInfo[]) =>
     const betTypes = leagueMap
         .filter(
             (leagueInfo) =>
-                Number(leagueInfo.sportId) === league && leagueInfo.type === 'Spread' && leagueInfo.enabled === 'true'
+                Number(leagueInfo.sportId) === Number(league) &&
+                leagueInfo.type === 'Spread' &&
+                leagueInfo.enabled === 'true'
         )
         .map((leagueInfo) => leagueInfo.marketName.toLowerCase());
 
@@ -63,7 +65,9 @@ export const getLeagueTotalTypes = (league: League, leagueMap: LeagueInfo[]) => 
     const betTypes = leagueMap
         .filter(
             (leagueInfo) =>
-                Number(leagueInfo.sportId) === league && leagueInfo.type === 'Total' && leagueInfo.enabled === 'true'
+                Number(leagueInfo.sportId) === Number(league) &&
+                leagueInfo.type === 'Total' &&
+                leagueInfo.enabled === 'true'
         )
         .map((leagueInfo) => leagueInfo.marketName.toLowerCase());
 
