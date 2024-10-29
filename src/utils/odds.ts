@@ -347,9 +347,9 @@ export const groupAndFormatTotalOdds = (oddsArray, commonData) => {
             if (!acc[key]) {
                 acc[key] = { over: null, under: null };
             }
-            if (odd.selection_line === 'over') {
+            if (odd.selectionLine === 'over') {
                 acc[key].over = odd.price;
-            } else if (odd.selection_line === 'under') {
+            } else if (odd.selectionLine === 'under') {
                 acc[key].under = odd.price;
             }
 
