@@ -5,6 +5,7 @@ import { adjustSpreadOnOdds, getSpreadData } from './spread';
 import { MoneylineTypes } from '../enums/sports';
 import { ChildMarket, LeagueInfo } from '../types/sports';
 import { getLeagueInfo } from './sports';
+import { OddsObject } from '../types/odds';
 
 /**
  * Converts a given odds value from one format to another.
@@ -55,8 +56,8 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
         const homeTeamOddsObject = oddsArray.filter((odd) => {
             return (
                 odd &&
-                odd.market_name.toLowerCase() === marketName.toLowerCase() &&
-                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
+                odd.marketName.toLowerCase() === marketName.toLowerCase() &&
+                odd.sportsBookName.toLowerCase() == oddsProvider.toLowerCase() &&
                 odd.selection.toLowerCase() === commonData.homeTeam.toLowerCase()
             );
         });
@@ -68,8 +69,8 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
         const awayTeamOddsObject = oddsArray.filter(
             (odd) =>
                 odd &&
-                odd.market_name.toLowerCase() === marketName.toLowerCase() &&
-                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
+                odd.marketName.toLowerCase() === marketName.toLowerCase() &&
+                odd.sportsBookName.toLowerCase() == oddsProvider.toLowerCase() &&
                 odd.selection.toLowerCase() === commonData.awayTeam.toLowerCase()
         );
 
@@ -82,8 +83,8 @@ export const filterOddsByMarketNameTeamNameBookmaker = (
             const drawOddsObject = oddsArray.filter(
                 (odd) =>
                     odd &&
-                    odd.market_name.toLowerCase() === marketName.toLowerCase() &&
-                    odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase() &&
+                    odd.marketName.toLowerCase() === marketName.toLowerCase() &&
+                    odd.sportsBookName.toLowerCase() == oddsProvider.toLowerCase() &&
                     odd.selection.toLowerCase() === DRAW.toLowerCase()
             );
 
@@ -122,7 +123,7 @@ export const getParentOdds = (
     defaultSpreadForLiveMarkets,
     maxPercentageDiffBetwenOdds
 ) => {
-    const commonData = { homeTeam: oddsApiObject.home_team, awayTeam: oddsApiObject.away_team };
+    const commonData = { homeTeam: oddsApiObject.homeTeam, awayTeam: oddsApiObject.awayTeam };
 
     // EXTRACTING ODDS FROM THE RESPONSE PER MARKET NAME AND BOOKMAKER
     const moneylineOddsMap = filterOddsByMarketNameTeamNameBookmaker(
@@ -176,7 +177,7 @@ export const getParentOdds = (
  * @returns {Array} The child markets.
  */
 export const createChildMarkets: (
-    apiResponseWithOdds: any,
+    apiResponseWithOdds: OddsObject,
     spreadDataForSport: any,
     leagueId: number,
     liveOddsProviders: any,
@@ -193,8 +194,8 @@ export const createChildMarkets: (
     const [spreadOdds, totalOdds, childMarkets]: any[] = [[], [], []];
     const leagueInfo = getLeagueInfo(leagueId, leagueMap);
     const commonData = {
-        homeTeam: apiResponseWithOdds.home_team,
-        awayTeam: apiResponseWithOdds.away_team,
+        homeTeam: apiResponseWithOdds.homeTeam,
+        awayTeam: apiResponseWithOdds.awayTeam,
     };
     if (leagueInfo.length > 0) {
         // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
@@ -204,7 +205,7 @@ export const createChildMarkets: (
             liveOddsProviders[0]
         );
 
-        const allValidOdds = allChildOdds.filter((odd) => odd && Math.abs(odd.selection_points % 1) === 0.5) as any;
+        const allValidOdds = allChildOdds.filter((odd) => odd && Math.abs(Number(odd.points) % 1) === 0.5) as any;
 
         allValidOdds.forEach((odd) => {
             if (odd.type === 'Total') {
@@ -270,13 +271,15 @@ export const filterOddsByMarketNameBookmaker = (oddsArray, leagueInfos: LeagueIn
     return oddsArray
         .filter(
             (odd) =>
-                allChildMarketsTypes.includes(odd.market_name.toLowerCase()) &&
-                odd.sports_book_name.toLowerCase() == oddsProvider.toLowerCase()
+                allChildMarketsTypes.includes(odd.marketName.toLowerCase()) &&
+                odd.sportsBookName.toLowerCase() == oddsProvider.toLowerCase()
         )
         .map((odd) => {
             return {
                 ...odd,
-                ...leagueInfos.find((leagueInfo) => leagueInfo.marketName === odd.market_name), // using .find() for team totals means that we will always assign 10017 as typeID at this point
+                ...leagueInfos.find(
+                    (leagueInfo) => leagueInfo.marketName.toLowerCase() === odd.marketName.toLowerCase()
+                ), // using .find() for team totals means that we will always assign 10017 as typeID at this point
             };
         });
 };
@@ -291,10 +294,10 @@ export const filterOddsByMarketNameBookmaker = (oddsArray, leagueInfos: LeagueIn
 export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
     // Group odds by their selection points and selection
     const groupedOdds = oddsArray.reduce((acc: any, odd: any) => {
-        const { selection_points, price, selection, typeId, sportId, type } = odd;
+        const { points, price, selection, typeId, sportId, type } = odd;
         const isHomeTeam = selection === commonData.homeTeam;
 
-        const key = isHomeTeam ? selection_points : -selection_points;
+        const key = isHomeTeam ? points : -points;
 
         if (!acc[key]) {
             acc[key] = { home: null, away: null, typeId: null, sportId: null };
@@ -340,7 +343,7 @@ export const groupAndFormatTotalOdds = (oddsArray, commonData) => {
     // Group odds by their selection points and selection
     const groupedOdds = oddsArray.reduce((acc, odd) => {
         if (odd) {
-            const key = `${odd.selection}_${odd.selection_points}`;
+            const key = `${odd.selection}_${odd.points}`;
             if (!acc[key]) {
                 acc[key] = { over: null, under: null };
             }
