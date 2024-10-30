@@ -50,15 +50,22 @@ export const processMarket = (
         market.errorMessage = moneylineOdds.errorMessage;
     } else {
         // Pack market odds for UI
-        market.odds = moneylineOdds.odds
-            .filter((odd) => odd != 0)
-            .map((_odd) => {
+        market.odds = moneylineOdds.odds.map((_odd) => {
+            if (_odd != 0) {
                 return {
                     american: oddslib.from('impliedProbability', _odd).to('moneyline'),
                     decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
                     normalizedImplied: _odd,
                 };
-            });
+            } else {
+                market.errorMessage = 'Unexpected odds after spread adjustment';
+                return {
+                    american: 0,
+                    decimal: 0,
+                    normalizedImplied: 0,
+                };
+            }
+        });
     }
 
     const childMarkets = createChildMarkets(
