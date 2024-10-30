@@ -152,6 +152,5 @@ export const checkOddsFromBookmakers = (
 
 export const calculateImpliedOddsDifference = (impliedOddsA: number, impliedOddsB: number): number => {
     const percentageDifference = (Math.abs(impliedOddsA - impliedOddsB) / impliedOddsA) * 100;
-    console.log('% diff: ' + percentageDifference);
     return percentageDifference;
 };
