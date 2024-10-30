@@ -16,6 +16,7 @@ export enum Sport {
     GOLF = 'Golf',
     TABLE_TENNIS = 'TableTennis',
     POLITICS = 'Politics',
+    FUTURES = 'Futures',
     EMPTY = '',
 }
 
@@ -128,6 +129,9 @@ export enum League {
     ENGLAND_LEGAUE_1 = 20126,
     URUGUAY_PRIMERA_DIVISION = 20127,
     EUROCUP = 20200,
+    NFL_FUTURES = 30002,
+    NBA_FUTURES = 30004,
+    EPL_FUTURES = 30011,
     GOLF_H2H = 100021,
     GOLF_WINNER = 100121,
     TENNIS_GRAND_SLAM_LIVE_MAPPING_V2_1 = 15312,
