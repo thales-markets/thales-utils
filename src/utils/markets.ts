@@ -58,7 +58,7 @@ export const processMarket = (
                     normalizedImplied: _odd,
                 };
             } else {
-                market.errorMessage = 'Unexpected odds after spread adjustment';
+                market.errorMessage = 'Bad odds after spread adjustment';
                 return {
                     american: 0,
                     decimal: 0,
