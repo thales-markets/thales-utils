@@ -78,7 +78,7 @@ export const checkOddsFromBookmakers = (
 
     // If none of the bookmakers have zero odds, check implied odds percentage difference
     const hasLargeImpliedPercentageDifference = arrayOfBookmakers.slice(1).some((bookmakerId) => {
-        const line = oddsMap[bookmakerId];
+        const line = oddsMap.get(bookmakerId);
         if (line) {
             const otherHomeOdd = line.homeOdds;
             const otherAwayOdd = line.awayOdds;
@@ -152,6 +152,5 @@ export const checkOddsFromBookmakers = (
 
 export const calculateImpliedOddsDifference = (impliedOddsA: number, impliedOddsB: number): number => {
     const percentageDifference = (Math.abs(impliedOddsA - impliedOddsB) / impliedOddsA) * 100;
-    console.log('% diff: ' + percentageDifference);
     return percentageDifference;
 };

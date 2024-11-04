@@ -6,6 +6,7 @@ export * from './src/utils/odds';
 export * from './src/utils/sports';
 export * from './src/utils/constraints';
 export * from './src/utils/spread';
+export * from './src/utils/opticOdds';
 
 // constants
 export * from './src/constants/common';

@@ -1,5 +1,6 @@
 import * as oddslib from 'oddslib';
 import { createChildMarkets, getParentOdds } from './odds';
+import { OddsObject } from '../types/odds';
 /**
  * Processes a single sports event. This function maps event data to a specific format,
  * filters invalid events, and optionally fetches player properties if the sport supports it.
@@ -16,14 +17,14 @@ import { createChildMarkets, getParentOdds } from './odds';
  * @returns {Promise<Object|null>} A promise that resolves to the processed event object or null if the event is invalid or mapping fails.
  */
 export const processMarket = (
-    market,
-    apiResponseWithOdds,
-    liveOddsProviders,
-    spreadData,
-    isDrawAvailable,
-    defaultSpreadForLiveMarkets,
-    maxPercentageDiffBetwenOdds,
-    leagueMap
+    market: any,
+    apiResponseWithOdds: OddsObject,
+    liveOddsProviders: any,
+    spreadData: any,
+    isDrawAvailable: any,
+    defaultSpreadForLiveMarkets: any,
+    maxPercentageDiffBetwenOdds: any,
+    leagueMap: any
 ) => {
     const sportSpreadData = spreadData.filter((data) => data.sportId === String(market.leagueId));
 
@@ -49,15 +50,22 @@ export const processMarket = (
         market.errorMessage = moneylineOdds.errorMessage;
     } else {
         // Pack market odds for UI
-        market.odds = moneylineOdds.odds
-            .filter((odd) => odd != 0)
-            .map((_odd) => {
+        market.odds = moneylineOdds.odds.map((_odd) => {
+            if (_odd != 0) {
                 return {
                     american: oddslib.from('impliedProbability', _odd).to('moneyline'),
                     decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
                     normalizedImplied: _odd,
                 };
-            });
+            } else {
+                market.errorMessage = 'Bad odds after spread adjustment';
+                return {
+                    american: 0,
+                    decimal: 0,
+                    normalizedImplied: 0,
+                };
+            }
+        });
     }
 
     const childMarkets = createChildMarkets(

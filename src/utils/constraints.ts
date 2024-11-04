@@ -1,16 +1,18 @@
 import { League, Sport } from '../enums/sports';
+import { ScoresObject } from '../types/odds';
 import { getLeagueSport } from './sports';
 
-export const checkGameContraints = (opticOddsScoresApiResponse, marketLeague: League, constraintsMap) => {
-    const currentScoreHome = opticOddsScoresApiResponse.score_home_total;
-    const currentScoreAway = opticOddsScoresApiResponse.score_away_total;
+export const checkGameContraints = (opticOddsScoresApiResponse: ScoresObject, marketLeague: League, constraintsMap) => {
+    const marketSport = getLeagueSport(marketLeague);
+    const homeTeam = opticOddsScoresApiResponse.homeTeam;
+    const currentScoreHome = opticOddsScoresApiResponse.homeTotal;
+    const awayTeam = opticOddsScoresApiResponse.awayTeam;
+    const currentScoreAway = opticOddsScoresApiResponse.awayTotal;
+
     const currentClock = opticOddsScoresApiResponse.clock;
     const currentPeriod = opticOddsScoresApiResponse.period;
     const currentGameStatus = opticOddsScoresApiResponse.status;
-    const homeTeam = opticOddsScoresApiResponse.home_team;
-    const awayTeam = opticOddsScoresApiResponse.away_team;
     const currentPeriodNumber = parseInt(currentPeriod);
-    const marketSport = getLeagueSport(marketLeague);
 
     if (currentGameStatus.toLowerCase() == 'completed') {
         return {
@@ -105,7 +107,7 @@ export const allowSoccerGame = (homeTeam, awayTeam, currentClock, currentPeriod,
 };
 
 export const allowGameSportWithResultConstraint = (
-    opticOddsScoresApiResponse,
+    opticOddsScoresApiResponse: ScoresObject,
     homeTeam,
     awayTeam,
     currentPeriod,
@@ -174,29 +176,29 @@ export const allowGameSportWithResultConstraint = (
     };
 };
 
-export const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiResponse) => {
+export const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiResponse: ScoresObject) => {
     let currentHomeGameScore = 0;
     let currentAwayGameScore = 0;
     switch (currentSet) {
         case 1:
-            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_1);
-            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_1);
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.homePeriod1);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.awayPeriod1);
             break;
         case 2:
-            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_2);
-            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_2);
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.homePeriod2);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.awayPeriod2);
             break;
         case 3:
-            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_3);
-            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_3);
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.homePeriod3);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.awayPeriod3);
             break;
         case 4:
-            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_4);
-            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_4);
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.homePeriod4);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.awayPeriod4);
             break;
         case 5:
-            currentHomeGameScore = Number(opticOddsScoresApiResponse.score_home_period_5);
-            currentAwayGameScore = Number(opticOddsScoresApiResponse.score_away_period_5);
+            currentHomeGameScore = Number(opticOddsScoresApiResponse.homePeriod5);
+            currentAwayGameScore = Number(opticOddsScoresApiResponse.awayPeriod5);
             break;
     }
     return { home: currentHomeGameScore, away: currentAwayGameScore };

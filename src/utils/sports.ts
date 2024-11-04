@@ -22,19 +22,24 @@ export const getLeagueIsDrawAvailable = (league: League) => {
     return leagueInfo ? leagueInfo.isDrawAvailable : false;
 };
 
-export const getLiveSupportedLeagues = (leagueMap: LeagueInfo[]) => {
-    return leagueMap.filter((leagueInfo) => leagueInfo.enabled === 'true').map((league) => Number(league.sportId));
+export const getLiveSupportedLeagues = (leagueInfoArray: LeagueInfo[]) => {
+    const uniqueId = new Set();
+    leagueInfoArray
+        .filter((leagueInfo) => leagueInfo.enabled === 'true')
+        .map((league) => uniqueId.add(Number(league.sportId)));
+    return Array.from(uniqueId);
 };
-export const getBetTypesForLeague = (league: League, leagueMap: LeagueInfo[]) => {
-    const betTypes = leagueMap
+export const getBetTypesForLeague = (league: League, leagueInfoArray: LeagueInfo[]) => {
+    const uniqueMarketNames = new Set();
+    leagueInfoArray
         .filter((leagueInfo) => Number(leagueInfo.sportId) === Number(league) && leagueInfo.enabled === 'true')
-        .map((leagueInfo) => leagueInfo.marketName);
+        .map((leagueInfo) => uniqueMarketNames.add(leagueInfo.marketName));
 
-    return betTypes;
+    return Array.from(uniqueMarketNames);
 };
 
-export const getLeagueInfo = (league: League, leagueMap: LeagueInfo[]) => {
-    const leagueInfos = leagueMap.filter((leagueInfo) => Number(leagueInfo.sportId) === league);
+export const getLeagueInfo = (league: League, leagueInfoArray: LeagueInfo[]) => {
+    const leagueInfos = leagueInfoArray.filter((leagueInfo) => Number(leagueInfo.sportId) === league);
     return leagueInfos;
 };
 
@@ -48,8 +53,8 @@ export const getLeaguePeriodType = (league: League) => {
     return leagueInfo ? leagueInfo.periodType : '';
 };
 
-export const getLeagueSpreadTypes = (league: League, leagueMap: LeagueInfo[]) => {
-    const betTypes = leagueMap
+export const getLeagueSpreadTypes = (league: League, leagueInfoArray: LeagueInfo[]) => {
+    const betTypes = leagueInfoArray
         .filter(
             (leagueInfo) =>
                 Number(leagueInfo.sportId) === Number(league) &&
@@ -61,8 +66,8 @@ export const getLeagueSpreadTypes = (league: League, leagueMap: LeagueInfo[]) =>
     return betTypes;
 };
 
-export const getLeagueTotalTypes = (league: League, leagueMap: LeagueInfo[]) => {
-    const betTypes = leagueMap
+export const getLeagueTotalTypes = (league: League, leagueInfoArray: LeagueInfo[]) => {
+    const betTypes = leagueInfoArray
         .filter(
             (leagueInfo) =>
                 Number(leagueInfo.sportId) === Number(league) &&
