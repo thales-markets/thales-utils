@@ -1509,5 +1509,12 @@ export const LeagueIdMapOpticOdds = {
     20125: 'England - EFL Cup',
     20126: 'England - League 1',
     20127: 'Uruguay - Primera Division',
+    20128: 'AFC - Champions League',
     20200: 'Eurocup',
+    20201: 'Spain - Liga ACB',
+    20202: 'Italy - Lega Basket Serie A',
+    20203: 'Germany - BBL',
+    20204: 'France - LNB Pro A',
+    20205: 'China - CBA',
+    20206: 'Australia - NBL',
 };
