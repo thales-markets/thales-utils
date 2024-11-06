@@ -1271,6 +1271,16 @@ export const LeagueMap = {
         periodType: PeriodType.EMPTY,
         isDrawAvailable: false,
     },
+    [League.UEFA_CHAMPIONS_LEAGUE_FUTURES]: {
+        sport: Sport.FUTURES,
+        id: League.UEFA_CHAMPIONS_LEAGUE_FUTURES,
+        label: 'UEFA Champions League Futures',
+        provider: Provider.EMPTY,
+        scoringType: ScoringType.EMPTY,
+        matchResolveType: MatchResolveType.EMPTY,
+        periodType: PeriodType.EMPTY,
+        isDrawAvailable: false,
+    },
     [League.GOLF_H2H]: {
         sport: Sport.GOLF,
         id: League.GOLF_H2H,
