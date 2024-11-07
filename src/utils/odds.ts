@@ -267,7 +267,11 @@ export const createChildMarkets: (
  */
 export const filterOddsByMarketNameBookmaker = (oddsArray, leagueInfos: LeagueInfo[], oddsProvider) => {
     const allChildMarketsTypes = leagueInfos
-        .filter((leagueInfo) => leagueInfo.marketName.toLowerCase() !== MoneylineTypes.MONEYLINE.toLowerCase())
+        .filter(
+            (leagueInfo) =>
+                leagueInfo.marketName.toLowerCase() !== MoneylineTypes.MONEYLINE.toLowerCase() &&
+                leagueInfo.enabled === 'true'
+        )
         .map((leagueInfo) => leagueInfo.marketName.toLowerCase());
     return oddsArray
         .filter(
@@ -417,7 +421,9 @@ export const groupAndFormatMoneylineOdds = (oddsArray, commonData) => {
     const formattedOdds = (Object.entries(groupedOdds as any) as any).reduce((acc, [_key, value]) => {
         if ((value as any).home !== null && (value as any).away !== null) {
             acc.push({
-                odds: [(value as any).home, (value as any).away, (value as any).draw],
+                odds: (value as any).draw
+                    ? [(value as any).home, (value as any).away, (value as any).draw]
+                    : [(value as any).home, (value as any).away],
                 typeId: value.typeId,
                 sportId: value.sportId,
                 type: value.type,
