@@ -775,7 +775,7 @@ export const LeagueMap = {
         sport: Sport.FIGHTING,
         id: League.NON_TITLE_BOXING,
         label: 'Boxing',
-        provider: Provider.EMPTY,
+        provider: Provider.ENETPULSE,
         scoringType: ScoringType.ROUNDS,
         matchResolveType: MatchResolveType.EMPTY,
         periodType: PeriodType.ROUND,
