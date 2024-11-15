@@ -205,6 +205,7 @@ export enum ScoringType {
     GOALS = 'goals',
     ROUNDS = 'rounds',
     SETS = 'sets',
+    MAPS = 'maps',
     EMPTY = '',
 }
 
@@ -221,6 +222,7 @@ export enum PeriodType {
     ROUND = 'round',
     INNING = 'inning',
     SET = 'set',
+    MAP = 'map',
     EMPTY = '',
 }
 
