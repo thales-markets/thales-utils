@@ -266,7 +266,11 @@ export const createChildMarkets: (
  */
 export const filterOddsByMarketNameBookmaker = (oddsArray, leagueInfos: LeagueInfo[], oddsProvider) => {
     const allChildMarketsTypes = leagueInfos
-        .filter((leagueInfo) => leagueInfo.marketName.toLowerCase() !== MoneylineTypes.MONEYLINE.toLowerCase())
+        .filter(
+            (leagueInfo) =>
+                leagueInfo.marketName.toLowerCase() !== MoneylineTypes.MONEYLINE.toLowerCase() &&
+                leagueInfo.enabled === 'true'
+        )
         .map((leagueInfo) => leagueInfo.marketName.toLowerCase());
     return oddsArray
         .filter(
