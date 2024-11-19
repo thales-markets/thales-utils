@@ -54,7 +54,6 @@ export const checkOddsFromBookmakers = (
                 (!isTwoPositionalSport && line.drawOdds === 1)
             );
         }
-        return false;
     });
 
     if (hasZeroOrOne) {
@@ -128,7 +127,6 @@ export const checkOddsFromBookmakers = (
                 return true;
             }
         }
-        return false;
     });
 
     if (hasLargeImpliedPercentageDifference) {
@@ -139,9 +137,6 @@ export const checkOddsFromBookmakers = (
             errorMessage: 'Returning zero odds due to percentage difference between bookmakers',
         };
     }
-
-    let lines: any[] = [];
-    arrayOfBookmakers.forEach((bookmaker) => lines.push(oddsMap.get(bookmaker)));
 
     return {
         homeOdds: homeOdd,
