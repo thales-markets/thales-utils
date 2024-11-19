@@ -30,8 +30,14 @@ const totalMock: LeagueInfo = {
     minOdds: 0,
 };
 
+const baseDiffSportId: LeagueInfo = {
+    ...baseLeagueInfo,
+    sportId: 4,
+};
+
 // Mock Variants
 const leagueInfoOnlyParent: LeagueInfo[] = [baseLeagueInfo];
+const leagueInfoOnlyParentDiffSportId: LeagueInfo[] = [baseDiffSportId];
 
 const leagueInfoMockDisabledChilds: LeagueInfo[] = [
     baseLeagueInfo,
@@ -50,6 +56,7 @@ const leagueInfoEnabledSpeadAndTotals: LeagueInfo[] = [baseLeagueInfo, spreadMoc
 // Grouped Exports
 export const LeagueMocks = {
     leagueInfoOnlyParent,
+    leagueInfoOnlyParentDiffSportId,
     leagueInfoMockDisabledChilds,
     leagueInfoEnabledSpreadDisabledTotals,
     leagueInfoEnabledSpeadAndTotals,
