@@ -1,14 +1,14 @@
-/* 
-Write tests about live markets and processing market in Overtime-Live-Trading-Utils.
-*/
-
 import { processMarket } from '../../../utils/markets';
-
 import { mockSoccer } from '../mock/MockSoccerRedis';
-import { MockOnlyMoneyline, MockOpticSoccer, MockZeroOdds } from '../mock/MockOpticSoccer';
+import {
+    MockOnlyMoneyline,
+    MockOnlyMoneylineWithDifferentSportsbook,
+    MockOpticSoccer,
+    MockZeroOdds,
+} from '../mock/MockOpticSoccer';
 import { mapOpticOddsApiFixtureOdds } from '../../../utils/opticOdds';
 import { LeagueMocks } from '../mock/MockLeagueMap';
-import { ZERO_ODDS_MESSAGE } from '../../../constants/errors';
+import { DIFF_BETWEEN_BOOKMAKERS_MESSAGE, ZERO_ODDS_MESSAGE } from '../../../constants/errors';
 
 describe('Live Markets', () => {
     describe('LeagueMap configuration', () => {
@@ -106,7 +106,7 @@ describe('Live Markets', () => {
                 [],
                 true,
                 undefined,
-                5,
+                undefined,
                 LeagueMocks.leagueInfoEnabledSpeadAndTotals
             );
 
@@ -138,6 +138,27 @@ describe('Live Markets', () => {
             expect(hasOdds).toBe(false);
             expect(market).toHaveProperty('errorMessage');
             expect(market.errorMessage).toBe(ZERO_ODDS_MESSAGE);
+        });
+
+        it('Should return zero odds for moneyline', () => {
+            const market = processMarket(
+                mockSoccer,
+                mapOpticOddsApiFixtureOdds([MockOnlyMoneylineWithDifferentSportsbook])[0],
+                ['draftkings', 'bovada'],
+                [],
+                true,
+                undefined,
+                5,
+                LeagueMocks.leagueInfoOnlyParent
+            );
+
+            const hasOdds = market.odds.some(
+                (odd) => odd.american !== 0 || odd.decimal !== 0 || odd.normalizedImplied !== 0
+            );
+
+            expect(hasOdds).toBe(false);
+            expect(market).toHaveProperty('errorMessage');
+            expect(market.errorMessage).toBe(DIFF_BETWEEN_BOOKMAKERS_MESSAGE);
         });
     });
 });
