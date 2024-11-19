@@ -16,8 +16,8 @@ const spreadMock: LeagueInfo = {
     marketName: 'Goal Spread',
     typeId: 10001,
     type: 'Spread',
-    maxOdds: 0,
-    minOdds: 0,
+    maxOdds: 0.25,
+    minOdds: 0.75,
 };
 
 const totalMock: LeagueInfo = {
@@ -26,8 +26,8 @@ const totalMock: LeagueInfo = {
     marketName: 'Total Goals',
     typeId: 10002,
     type: 'Total',
-    maxOdds: 0,
-    minOdds: 0,
+    maxOdds: 0.25,
+    minOdds: 0.75,
 };
 
 const baseDiffSportId: LeagueInfo = {

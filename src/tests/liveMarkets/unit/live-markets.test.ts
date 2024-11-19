@@ -2,6 +2,8 @@ import { processMarket } from '../../../utils/markets';
 import { mockSoccer } from '../mock/MockSoccerRedis';
 import {
     MockAfterSpreadZeroOdds1,
+    MockOddsChildMarketsGoodOdds,
+    MockOddsChildMarketsOddsCut,
     MockOnlyMoneyline,
     MockOnlyMoneylineWithDifferentSportsbook,
     MockOpticSoccer,
@@ -92,6 +94,65 @@ describe('Live Markets', () => {
 
             expect(containsSpread).toBe(true);
             expect(containsTotal).toBe(true);
+        });
+
+        it('Should contain child markets for good odds', () => {
+            const freshMockSoccer = JSON.parse(JSON.stringify(mockSoccer));
+            const freshMockOpticSoccer = JSON.parse(JSON.stringify(MockOddsChildMarketsGoodOdds));
+            const market = processMarket(
+                freshMockSoccer,
+                mapOpticOddsApiFixtureOdds([freshMockOpticSoccer])[0],
+                ['draftkings'],
+                [],
+                true,
+                undefined,
+                undefined,
+                LeagueMocks.leagueInfoEnabledSpeadAndTotals
+            );
+
+            console.log(market);
+            const hasChildMarkets = market.childMarkets.length > 0;
+
+            expect(hasChildMarkets).toBe(true);
+        });
+
+        it('Should return empty array for child child markets after odds cut', () => {
+            const freshMockSoccer = JSON.parse(JSON.stringify(mockSoccer));
+            const freshMockOpticSoccer = JSON.parse(JSON.stringify(MockOddsChildMarketsOddsCut));
+            const market = processMarket(
+                freshMockSoccer,
+                mapOpticOddsApiFixtureOdds([freshMockOpticSoccer])[0],
+                ['draftkings'],
+                [],
+                true,
+                undefined,
+                undefined,
+                LeagueMocks.leagueInfoEnabledSpeadAndTotals
+            );
+            expect(market.childMarkets).toHaveLength(0);
+        });
+
+        it('Should return warning message that there are is no configuration available in league map csv', () => {
+            const freshMockSoccer = JSON.parse(JSON.stringify(mockSoccer));
+            const freshMockOpticSoccer = JSON.parse(JSON.stringify(MockOnlyMoneyline));
+            const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+            processMarket(
+                freshMockSoccer,
+                mapOpticOddsApiFixtureOdds([freshMockOpticSoccer])[0],
+                ['draftkings'],
+                [],
+                true,
+                undefined,
+                undefined,
+                LeagueMocks.leagueInfoOnlyParentDiffSportId
+            );
+
+            expect(warnSpy).toHaveBeenCalled();
+            expect(warnSpy).toHaveBeenCalledWith(NO_MARKETS_FOR_LEAGUE_ID);
+
+            // Restore the original implementation
+            warnSpy.mockRestore();
         });
     });
     describe('Odds configuration', () => {
@@ -224,29 +285,6 @@ describe('Live Markets', () => {
             expect(hasOdds).toBe(false);
             expect(market).toHaveProperty('errorMessage');
             expect(market.errorMessage).toBe(ZERO_ODDS_AFTER_SPREAD_ADJUSTMENT); // should be no matching bookmakers mesage
-        });
-
-        it('Should return zero odds for moneyline as no matching bookmaker was provided', () => {
-            const freshMockSoccer = JSON.parse(JSON.stringify(mockSoccer));
-            const freshMockOpticSoccer = JSON.parse(JSON.stringify(MockOnlyMoneyline));
-            const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-
-            processMarket(
-                freshMockSoccer,
-                mapOpticOddsApiFixtureOdds([freshMockOpticSoccer])[0],
-                ['draftkings'],
-                [],
-                true,
-                undefined,
-                undefined,
-                LeagueMocks.leagueInfoOnlyParentDiffSportId
-            );
-
-            expect(warnSpy).toHaveBeenCalled();
-            expect(warnSpy).toHaveBeenCalledWith(NO_MARKETS_FOR_LEAGUE_ID);
-
-            // Restore the original implementation
-            warnSpy.mockRestore();
         });
     });
 });
