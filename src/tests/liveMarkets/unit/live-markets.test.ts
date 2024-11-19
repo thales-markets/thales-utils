@@ -160,6 +160,26 @@ describe('Live Markets', () => {
             expect(market).toHaveProperty('errorMessage');
             expect(market.errorMessage).toBe(DIFF_BETWEEN_BOOKMAKERS_MESSAGE);
         });
+
+        it('Should return zero odds for moneyline as no matching bookmaker was provided', () => {
+            const market = processMarket(
+                mockSoccer,
+                mapOpticOddsApiFixtureOdds([MockOnlyMoneyline])[0],
+                ['bovada', 'draftkings'],
+                [],
+                true,
+                undefined,
+                undefined,
+                LeagueMocks.leagueInfoEnabledSpeadAndTotals
+            );
+            const hasOdds = market.odds.some(
+                (odd) => odd.american !== 0 || odd.decimal !== 0 || odd.normalizedImplied !== 0
+            );
+
+            expect(hasOdds).toBe(false);
+            expect(market).toHaveProperty('errorMessage');
+            expect(market.errorMessage).toBe(ZERO_ODDS_MESSAGE); // should be no matching bookmakers mesage
+        });
     });
 });
 

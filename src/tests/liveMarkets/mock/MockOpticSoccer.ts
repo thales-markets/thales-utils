@@ -268,7 +268,7 @@ export const MockZeroOdds = {
             selection_line: null,
             player_id: null,
             team_id: null,
-            price: 0,
+            price: 1,
             timestamp: 1731890434.0742507,
             grouping_key: 'default',
             points: null,
