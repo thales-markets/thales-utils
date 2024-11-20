@@ -155,8 +155,13 @@ export const getParentOdds = (
 
     let parentOdds = primaryBookmakerOdds.map((odd) => convertOddsToImpl(odd));
     const spreadData = getSpreadData(sportSpreadData, sportId, MONEYLINE_TYPE_ID, defaultSpreadForLiveMarkets);
-    parentOdds = adjustSpreadOnOdds(parentOdds, spreadData.minSpread, spreadData.targetSpread);
 
+    if (spreadData !== null) {
+        parentOdds = adjustSpreadOnOdds(parentOdds, spreadData.minSpread, spreadData.targetSpread);
+    } else {
+        // Use min spread by sport if available, otherwise use default min spread
+        parentOdds = adjustSpreadOnOdds(parentOdds, defaultSpreadForLiveMarkets, 0);
+    }
     return { odds: parentOdds };
 };
 
@@ -397,11 +402,16 @@ export const adjustSpreadOnChildOdds = (iterableGroupedOdds, spreadDataForSport,
                 defaultSpreadForLiveMarkets
             );
 
-            const adjustedOdds = adjustSpreadOnOdds(
-                [homeTeamOdds, awayTeamOdds],
-                spreadData.minSpread,
-                spreadData.targetSpread
-            );
+            let adjustedOdds;
+            if (spreadData !== null) {
+                adjustedOdds = adjustSpreadOnOdds(
+                    [homeTeamOdds, awayTeamOdds],
+                    spreadData.minSpread,
+                    spreadData.targetSpread
+                );
+            } else {
+                adjustedOdds = adjustSpreadOnOdds([homeTeamOdds, awayTeamOdds], defaultSpreadForLiveMarkets, 0);
+            }
 
             [homeTeamOdds, awayTeamOdds] = adjustedOdds;
             result.push({
