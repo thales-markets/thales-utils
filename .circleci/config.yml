@@ -3,7 +3,7 @@ version: 2.1
 executors:
     node-executor:
         docker:
-            - image: circleci/node:18.18 # Specify the Node.js version you need
+            - image: circleci/node:17.0.1 # Specify the Node.js version you need
 
 jobs:
     test:
