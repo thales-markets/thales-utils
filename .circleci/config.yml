@@ -1,0 +1,30 @@
+version: 2.1
+
+executors:
+    node-executor:
+        docker:
+            - image: circleci/node:18.18.0 # Specify the Node.js version you need
+
+jobs:
+    test:
+        executor: node-executor
+        steps:
+            - checkout # Check out the code from your repository
+
+            - run:
+                  name: Install dependencies
+                  command: npm install
+
+            - run:
+                  name: Verify Mocha installation
+                  command: npx mocha --version
+
+            - run:
+                  name: Run tests
+                  command: npm test
+
+workflows:
+    version: 2
+    test:
+        jobs:
+            - test
