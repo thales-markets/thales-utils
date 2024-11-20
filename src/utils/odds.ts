@@ -452,6 +452,7 @@ export const adjustSpreadOnChildOdds = (iterableGroupedOdds, spreadDataForSport,
                 data.typeId,
                 defaultSpreadForLiveMarkets
             );
+
             let adjustedOdds;
             if (spreadData !== null) {
                 adjustedOdds = adjustSpreadOnOdds(odds, spreadData.minSpread, spreadData.targetSpread);

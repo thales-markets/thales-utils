@@ -1,0 +1,26 @@
+version: 2.1
+
+executors:
+    node-executor:
+        docker:
+            - image: circleci/node:17.0.1 # Specify the Node.js version you need
+
+jobs:
+    test:
+        executor: node-executor
+        steps:
+            - checkout # Check out the code from your repository
+
+            - run:
+                  name: Install dependencies
+                  command: npm install
+
+            - run:
+                  name: Run tests
+                  command: npm test
+
+workflows:
+    version: 2
+    test:
+        jobs:
+            - test

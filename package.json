@@ -1,11 +1,12 @@
 {
     "name": "overtime-live-trading-utils",
-    "version": "0.0.158",
+    "version": "0.0.159",
     "description": "",
     "main": "main.js",
     "scripts": {
         "pack": "webpack --mode production",
-        "prepublish": "npm run pack"
+        "prepublish": "npm run pack",
+        "test": "jest"
     },
     "author": "",
     "license": "MIT",
@@ -15,7 +16,11 @@
         "react": "^17.0.1"
     },
     "devDependencies": {
+        "@types/jest": "^29.5.14",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.2.5",
         "ts-loader": "^9.5.0",
+        "ts-node": "^10.9.2",
         "typescript": "^4.5.5",
         "webpack": "^5.89.0",
         "webpack-cli": "^5.1.4"
