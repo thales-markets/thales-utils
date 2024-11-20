@@ -3,7 +3,7 @@ import {
     getLeagueSpreadTypes,
     getLeagueTotalTypes,
     getLiveSupportedLeagues,
-} from '../../../utils/sports';
+} from '../../utils/sports';
 import { LeagueMocks } from '../mock/MockLeagueMap';
 
 describe('Sports', () => {

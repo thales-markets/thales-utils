@@ -1,6 +1,6 @@
-import { DIFF_BETWEEN_BOOKMAKERS_MESSAGE, ZERO_ODDS_MESSAGE } from '../../../constants/errors';
-import { processMarket } from '../../../utils/markets';
-import { mapOpticOddsApiFixtureOdds } from '../../../utils/opticOdds';
+import { DIFF_BETWEEN_BOOKMAKERS_MESSAGE, ZERO_ODDS_MESSAGE } from '../../constants/errors';
+import { processMarket } from '../../utils/markets';
+import { mapOpticOddsApiFixtureOdds } from '../../utils/opticOdds';
 import { LeagueMocks } from '../mock/MockLeagueMap';
 import { MockOnlyMoneyline, MockOnlyMoneylineWithDifferentSportsbook } from '../mock/MockOpticSoccer';
 import { mockSoccer } from '../mock/MockSoccerRedis';

@@ -1,9 +1,9 @@
-import { processMarket } from '../../../utils/markets';
+import { processMarket } from '../../utils/markets';
 import { mockSoccer } from '../mock/MockSoccerRedis';
 import { MockOnlyMoneyline, MockOpticSoccer } from '../mock/MockOpticSoccer';
-import { mapOpticOddsApiFixtureOdds } from '../../../utils/opticOdds';
+import { mapOpticOddsApiFixtureOdds } from '../../utils/opticOdds';
 import { LeagueMocks } from '../mock/MockLeagueMap';
-import { NO_MARKETS_FOR_LEAGUE_ID } from '../../../constants/errors';
+import { NO_MARKETS_FOR_LEAGUE_ID } from '../../constants/errors';
 
 describe('Markets', () => {
     describe('LeagueMap configuration', () => {

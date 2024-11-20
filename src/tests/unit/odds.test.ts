@@ -1,6 +1,6 @@
-import { ZERO_ODDS_MESSAGE } from '../../../constants/errors';
-import { processMarket } from '../../../utils/markets';
-import { mapOpticOddsApiFixtureOdds } from '../../../utils/opticOdds';
+import { ZERO_ODDS_MESSAGE } from '../../constants/errors';
+import { processMarket } from '../../utils/markets';
+import { mapOpticOddsApiFixtureOdds } from '../../utils/opticOdds';
 import { LeagueMocks } from '../mock/MockLeagueMap';
 import {
     MockOnlyMoneyline,

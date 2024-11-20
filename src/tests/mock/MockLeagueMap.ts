@@ -1,4 +1,4 @@
-import { LeagueInfo } from '../../../types/sports';
+import { LeagueInfo } from '../../types/sports';
 
 const baseLeagueInfo: LeagueInfo = {
     sportId: 9806,
