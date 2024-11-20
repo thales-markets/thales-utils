@@ -5,7 +5,8 @@
     "main": "main.js",
     "scripts": {
         "pack": "webpack --mode production",
-        "prepublish": "npm run pack"
+        "prepublish": "npm run pack",
+        "test": "jest"
     },
     "author": "",
     "license": "MIT",
