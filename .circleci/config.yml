@@ -16,10 +16,6 @@ jobs:
                   command: npm install
 
             - run:
-                  name: Verify Mocha installation
-                  command: npx mocha --version
-
-            - run:
                   name: Run tests
                   command: npm test
 
