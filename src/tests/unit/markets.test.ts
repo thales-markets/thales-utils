@@ -84,6 +84,31 @@ describe('Markets', () => {
             expect(containsTotal).toBe(true);
         });
 
+        it('Should return all child markets', () => {
+            const freshMockSoccer = JSON.parse(JSON.stringify(mockSoccer));
+            const freshMockOpticSoccer = JSON.parse(JSON.stringify(MockOpticSoccer));
+            const market = processMarket(
+                freshMockSoccer,
+                mapOpticOddsApiFixtureOdds([freshMockOpticSoccer])[0],
+                ['draftkings'],
+                [],
+                true,
+                undefined,
+                undefined,
+                LeagueMocks.leagueInfoEnabledAll
+            );
+
+            const containsSpread = market.childMarkets.some((child) => child.type === 'spread');
+            const containsTotal = market.childMarkets.some((child) => child.type === 'total');
+            const containsChildMoneyline = market.childMarkets.some((child) => child.type === 'moneyline');
+
+            console.log(market.childMarkets);
+
+            expect(containsSpread).toBe(true);
+            expect(containsTotal).toBe(true);
+            expect(containsChildMoneyline).toBe(true);
+        });
+
         it('Should return warning message that there are is no configuration available in league map csv', () => {
             const freshMockSoccer = JSON.parse(JSON.stringify(mockSoccer));
             const freshMockOpticSoccer = JSON.parse(JSON.stringify(MockOnlyMoneyline));

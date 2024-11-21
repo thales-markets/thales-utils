@@ -30,6 +30,16 @@ const totalMock: LeagueInfo = {
     minOdds: 0.75,
 };
 
+const childMoneylineMock: LeagueInfo = {
+    sportId: 9806,
+    enabled: 'true',
+    marketName: '1st Half Moneyline',
+    typeId: 10022,
+    type: 'Moneyline',
+    maxOdds: 0.25,
+    minOdds: 0.75,
+};
+
 const baseDiffSportId: LeagueInfo = {
     ...baseLeagueInfo,
     sportId: 4,
@@ -52,6 +62,7 @@ const leagueInfoEnabledSpreadDisabledTotals: LeagueInfo[] = [
 ];
 
 const leagueInfoEnabledSpeadAndTotals: LeagueInfo[] = [baseLeagueInfo, spreadMock, totalMock];
+const leagueInfoEnabledAll: LeagueInfo[] = [baseLeagueInfo, spreadMock, totalMock, childMoneylineMock];
 
 // Grouped Exports
 export const LeagueMocks = {
@@ -60,4 +71,5 @@ export const LeagueMocks = {
     leagueInfoMockDisabledChilds,
     leagueInfoEnabledSpreadDisabledTotals,
     leagueInfoEnabledSpeadAndTotals,
+    leagueInfoEnabledAll,
 };

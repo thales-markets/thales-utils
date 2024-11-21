@@ -1690,7 +1690,7 @@ export const MockOpticSoccer = {
             selection_line: null,
             player_id: null,
             team_id: 'CC6409213C00',
-            price: 5.75,
+            price: 3.1,
             timestamp: 1731890434.0742507,
             grouping_key: 'default',
             points: null,
