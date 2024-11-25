@@ -66,7 +66,6 @@ export const checkOddsFromBookmakers = (
             errorMessage: `Returning zero odds cause bookmakers have 0 or 1 odds`,
             // TODO: Return sportsbook name with zero odds
         };
-        return false; // fix for es-lint
     }
 
     if (arrayOfBookmakers.length == 1) {
@@ -129,6 +128,7 @@ export const checkOddsFromBookmakers = (
                 return true;
             }
         }
+        return false; // fix for es-lint
     });
 
     if (hasLargeImpliedPercentageDifference) {
