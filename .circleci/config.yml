@@ -26,7 +26,7 @@ jobs:
                       echo "Test completed. Coverage report saved."
             - codecov/upload: # Use the Codecov orb to upload the coverage
                   file: coverage/lcov.info # Adjust if your coverage report is not in `coverage/lcov.info`
-
+                  slug: thales-markets/overtime-live-trading-utils
 workflows:
     test:
         jobs:
