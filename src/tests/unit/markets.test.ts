@@ -102,8 +102,6 @@ describe('Markets', () => {
             const containsTotal = market.childMarkets.some((child) => child.type === 'total');
             const containsChildMoneyline = market.childMarkets.some((child) => child.type === 'moneyline');
 
-            console.log(market.childMarkets);
-
             expect(containsSpread).toBe(true);
             expect(containsTotal).toBe(true);
             expect(containsChildMoneyline).toBe(true);
