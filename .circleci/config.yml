@@ -1,7 +1,7 @@
+version: 2.1
+
 orbs:
     codecov: codecov/codecov@3.2.3 # Include the Codecov orb
-
-version: 2.1
 
 executors:
     node-executor:
@@ -26,10 +26,8 @@ jobs:
                       echo "Test completed. Coverage report saved."
             - codecov/upload: # Use the Codecov orb to upload the coverage
                   file: coverage/lcov.info # Adjust if your coverage report is not in `coverage/lcov.info`
-                  flags: unittests # Optional flag to tag your coverage report
-                  verbose: true # Enable detailed logging for debugging
 
 workflows:
-    test-and-report:
+    test:
         jobs:
             - test
