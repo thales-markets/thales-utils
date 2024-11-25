@@ -134,8 +134,6 @@ export const getParentOdds = (
         isTwoPositionalSport
     );
 
-    console.log('added test coverage');
-
     // CHECKING AND COMPARING ODDS FOR THE GIVEN BOOKMAKERS
     const oddsObject = checkOddsFromBookmakers(
         moneylineOddsMap,
