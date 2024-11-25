@@ -1,26 +1,35 @@
+orbs:
+    codecov: codecov/codecov@3.2.3 # Include the Codecov orb
+
 version: 2.1
 
 executors:
     node-executor:
         docker:
-            - image: circleci/node:17.0.1 # Specify the Node.js version you need
+            - image: circleci/node:17.0.1 # Specify the Node.js version
 
 jobs:
     test:
         executor: node-executor
         steps:
             - checkout # Check out the code from your repository
-
             - run:
                   name: Install dependencies
                   command: npm install
-
             - run:
-                  name: Run tests
-                  command: npm test
+                  name: Run tests and generate coverage
+                  command: npm test -- --coverage # Adjust for your test framework
+            - run:
+                  name: Save coverage report
+                  command: |
+                      mkdir -p coverage # Ensure the directory exists
+                      echo "Test completed. Coverage report saved."
+            - codecov/upload: # Use the Codecov orb to upload the coverage
+                  file: coverage/lcov.info # Adjust if your coverage report is not in `coverage/lcov.info`
+                  flags: unittests # Optional flag to tag your coverage report
+                  verbose: true # Enable detailed logging for debugging
 
 workflows:
-    version: 2
-    test:
+    test-and-report:
         jobs:
             - test
