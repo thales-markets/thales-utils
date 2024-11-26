@@ -191,7 +191,7 @@ export const createChildMarkets: (
     defaultSpreadForLiveMarkets,
     leagueMap
 ) => {
-    const [spreadOdds, totalOdds, childMarkets]: any[] = [[], [], []];
+    const [spreadOdds, totalOdds, moneylineOdds, childMarkets]: any[] = [[], [], [], []];
     const leagueInfo = getLeagueInfo(leagueId, leagueMap);
     const commonData = {
         homeTeam: apiResponseWithOdds.homeTeam,
@@ -205,19 +205,20 @@ export const createChildMarkets: (
             liveOddsProviders[0]
         );
 
-        const allValidOdds = allChildOdds.filter((odd) => odd && Math.abs(Number(odd.points) % 1) === 0.5) as any;
-
-        allValidOdds.forEach((odd) => {
+        allChildOdds.forEach((odd) => {
             if (odd.type === 'Total') {
-                totalOdds.push(odd);
+                if (Math.abs(Number(odd.points) % 1) === 0.5) totalOdds.push(odd);
             } else if (odd.type === 'Spread') {
-                spreadOdds.push(odd);
+                if (Math.abs(Number(odd.points) % 1) === 0.5) spreadOdds.push(odd);
+            } else if (odd.type === 'Moneyline') {
+                moneylineOdds.push(odd);
             }
         });
 
         const formattedOdds = [
             ...groupAndFormatSpreadOdds(spreadOdds, commonData),
             ...groupAndFormatTotalOdds(totalOdds, commonData),
+            ...groupAndFormatMoneylineOdds(moneylineOdds, commonData),
         ];
 
         const oddsWithSpreadAdjusted = adjustSpreadOnChildOdds(
@@ -231,7 +232,7 @@ export const createChildMarkets: (
                 leagueId: Number(data.sportId),
                 typeId: Number(data.typeId),
                 type: data.type.toLowerCase(),
-                line: Number(data.line),
+                line: Number(data.line || 0),
                 odds: data.odds,
             };
             const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(data.typeId));
@@ -266,7 +267,11 @@ export const createChildMarkets: (
  */
 export const filterOddsByMarketNameBookmaker = (oddsArray, leagueInfos: LeagueInfo[], oddsProvider) => {
     const allChildMarketsTypes = leagueInfos
-        .filter((leagueInfo) => leagueInfo.marketName.toLowerCase() !== MoneylineTypes.MONEYLINE.toLowerCase())
+        .filter(
+            (leagueInfo) =>
+                leagueInfo.marketName.toLowerCase() !== MoneylineTypes.MONEYLINE.toLowerCase() &&
+                leagueInfo.enabled === 'true'
+        )
         .map((leagueInfo) => leagueInfo.marketName.toLowerCase());
     return oddsArray
         .filter(
@@ -294,10 +299,10 @@ export const filterOddsByMarketNameBookmaker = (oddsArray, leagueInfos: LeagueIn
 export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
     // Group odds by their selection points and selection
     const groupedOdds = oddsArray.reduce((acc: any, odd: any) => {
-        const { points, price, selection, typeId, sportId, type } = odd;
+        const { points, marketName, price, selection, typeId, sportId, type } = odd;
         const isHomeTeam = selection === commonData.homeTeam;
 
-        const key = isHomeTeam ? points : -points;
+        const key = `${marketName}_${isHomeTeam ? points : -points}`;
 
         if (!acc[key]) {
             acc[key] = { home: null, away: null, typeId: null, sportId: null };
@@ -317,7 +322,8 @@ export const groupAndFormatSpreadOdds = (oddsArray, commonData) => {
     }, {}) as any;
     // Format the grouped odds into the desired output
     const formattedOdds = (Object.entries(groupedOdds as any) as any).reduce((acc, [key, value]) => {
-        const line = parseFloat(key);
+        const [_marketName, lineFloat] = key.split('_');
+        const line = parseFloat(lineFloat);
         if ((value as any).home !== null && (value as any).away !== null) {
             acc.push({
                 line: line as any,
@@ -343,7 +349,7 @@ export const groupAndFormatTotalOdds = (oddsArray, commonData) => {
     // Group odds by their selection points and selection
     const groupedOdds = oddsArray.reduce((acc, odd) => {
         if (odd) {
-            const key = `${odd.selection}_${odd.points}`;
+            const key = `${odd.marketName}_${odd.selection}_${odd.points}`;
             if (!acc[key]) {
                 acc[key] = { over: null, under: null };
             }
@@ -363,7 +369,7 @@ export const groupAndFormatTotalOdds = (oddsArray, commonData) => {
 
     // Format the grouped odds into the desired output
     const formattedOdds = (Object.entries(groupedOdds as any) as any).reduce((acc, [key, value]) => {
-        const [selection, selectionLine] = key.split('_');
+        const [_marketName, selection, selectionLine] = key.split('_');
         const line = parseFloat(selectionLine);
 
         // if we have away team in total odds we know the market is team total and we need to increase typeId by one.
@@ -384,12 +390,61 @@ export const groupAndFormatTotalOdds = (oddsArray, commonData) => {
     return formattedOdds;
 };
 
+/**
+ * Groups spread odds by their lines and formats the result.
+ *
+ * @param {Array} oddsArray - The input array of odds objects.
+ * @param {Object} commonData - The common data object containing homeTeam information.
+ * @returns {Array} The grouped and formatted spread odds.
+ */
+export const groupAndFormatMoneylineOdds = (oddsArray, commonData) => {
+    // Group odds by their selection points and selection
+    const groupedOdds = oddsArray.reduce((acc: any, odd: any) => {
+        const { price, selection, typeId, sportId, type } = odd;
+        const key = typeId;
+
+        if (!acc[key]) {
+            acc[key] = { home: null, away: null, draw: null, typeId: null, sportId: null };
+        }
+
+        if (selection.toLowerCase() === commonData.homeTeam.toLowerCase()) acc[key].home = price;
+        else if (selection.toLowerCase() === commonData.awayTeam.toLowerCase()) acc[key].away = price;
+        else if (selection.toLowerCase() === DRAW.toLowerCase()) acc[key].draw = price;
+
+        acc[key].typeId = typeId;
+        acc[key].type = type;
+        acc[key].sportId = sportId;
+
+        return acc;
+    }, {}) as any;
+    // Format the grouped odds into the desired output
+    const formattedOdds = (Object.entries(groupedOdds as any) as any).reduce((acc, [_key, value]) => {
+        if ((value as any).home !== null && (value as any).away !== null) {
+            acc.push({
+                odds: (value as any).draw
+                    ? [(value as any).home, (value as any).away, (value as any).draw]
+                    : [(value as any).home, (value as any).away],
+                typeId: value.typeId,
+                sportId: value.sportId,
+                type: value.type,
+            });
+        }
+        return acc;
+    }, []);
+
+    return formattedOdds;
+};
+
 export const adjustSpreadOnChildOdds = (iterableGroupedOdds, spreadDataForSport, defaultSpreadForLiveMarkets) => {
     const result: any[] = [];
     iterableGroupedOdds.forEach((data) => {
-        let homeTeamOdds = convertOddsToImpl(data.odds[0]) || ZERO;
-        let awayTeamOdds = convertOddsToImpl(data.odds[1]) || ZERO;
-        let isZeroOddsChild = homeTeamOdds === ZERO || awayTeamOdds === ZERO;
+        const hasDrawOdds = data.odds.length === 3;
+        const homeTeamOdds = convertOddsToImpl(data.odds[0]) || ZERO;
+        const awayTeamOdds = convertOddsToImpl(data.odds[1]) || ZERO;
+        const drawOdds = convertOddsToImpl(data.odds[2]) || ZERO;
+        const odds = hasDrawOdds ? [homeTeamOdds, awayTeamOdds, drawOdds] : [homeTeamOdds, awayTeamOdds];
+
+        const isZeroOddsChild = homeTeamOdds === ZERO || awayTeamOdds === ZERO || (hasDrawOdds && drawOdds === ZERO);
         if (!isZeroOddsChild) {
             const spreadData = getSpreadData(
                 spreadDataForSport,
@@ -397,17 +452,14 @@ export const adjustSpreadOnChildOdds = (iterableGroupedOdds, spreadDataForSport,
                 data.typeId,
                 defaultSpreadForLiveMarkets
             );
+
             let adjustedOdds;
             if (spreadData !== null) {
-                adjustedOdds = adjustSpreadOnOdds(
-                    [homeTeamOdds, awayTeamOdds],
-                    spreadData.minSpread,
-                    spreadData.targetSpread
-                );
+                adjustedOdds = adjustSpreadOnOdds(odds, spreadData.minSpread, spreadData.targetSpread);
             } else {
-                adjustedOdds = adjustSpreadOnOdds([homeTeamOdds, awayTeamOdds], defaultSpreadForLiveMarkets, 0);
+                adjustedOdds = adjustSpreadOnOdds(odds, defaultSpreadForLiveMarkets, 0);
             }
-            [homeTeamOdds, awayTeamOdds] = adjustedOdds;
+
             result.push({
                 ...data,
                 odds: adjustedOdds,

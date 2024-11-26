@@ -98,7 +98,7 @@ export const allowSoccerGame = (homeTeam, awayTeam, currentClock, currentPeriod,
     const currentClockNumber = Number(currentClock);
     if (
         (!Number.isNaN(currentClockNumber) && currentClockNumber >= soccerMinuteLimitForLiveTrading) ||
-        (Number.isNaN(currentClockNumber) && currentPeriod != 'HALF')
+        (Number.isNaN(currentClockNumber) && currentPeriod.toLowerCase() != 'half')
     ) {
         return { allow: false, message: `Blocking game ${homeTeam} - ${awayTeam} due to clock: ${currentClock}min` };
     }

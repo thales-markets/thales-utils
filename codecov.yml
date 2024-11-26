@@ -1,0 +1,20 @@
+# codecov.yml
+
+# Specify the coverage rules
+coverage:
+    precision: 2 # Number of decimal places for coverage percentages
+    round: down # Round coverage percentages down
+    range: '70...100' # Expected range of coverage (useful for enforcing quality gates)
+
+# Adjust how Codecov processes reports
+comment:
+    layout: 'reach, diff, flags' # Format of the PR comments
+    behavior: default # Default behavior for comments
+    require_changes: false # Only comment if changes occur in coverage
+    branches:
+        - main # Restrict comments to specific branches
+
+# Custom CI configuration (if needed)
+ci:
+    - circleci # Specify CircleCI as the CI provider
+
