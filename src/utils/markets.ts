@@ -54,7 +54,7 @@ export const processMarket = (
             if (_odd != 0) {
                 return {
                     american: oddslib.from('impliedProbability', _odd).to('moneyline'),
-                    decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
+                    decimal: Number(oddslib.from('impliedProbability', _odd).to('decimal').toFixed(10)),
                     normalizedImplied: _odd,
                 };
             } else {
@@ -91,7 +91,7 @@ export const processMarket = (
 
                 return {
                     american: oddslib.from('impliedProbability', _odd).to('moneyline'),
-                    decimal: oddslib.from('impliedProbability', _odd).to('decimal'),
+                    decimal: Number(oddslib.from('impliedProbability', _odd).to('decimal').toFixed(10)),
                     normalizedImplied: _odd,
                 };
             });
