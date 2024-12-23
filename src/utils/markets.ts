@@ -52,26 +52,26 @@ export const processMarket = (
         market.errorMessage = moneylineOdds.errorMessage;
     } else {
         // Pack market odds for UI
-        market.odds = moneylineOdds.odds.map((_odd) => {
-            if (_odd != 0) {
+        market.odds = moneylineOdds.odds.map((probability) => {
+            if (probability != 0) {
                 const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(market.typeId));
-                let finalOdd = _odd;
+                let finalProbability = probability;
 
-                if (_odd < 0.95) {
-                    finalOdd =
+                if (probability < 0.95) {
+                    finalProbability =
                         leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
-                            ? (_odd * (100 + leagueInfoByTypeId.addedSpread)) / 100
-                            : _odd;
+                            ? (probability * (100 + leagueInfoByTypeId.addedSpread)) / 100
+                            : probability;
                     // edge case if added spread is bigger than 5%, it can happen that odd goes above 1, in that case return odd from api.
-                    if (finalOdd >= 1) {
-                        finalOdd = _odd;
+                    if (finalProbability >= 1) {
+                        finalProbability = probability;
                     }
                 }
 
                 return {
-                    american: oddslib.from('impliedProbability', finalOdd).to('moneyline'),
-                    decimal: Number(oddslib.from('impliedProbability', finalOdd).to('decimal').toFixed(10)),
-                    normalizedImplied: finalOdd,
+                    american: oddslib.from('impliedProbability', finalProbability).to('moneyline'),
+                    decimal: Number(oddslib.from('impliedProbability', finalProbability).to('decimal').toFixed(10)),
+                    normalizedImplied: finalProbability,
                 };
             } else {
                 market.errorMessage = 'Bad odds after spread adjustment';
@@ -96,8 +96,8 @@ export const processMarket = (
     const packedChildMarkets = childMarkets.map((childMarket: any) => {
         const preparedMarket = { ...market, ...childMarket };
         if (preparedMarket.odds.length > 0) {
-            preparedMarket.odds = preparedMarket.odds.map((_odd) => {
-                if (_odd == 0) {
+            preparedMarket.odds = preparedMarket.odds.map((probability) => {
+                if (probability == 0) {
                     return {
                         american: 0,
                         decimal: 0,
@@ -107,21 +107,21 @@ export const processMarket = (
                 const leagueInfoByTypeId = leagueInfo.find(
                     (league) => Number(league.typeId) === Number(preparedMarket.typeId)
                 );
-                let finalOdd = _odd;
+                let finalProbability = probability;
 
-                if (_odd < 0.95) {
-                    finalOdd =
+                if (probability < 0.95) {
+                    finalProbability =
                         leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
-                            ? (_odd * (100 + leagueInfoByTypeId.addedSpread)) / 100
-                            : _odd;
-                    if (finalOdd >= 1) {
-                        finalOdd = _odd;
+                            ? (probability * (100 + leagueInfoByTypeId.addedSpread)) / 100
+                            : probability;
+                    if (finalProbability >= 1) {
+                        finalProbability = probability;
                     }
                 }
                 return {
-                    american: oddslib.from('impliedProbability', finalOdd).to('moneyline'),
-                    decimal: Number(oddslib.from('impliedProbability', finalOdd).to('decimal').toFixed(10)),
-                    normalizedImplied: finalOdd,
+                    american: oddslib.from('impliedProbability', finalProbability).to('moneyline'),
+                    decimal: Number(oddslib.from('impliedProbability', finalProbability).to('decimal').toFixed(10)),
+                    normalizedImplied: finalProbability,
                 };
             });
         }
