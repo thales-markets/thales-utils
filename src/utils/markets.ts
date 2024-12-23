@@ -55,15 +55,23 @@ export const processMarket = (
         market.odds = moneylineOdds.odds.map((_odd) => {
             if (_odd != 0) {
                 const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(market.typeId));
+                let finalOdd = _odd;
 
-                const addedSpreadOdds =
-                    leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
-                        ? (_odd * (100 + leagueInfoByTypeId.addedSpread)) / 100
-                        : _odd;
+                if (_odd < 0.95) {
+                    finalOdd =
+                        leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
+                            ? (_odd * (100 + leagueInfoByTypeId.addedSpread)) / 100
+                            : _odd;
+                    // edge case if added spread is bigger than 5%, it can happen that odd goes above 1, in that case return odd from api.
+                    if (finalOdd >= 1) {
+                        finalOdd = _odd;
+                    }
+                }
+
                 return {
-                    american: oddslib.from('impliedProbability', addedSpreadOdds).to('moneyline'),
-                    decimal: Number(oddslib.from('impliedProbability', addedSpreadOdds).to('decimal').toFixed(10)),
-                    normalizedImplied: addedSpreadOdds,
+                    american: oddslib.from('impliedProbability', finalOdd).to('moneyline'),
+                    decimal: Number(oddslib.from('impliedProbability', finalOdd).to('decimal').toFixed(10)),
+                    normalizedImplied: finalOdd,
                 };
             } else {
                 market.errorMessage = 'Bad odds after spread adjustment';
@@ -99,14 +107,21 @@ export const processMarket = (
                 const leagueInfoByTypeId = leagueInfo.find(
                     (league) => Number(league.typeId) === Number(preparedMarket.typeId)
                 );
-                const addedSpreadOdds =
-                    leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
-                        ? (_odd * (100 + leagueInfoByTypeId.addedSpread)) / 100
-                        : _odd;
+                let finalOdd = _odd;
+
+                if (_odd < 0.95) {
+                    finalOdd =
+                        leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
+                            ? (_odd * (100 + leagueInfoByTypeId.addedSpread)) / 100
+                            : _odd;
+                    if (finalOdd >= 1) {
+                        finalOdd = _odd;
+                    }
+                }
                 return {
-                    american: oddslib.from('impliedProbability', addedSpreadOdds).to('moneyline'),
-                    decimal: Number(oddslib.from('impliedProbability', addedSpreadOdds).to('decimal').toFixed(10)),
-                    normalizedImplied: addedSpreadOdds,
+                    american: oddslib.from('impliedProbability', finalOdd).to('moneyline'),
+                    decimal: Number(oddslib.from('impliedProbability', finalOdd).to('decimal').toFixed(10)),
+                    normalizedImplied: finalOdd,
                 };
             });
         }

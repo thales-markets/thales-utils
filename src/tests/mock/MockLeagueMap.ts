@@ -8,7 +8,6 @@ const baseLeagueInfo: LeagueInfo = {
     type: 'moneyline',
     maxOdds: 0.25,
     minOdds: 0.75,
-    addedSpread: 0,
 };
 
 const spreadMock: LeagueInfo = {
@@ -19,7 +18,6 @@ const spreadMock: LeagueInfo = {
     type: 'Spread',
     maxOdds: 0.25,
     minOdds: 0.75,
-    addedSpread: 0,
 };
 
 const totalMock: LeagueInfo = {
@@ -30,7 +28,6 @@ const totalMock: LeagueInfo = {
     type: 'Total',
     maxOdds: 0.25,
     minOdds: 0.75,
-    addedSpread: 0,
 };
 
 const childMoneylineMock: LeagueInfo = {
@@ -41,7 +38,6 @@ const childMoneylineMock: LeagueInfo = {
     type: 'Moneyline',
     maxOdds: 0.25,
     minOdds: 0.75,
-    addedSpread: 0,
 };
 
 const baseDiffSportId: LeagueInfo = {

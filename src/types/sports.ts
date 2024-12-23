@@ -6,7 +6,7 @@ export type LeagueInfo = {
     enabled: string;
     minOdds: number;
     maxOdds: number;
-    addedSpread: number;
+    addedSpread?: number;
 };
 
 export type ChildMarket = {
