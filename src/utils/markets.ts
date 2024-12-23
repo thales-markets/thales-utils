@@ -1,6 +1,7 @@
 import * as oddslib from 'oddslib';
 import { createChildMarkets, getParentOdds } from './odds';
 import { OddsObject } from '../types/odds';
+import { getLeagueInfo } from './sports';
 /**
  * Processes a single sports event. This function maps event data to a specific format,
  * filters invalid events, and optionally fetches player properties if the sport supports it.
@@ -27,6 +28,7 @@ export const processMarket = (
     leagueMap: any
 ) => {
     const sportSpreadData = spreadData.filter((data) => data.sportId === String(market.leagueId));
+    const leagueInfo = getLeagueInfo(market.leagueId, leagueMap);
 
     const moneylineOdds = getParentOdds(
         !isDrawAvailable,
@@ -52,13 +54,16 @@ export const processMarket = (
         // Pack market odds for UI
         market.odds = moneylineOdds.odds.map((_odd) => {
             if (_odd != 0) {
-                const addedOnePercentToOdds = _odd * 1.01; // add one percentage
+                const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(market.typeId));
+
+                const addedSpreadOdds =
+                    leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
+                        ? (_odd * (100 + leagueInfoByTypeId.addedSpread)) / 100
+                        : _odd;
                 return {
-                    american: oddslib.from('impliedProbability', addedOnePercentToOdds).to('moneyline'),
-                    decimal: Number(
-                        oddslib.from('impliedProbability', addedOnePercentToOdds).to('decimal').toFixed(10)
-                    ),
-                    normalizedImplied: addedOnePercentToOdds,
+                    american: oddslib.from('impliedProbability', addedSpreadOdds).to('moneyline'),
+                    decimal: Number(oddslib.from('impliedProbability', addedSpreadOdds).to('decimal').toFixed(10)),
+                    normalizedImplied: addedSpreadOdds,
                 };
             } else {
                 market.errorMessage = 'Bad odds after spread adjustment';
@@ -91,13 +96,17 @@ export const processMarket = (
                         normalizedImplied: 0,
                     };
                 }
-                const addedOnePercentToOdds = _odd * 1.01; // add one percentage
+                const leagueInfoByTypeId = leagueInfo.find(
+                    (league) => Number(league.typeId) === Number(preparedMarket.typeId)
+                );
+                const addedSpreadOdds =
+                    leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
+                        ? (_odd * (100 + leagueInfoByTypeId.addedSpread)) / 100
+                        : _odd;
                 return {
-                    american: oddslib.from('impliedProbability', addedOnePercentToOdds).to('moneyline'),
-                    decimal: Number(
-                        oddslib.from('impliedProbability', addedOnePercentToOdds).to('decimal').toFixed(10)
-                    ),
-                    normalizedImplied: addedOnePercentToOdds,
+                    american: oddslib.from('impliedProbability', addedSpreadOdds).to('moneyline'),
+                    decimal: Number(oddslib.from('impliedProbability', addedSpreadOdds).to('decimal').toFixed(10)),
+                    normalizedImplied: addedSpreadOdds,
                 };
             });
         }
