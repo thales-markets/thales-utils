@@ -58,13 +58,12 @@ export const processMarket = (
                 let finalProbability = probability;
 
                 if (probability < 0.95) {
-                    finalProbability =
-                        leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
-                            ? (probability * (100 + leagueInfoByTypeId.addedSpread)) / 100
-                            : probability;
-                    // edge case if added spread is bigger than 5%, it can happen that odd goes above 1, in that case return odd from api.
-                    if (finalProbability >= 1) {
-                        finalProbability = probability;
+                    if (leagueInfoByTypeId && leagueInfoByTypeId.addedSpread) {
+                        finalProbability = (probability * (100 + leagueInfoByTypeId.addedSpread)) / 100;
+                        // edge case if added spread is bigger than 5%, it can happen that odd goes above 1, in that case return odd from api.
+                        if (finalProbability >= 1) {
+                            finalProbability = probability;
+                        }
                     }
                 }
 
@@ -110,12 +109,12 @@ export const processMarket = (
                 let finalProbability = probability;
 
                 if (probability < 0.95) {
-                    finalProbability =
-                        leagueInfoByTypeId && leagueInfoByTypeId.addedSpread > 0
-                            ? (probability * (100 + leagueInfoByTypeId.addedSpread)) / 100
-                            : probability;
-                    if (finalProbability >= 1) {
-                        finalProbability = probability;
+                    if (leagueInfoByTypeId && leagueInfoByTypeId.addedSpread) {
+                        finalProbability = (probability * (100 + leagueInfoByTypeId.addedSpread)) / 100;
+                        // edge case if added spread is bigger than 5%, it can happen that odd goes above 1, in that case return odd from api.
+                        if (finalProbability >= 1) {
+                            finalProbability = probability;
+                        }
                     }
                 }
                 return {
