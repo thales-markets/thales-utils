@@ -52,10 +52,13 @@ export const processMarket = (
         // Pack market odds for UI
         market.odds = moneylineOdds.odds.map((_odd) => {
             if (_odd != 0) {
+                const addedOnePercentToOdds = _odd * 1.01; // add one percentage
                 return {
-                    american: oddslib.from('impliedProbability', _odd).to('moneyline'),
-                    decimal: Number(oddslib.from('impliedProbability', _odd).to('decimal').toFixed(10)),
-                    normalizedImplied: _odd,
+                    american: oddslib.from('impliedProbability', addedOnePercentToOdds).to('moneyline'),
+                    decimal: Number(
+                        oddslib.from('impliedProbability', addedOnePercentToOdds).to('decimal').toFixed(10)
+                    ),
+                    normalizedImplied: addedOnePercentToOdds,
                 };
             } else {
                 market.errorMessage = 'Bad odds after spread adjustment';
@@ -88,11 +91,13 @@ export const processMarket = (
                         normalizedImplied: 0,
                     };
                 }
-
+                const addedOnePercentToOdds = _odd * 1.01; // add one percentage
                 return {
-                    american: oddslib.from('impliedProbability', _odd).to('moneyline'),
-                    decimal: Number(oddslib.from('impliedProbability', _odd).to('decimal').toFixed(10)),
-                    normalizedImplied: _odd,
+                    american: oddslib.from('impliedProbability', addedOnePercentToOdds).to('moneyline'),
+                    decimal: Number(
+                        oddslib.from('impliedProbability', addedOnePercentToOdds).to('decimal').toFixed(10)
+                    ),
+                    normalizedImplied: addedOnePercentToOdds,
                 };
             });
         }
