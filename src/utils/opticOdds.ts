@@ -67,7 +67,7 @@ export const convertFromBytes32 = (value) => {
     return result.replace(/\0/g, '');
 };
 
-export const formatOpticOddsLeagueName = (leagueName: string) => leagueName.replace(' ', '_').toLowerCase();
+export const formatOpticOddsLeagueName = (leagueName: string) => leagueName.replaceAll(' ', '_').toLowerCase();
 
 export const mapFromOpticOddsToOvertimeFormat = (fixtureId: string) => {
     if (!fixtureId.includes(OPTIC_ODDS_ID_SEPARATOR)) {
@@ -75,7 +75,7 @@ export const mapFromOpticOddsToOvertimeFormat = (fixtureId: string) => {
     }
     const [leagueName, id] = fixtureId.split(':');
     const overtimeLeagueId = Object.keys(LeagueIdMapOpticOdds).find(
-        (key) => formatOpticOddsLeagueName(LeagueIdMapOpticOdds[key]) === leagueName
+        (key) => formatOpticOddsLeagueName(LeagueIdMapOpticOdds[Number(key)]) === leagueName
     );
     if (!overtimeLeagueId) {
         throw `Optic Odds league ${leagueName} not mapped.`;
