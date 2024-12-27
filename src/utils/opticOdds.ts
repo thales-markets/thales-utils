@@ -73,7 +73,7 @@ export const mapFromOpticOddsToOvertimeFormat = (fixtureId: string) => {
     if (!fixtureId.includes(OPTIC_ODDS_ID_SEPARATOR)) {
         return fixtureId;
     }
-    const [leagueName, id] = fixtureId.split(':');
+    const [leagueName, id] = fixtureId.split(OPTIC_ODDS_ID_SEPARATOR);
     const overtimeLeagueId = Object.keys(LeagueIdMapOpticOdds).find(
         (key) => formatOpticOddsLeagueName(LeagueIdMapOpticOdds[Number(key)]) === leagueName
     );
@@ -87,7 +87,7 @@ export const mapFromOvertimeToOpticOddsFormat = (gameId: string) => {
     if (!gameId.includes(OVERTIME_ID_SEPARATOR)) {
         return gameId;
     }
-    const [leagueId, id] = gameId.split(':');
+    const [leagueId, id] = gameId.split(OVERTIME_ID_SEPARATOR);
     const opticOddsLeagueName = LeagueIdMapOpticOdds[Number(leagueId)];
     if (!opticOddsLeagueName) {
         throw `Overtime league ID ${leagueId} not mapped.`;
