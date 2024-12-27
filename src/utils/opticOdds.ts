@@ -1,3 +1,7 @@
+import bytes32 from 'bytes32';
+import { OPTIC_ODDS_ID_SEPARATOR, OVERTIME_ID_SEPARATOR } from '../constants/common';
+import { LeagueIdMapOpticOdds } from '../constants/sports';
+
 export const mapOpticOddsApiFixtures = (fixturesData) =>
     fixturesData.map((fixtureData) => ({
         gameId: fixtureData.id, // fixture_id
@@ -57,3 +61,42 @@ const mapScorePeriods = (periods, homeAwayType) =>
         }),
         {}
     ) as any;
+
+export const convertFromBytes32 = (value) => {
+    const result = bytes32({ input: value });
+    return result.replace(/\0/g, '');
+};
+
+export const formatOpticOddsLeagueName = (leagueName: string) => leagueName.replace(' ', '_').toLowerCase();
+
+export const mapFromOpticOddsToOvertimeFormat = (fixtureId: string) => {
+    if (!fixtureId.includes(OPTIC_ODDS_ID_SEPARATOR)) {
+        return fixtureId;
+    }
+    const [leagueName, id] = fixtureId.split(':');
+    const overtimeLeagueId = Object.keys(LeagueIdMapOpticOdds).find(
+        (key) => formatOpticOddsLeagueName(LeagueIdMapOpticOdds[key]) === leagueName
+    );
+    if (!overtimeLeagueId) {
+        throw `Optic Odds league ${leagueName} not mapped.`;
+    }
+    return `${overtimeLeagueId}${OVERTIME_ID_SEPARATOR}${id}`;
+};
+
+export const mapFromOvertimeToOpticOddsFormat = (gameId: string) => {
+    if (!gameId.includes(OVERTIME_ID_SEPARATOR)) {
+        return gameId;
+    }
+    const [leagueId, id] = gameId.split(':');
+    const opticOddsLeagueName = LeagueIdMapOpticOdds[Number(leagueId)];
+    if (!opticOddsLeagueName) {
+        throw `Overtime league ID ${leagueId} not mapped.`;
+    }
+    return `${formatOpticOddsLeagueName(opticOddsLeagueName)}${OPTIC_ODDS_ID_SEPARATOR}${id}`;
+};
+
+export const mapFromOpticOddsFormatToBytes32 = (fixtureId: string) =>
+    bytes32({ input: mapFromOpticOddsToOvertimeFormat(fixtureId) });
+
+export const mapFromBytes32ToOpticOddsFormat = (gameId: string) =>
+    mapFromOvertimeToOpticOddsFormat(convertFromBytes32(gameId));
