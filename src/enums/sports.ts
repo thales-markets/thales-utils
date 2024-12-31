@@ -197,6 +197,22 @@ export enum League {
     TENNIS_WTA_LIVE_MAPPING_V2_5 = 15226,
     TENNIS_WTA_LIVE_MAPPING_V2_6 = 15227,
     TENNIS_WTA_LIVE_MAPPING_V2_7 = 15228,
+    TENNIS_WTA_LIVE_MAPPING_V2_8 = 15231, // Tennis WTA 500 unknown round
+    TENNIS_WTA_LIVE_MAPPING_V2_9 = 15232, // Tennis WTA 500 1st round
+    TENNIS_WTA_LIVE_MAPPING_V2_10 = 15233, // Tennis WTA 500 2nd round
+    TENNIS_WTA_LIVE_MAPPING_V2_11 = 15234, // Tennis WTA 500 3rd round
+    TENNIS_WTA_LIVE_MAPPING_V2_12 = 15235, // Tennis WTA 500 4th round
+    TENNIS_WTA_LIVE_MAPPING_V2_13 = 15236, // Tennis WTA 500 quarterfinals
+    TENNIS_WTA_LIVE_MAPPING_V2_14 = 15237, // Tennis WTA 500 semifinals
+    TENNIS_WTA_LIVE_MAPPING_V2_15 = 15238, // Tennis WTA 500 finals
+    TENNIS_WTA_LIVE_MAPPING_V2_16 = 15241, // Tennis WTA 250 unknown round
+    TENNIS_WTA_LIVE_MAPPING_V2_17 = 15242, // Tennis WTA 250 1st round
+    TENNIS_WTA_LIVE_MAPPING_V2_18 = 15243, // Tennis WTA 250 2nd round
+    TENNIS_WTA_LIVE_MAPPING_V2_19 = 15244, // Tennis WTA 250 3rd round
+    TENNIS_WTA_LIVE_MAPPING_V2_20 = 15245, // Tennis WTA 250 4th round
+    TENNIS_WTA_LIVE_MAPPING_V2_21 = 15246, // Tennis WTA 250 quarterfinals
+    TENNIS_WTA_LIVE_MAPPING_V2_22 = 15247, // Tennis WTA 250 semifinals
+    TENNIS_WTA_LIVE_MAPPING_V2_23 = 15248, // Tennis WTA 250 finals
 }
 
 export enum MoneylineTypes {
