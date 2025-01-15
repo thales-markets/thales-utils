@@ -1,8 +1,8 @@
+import { formatUnits, getAddress as getAddressViem, hexToString, parseUnits, stringToHex } from 'viem';
 import { COLLATERAL_DECIMALS } from '../../constants/currency';
 import { Coins } from '../../types/tokens';
 import { getDefaultDecimalsForNetwork } from '../network';
-import { floorNumberToDecimals } from './number';
-import { formatUnits, getAddress as getAddressViem, hexToString, parseUnits, stringToHex } from 'viem';
+import { countDecimals, floorNumberToDecimals } from './number';
 
 export const bytesFormatter = (input: string) => stringToHex(input, { size: 32 });
 
@@ -19,8 +19,9 @@ export const coinFormatter = (value: bigint, networkId: number, currency?: Coins
 
 export const coinParser = (value: string, networkId: number, currency?: Coins) => {
     const decimals = currency ? COLLATERAL_DECIMALS[currency] : getDefaultDecimalsForNetwork(networkId);
+    const numOfValueDecimals = countDecimals(Number(value));
 
-    return parseUnits(floorNumberToDecimals(Number(value), decimals).toString(), decimals);
+    return parseUnits(floorNumberToDecimals(Number(value), decimals).toFixed(numOfValueDecimals), decimals);
 };
 
 export const getAddress = (addr: string) => getAddressViem(addr);
