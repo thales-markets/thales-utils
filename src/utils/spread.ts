@@ -65,11 +65,11 @@ export const getSpreadData = (spreadData, sportId, typeId, defaultSpreadForLiveM
     return { minSpread: defaultSpreadForLiveMarkets, targetSpread: 0 };
 };
 
-export const adjustAddedSpread = (odds, leagueInfo, market) => {
+export const adjustAddedSpread = (odds, leagueInfo, typeId) => {
     // Pack market odds for UI
     return odds.map((probability) => {
         if (probability != 0) {
-            const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(market.typeId));
+            const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(typeId));
             let finalProbability = probability;
 
             if (probability < 0.95) {

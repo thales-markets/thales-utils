@@ -41,7 +41,7 @@ export const processMarket = (
         maxPercentageDiffBetwenOdds
     );
 
-    const oddsAfterSpread = adjustAddedSpread(moneylineOdds.odds, leagueInfo, market);
+    const oddsAfterSpread = adjustAddedSpread(moneylineOdds.odds, leagueInfo, market.typeId);
 
     if (moneylineOdds.errorMessage) {
         market.odds = market.odds.map(() => {
@@ -84,7 +84,7 @@ export const processMarket = (
 
     const packedChildMarkets = childMarkets.map((childMarket: any) => {
         const preparedMarket = { ...market, ...childMarket };
-        const oddsAfterSpread = adjustAddedSpread(preparedMarket.odds, leagueInfo, preparedMarket);
+        const oddsAfterSpread = adjustAddedSpread(preparedMarket.odds, leagueInfo, preparedMarket.typeId);
         if (preparedMarket.odds.length > 0) {
             preparedMarket.odds = oddsAfterSpread.map((probability) => {
                 if (probability == 0) {
