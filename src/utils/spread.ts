@@ -64,3 +64,27 @@ export const getSpreadData = (spreadData, sportId, typeId, defaultSpreadForLiveM
     }
     return { minSpread: defaultSpreadForLiveMarkets, targetSpread: 0 };
 };
+
+export const adjustAddedSpread = (odds, leagueInfo, market) => {
+    // Pack market odds for UI
+    return odds.map((probability) => {
+        if (probability != 0) {
+            const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(market.typeId));
+            let finalProbability = probability;
+
+            if (probability < 0.95) {
+                if (leagueInfoByTypeId && Number(leagueInfoByTypeId.addedSpread)) {
+                    finalProbability = (probability * (100 + Number(leagueInfoByTypeId.addedSpread))) / 100;
+                    // edge case if added spread is bigger than 5%, it can happen that odd goes above 1, in that case return odd from api.
+                    if (finalProbability >= 1) {
+                        finalProbability = probability;
+                    }
+                }
+            }
+
+            return finalProbability;
+        } else {
+            return 0;
+        }
+    });
+};
