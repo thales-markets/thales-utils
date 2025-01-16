@@ -10,4 +10,5 @@ export type Coins =
     | 'ETH'
     | 'ARB'
     | 'THALES'
-    | 'sTHALES';
+    | 'sTHALES'
+    | 'OVER';
