@@ -1467,6 +1467,16 @@ export const LeagueMap = {
         periodType: PeriodType.EMPTY,
         isDrawAvailable: false,
     },
+    [League.ATP_FUTURES]: {
+        sport: Sport.FUTURES,
+        id: League.ATP_FUTURES,
+        label: 'ATP Futures',
+        provider: Provider.EMPTY,
+        scoringType: ScoringType.EMPTY,
+        matchResolveType: MatchResolveType.EMPTY,
+        periodType: PeriodType.EMPTY,
+        isDrawAvailable: false,
+    },
     [League.EUROLEAGUE_FUTURES]: {
         sport: Sport.FUTURES,
         id: League.EUROLEAGUE_FUTURES,
