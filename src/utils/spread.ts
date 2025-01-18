@@ -1,3 +1,5 @@
+import { LeagueInfo } from '../types/sports';
+
 export const adjustSpreadOnOdds = (impliedProbs, minSpread, targetSpread) => {
     // Step 1: Check if any implied probability is zero
     if (impliedProbs.some((prob) => prob === 0)) {
@@ -63,4 +65,28 @@ export const getSpreadData = (spreadData, sportId, typeId, defaultSpreadForLiveM
         };
     }
     return { minSpread: defaultSpreadForLiveMarkets, targetSpread: 0 };
+};
+
+export const adjustAddedSpread = (odds: number[], leagueInfo: LeagueInfo[], typeId: number) => {
+    // Pack market odds for UI
+    return odds.map((probability) => {
+        if (probability != 0) {
+            const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(typeId));
+            let finalProbability = probability;
+
+            if (probability < 0.95) {
+                if (leagueInfoByTypeId && Number(leagueInfoByTypeId.addedSpread)) {
+                    finalProbability = (probability * (100 + Number(leagueInfoByTypeId.addedSpread))) / 100;
+                    // edge case if added spread is bigger than 5%, it can happen that odd goes above 1, in that case return odd from api.
+                    if (finalProbability >= 1) {
+                        finalProbability = probability;
+                    }
+                }
+            }
+
+            return finalProbability;
+        } else {
+            return 0;
+        }
+    });
 };
