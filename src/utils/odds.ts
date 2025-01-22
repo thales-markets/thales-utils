@@ -14,7 +14,7 @@ import { OddsObject } from '../types/odds';
  * @param {Number} odds - The odds value to convert.
  * @returns {Number} The converted odds value.
  */
-const convertOddsToImpl = (odds) => {
+export const convertOddsToImpl = (odds) => {
     return odds === ZERO ? 0 : getOddsFromTo('decimal', 'impliedProbability', odds);
 };
 
@@ -25,7 +25,7 @@ const convertOddsToImpl = (odds) => {
  * @param {Number} input - The odds value.
  * @returns {Number} The converted odds.
  */
-const getOddsFromTo = (from, to, input) => {
+export const getOddsFromTo = (from, to, input) => {
     try {
         return oddslib.from(from, input).to(to);
     } catch (error) {
