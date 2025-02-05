@@ -11,4 +11,5 @@ export type Coins =
     | 'ARB'
     | 'THALES'
     | 'sTHALES'
-    | 'OVER';
+    | 'OVER'
+    | 'cbBTC';
