@@ -1,5 +1,4 @@
 export type Coins =
-    | 'sUSD'
     | 'DAI'
     | 'USDCe'
     | 'USDbC'
