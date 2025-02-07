@@ -15,6 +15,7 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     sTHALES: 18,
     OVER: 18,
     cbBTC: 8,
+    wBTC: 8,
 };
 
 export const DEFAULT_CURRENCY_DECIMALS = 2;
