@@ -1596,6 +1596,16 @@ export const LeagueMap = {
         periodType: PeriodType.EMPTY,
         isDrawAvailable: false,
     },
+    [League.NCAAB_FUTURES]: {
+        sport: Sport.FUTURES,
+        id: League.NCAAB_FUTURES,
+        label: 'NCAAB Futures',
+        provider: Provider.EMPTY,
+        scoringType: ScoringType.EMPTY,
+        matchResolveType: MatchResolveType.EMPTY,
+        periodType: PeriodType.EMPTY,
+        isDrawAvailable: false,
+    },
     [League.NHL_FUTURES]: {
         sport: Sport.FUTURES,
         id: League.NHL_FUTURES,
