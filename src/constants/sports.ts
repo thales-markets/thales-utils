@@ -1455,9 +1455,9 @@ export const LeagueMap = {
         periodType: PeriodType.HALF,
         isDrawAvailable: true,
     },
-    [League.UEFA_CHAMPIONS_LEAGUE_WOMEN]: {
+    [League.UEFA_NATIONS_LEAGUE_WOMEN]: {
         sport: Sport.SOCCER,
-        id: League.UEFA_CHAMPIONS_LEAGUE_WOMEN,
+        id: League.UEFA_NATIONS_LEAGUE_WOMEN,
         label: 'UEFA Nations League Women',
         opticOddsName: 'UEFA - Nations League Women',
         provider: Provider.OPTICODDS,
