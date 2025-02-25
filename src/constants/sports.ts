@@ -1612,7 +1612,7 @@ export const LeagueMap = {
     [League.GREECE_A1_LEAGUE]: {
         sport: Sport.BASKETBALL,
         id: League.GREECE_A1_LEAGUE,
-        label: 'Greece - A1 League',
+        label: 'Greece A1 League',
         opticOddsName: 'Greece - A1 League',
         provider: Provider.OPTICODDS,
         scoringType: ScoringType.POINTS,
