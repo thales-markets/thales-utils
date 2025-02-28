@@ -5,14 +5,11 @@ import { getLeagueSport } from './sports';
 export const checkGameContraints = (opticOddsScoresApiResponse: ScoresObject, marketLeague: League, constraintsMap) => {
     const marketSport = getLeagueSport(marketLeague);
     const homeTeam = opticOddsScoresApiResponse.homeTeam;
-    const currentScoreHome = opticOddsScoresApiResponse.homeTotal;
     const awayTeam = opticOddsScoresApiResponse.awayTeam;
-    const currentScoreAway = opticOddsScoresApiResponse.awayTotal;
 
     const currentClock = opticOddsScoresApiResponse.clock;
     const currentPeriod = opticOddsScoresApiResponse.period;
     const currentGameStatus = opticOddsScoresApiResponse.status;
-    const currentPeriodNumber = parseInt(currentPeriod);
 
     if (currentGameStatus.toLowerCase() == 'completed') {
         return {
