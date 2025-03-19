@@ -1,6 +1,6 @@
 import * as oddslib from 'oddslib';
 
-export const getBookmakersArray = (bookmakersData, sportId, backupLiveOddsProviders) => {
+export const getBookmakersArray = (bookmakersData: any[], sportId: any, backupLiveOddsProviders: string[]) => {
     const sportBookmakersData = bookmakersData.find((data) => Number(data.sportId) === Number(sportId));
     if (sportBookmakersData) {
         if (sportBookmakersData.primaryBookmaker == '') {

@@ -6,7 +6,8 @@
     "scripts": {
         "pack": "webpack --mode production",
         "prepublish": "npm run pack",
-        "test": "jest"
+        "test": "jest",
+        "compile": "tsc"
     },
     "author": "",
     "license": "MIT",

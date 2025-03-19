@@ -1,3 +1,27 @@
+export type Fixture = {
+    gameId: string;
+    startDate: number;
+    homeTeam: string;
+    awayTeam: string;
+};
+
+export type Odds = [
+    {
+        id: string;
+        sportsBookName: string;
+        name: string;
+        price: number;
+        timestamp: number;
+        points: number;
+        isMain: boolean;
+        isLive: boolean;
+        marketName: string;
+        playerId: string;
+        selection: string;
+        selectionLine: string;
+    }
+];
+
 export type OddsObject = {
     gameId: string;
     startDate: number;
@@ -7,22 +31,7 @@ export type OddsObject = {
     status: string;
     sport: string;
     league: string;
-    odds: [
-        {
-            id: string;
-            sportsBookName: string;
-            name: string;
-            price: number;
-            timestamp: number;
-            points: number;
-            isMain: boolean;
-            isLive: boolean;
-            marketName: string;
-            playerId: string;
-            selection: string;
-            selectionLine: string;
-        }
-    ];
+    odds: Odds;
 };
 
 export type ScoresObject = {
@@ -48,3 +57,5 @@ export type ScoresObject = {
     homePeriod5: string;
     awayPeriod5: string;
 };
+
+export type HomeAwayTeams = { homeTeam: string; awayTeam: string };

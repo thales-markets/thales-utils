@@ -1,9 +1,9 @@
+import { NO_MARKETS_FOR_LEAGUE_ID } from '../../constants/errors';
 import { processMarket } from '../../utils/markets';
-import { mockSoccer } from '../mock/MockSoccerRedis';
-import { MockOnlyMoneyline, MockOpticSoccer } from '../mock/MockOpticSoccer';
 import { mapOpticOddsApiFixtureOdds } from '../../utils/opticOdds';
 import { LeagueMocks } from '../mock/MockLeagueMap';
-import { NO_MARKETS_FOR_LEAGUE_ID } from '../../constants/errors';
+import { MockOnlyMoneyline, MockOpticSoccer } from '../mock/MockOpticSoccer';
+import { mockSoccer } from '../mock/MockSoccerRedis';
 
 describe('Markets', () => {
     describe('LeagueMap configuration', () => {
@@ -56,8 +56,8 @@ describe('Markets', () => {
                 LeagueMocks.leagueInfoEnabledSpreadDisabledTotals
             );
 
-            const containsSpread = market.childMarkets.some((child) => child.type === 'spread');
-            const containsTotal = market.childMarkets.some((child) => child.type === 'total');
+            const containsSpread = market.childMarkets.some((child: any) => child.type === 'spread');
+            const containsTotal = market.childMarkets.some((child: any) => child.type === 'total');
 
             expect(containsSpread).toBe(true);
             expect(containsTotal).toBe(false);
@@ -77,8 +77,8 @@ describe('Markets', () => {
                 LeagueMocks.leagueInfoEnabledSpeadAndTotals
             );
 
-            const containsSpread = market.childMarkets.some((child) => child.type === 'spread');
-            const containsTotal = market.childMarkets.some((child) => child.type === 'total');
+            const containsSpread = market.childMarkets.some((child: any) => child.type === 'spread');
+            const containsTotal = market.childMarkets.some((child: any) => child.type === 'total');
 
             expect(containsSpread).toBe(true);
             expect(containsTotal).toBe(true);
@@ -98,9 +98,9 @@ describe('Markets', () => {
                 LeagueMocks.leagueInfoEnabledAll
             );
 
-            const containsSpread = market.childMarkets.some((child) => child.type === 'spread');
-            const containsTotal = market.childMarkets.some((child) => child.type === 'total');
-            const containsChildMoneyline = market.childMarkets.some((child) => child.type === 'moneyline');
+            const containsSpread = market.childMarkets.some((child: any) => child.type === 'spread');
+            const containsTotal = market.childMarkets.some((child: any) => child.type === 'total');
+            const containsChildMoneyline = market.childMarkets.some((child: any) => child.type === 'moneyline');
 
             expect(containsSpread).toBe(true);
             expect(containsTotal).toBe(true);

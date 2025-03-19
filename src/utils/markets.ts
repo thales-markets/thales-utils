@@ -1,6 +1,6 @@
 import * as oddslib from 'oddslib';
-import { createChildMarkets, getParentOdds } from './odds';
 import { OddsObject } from '../types/odds';
+import { createChildMarkets, getParentOdds } from './odds';
 import { getLeagueInfo } from './sports';
 import { adjustAddedSpread } from './spread';
 /**
@@ -28,7 +28,7 @@ export const processMarket = (
     maxPercentageDiffBetwenOdds: any,
     leagueMap: any
 ) => {
-    const sportSpreadData = spreadData.filter((data) => data.sportId === String(market.leagueId));
+    const sportSpreadData = spreadData.filter((data: any) => data.sportId === String(market.leagueId));
     const leagueInfo = getLeagueInfo(market.leagueId, leagueMap);
 
     const moneylineOdds = getParentOdds(
