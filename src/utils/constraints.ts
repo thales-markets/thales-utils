@@ -1,4 +1,4 @@
-import { League, Sport } from '../enums/sports';
+import { League, Sport } from 'overtime-utils';
 import { ScoresObject } from '../types/odds';
 import { getLeagueSport } from './sports';
 

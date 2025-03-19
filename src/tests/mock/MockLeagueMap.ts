@@ -1,6 +1,6 @@
-import { LeagueInfo } from '../../types/sports';
+import { LeagueConfigInfo } from '../../types/sports';
 
-const baseLeagueInfo: LeagueInfo = {
+const baseLeagueInfo: LeagueConfigInfo = {
     sportId: 9806,
     enabled: 'true',
     marketName: 'Moneyline',
@@ -10,7 +10,7 @@ const baseLeagueInfo: LeagueInfo = {
     minOdds: 0.75,
 };
 
-const spreadMock: LeagueInfo = {
+const spreadMock: LeagueConfigInfo = {
     sportId: 9806,
     enabled: 'true',
     marketName: 'Goal Spread',
@@ -20,7 +20,7 @@ const spreadMock: LeagueInfo = {
     minOdds: 0.75,
 };
 
-const totalMock: LeagueInfo = {
+const totalMock: LeagueConfigInfo = {
     sportId: 9806,
     enabled: 'true',
     marketName: 'Total Goals',
@@ -30,7 +30,7 @@ const totalMock: LeagueInfo = {
     minOdds: 0.75,
 };
 
-const childMoneylineMock: LeagueInfo = {
+const childMoneylineMock: LeagueConfigInfo = {
     sportId: 9806,
     enabled: 'true',
     marketName: '1st Half Moneyline',
@@ -40,30 +40,30 @@ const childMoneylineMock: LeagueInfo = {
     minOdds: 0.75,
 };
 
-const baseDiffSportId: LeagueInfo = {
+const baseDiffSportId: LeagueConfigInfo = {
     ...baseLeagueInfo,
     sportId: 4,
 };
 
 // Mock Variants
-const leagueInfoOnlyParent: LeagueInfo[] = [baseLeagueInfo];
-const leagueInfoOnlyParentWithSpreadAdded: LeagueInfo[] = [{ ...baseLeagueInfo, addedSpread: 3 }];
-const leagueInfoOnlyParentDiffSportId: LeagueInfo[] = [baseDiffSportId];
+const leagueInfoOnlyParent: LeagueConfigInfo[] = [baseLeagueInfo];
+const leagueInfoOnlyParentWithSpreadAdded: LeagueConfigInfo[] = [{ ...baseLeagueInfo, addedSpread: 3 }];
+const leagueInfoOnlyParentDiffSportId: LeagueConfigInfo[] = [baseDiffSportId];
 
-const leagueInfoMockDisabledChilds: LeagueInfo[] = [
+const leagueInfoMockDisabledChilds: LeagueConfigInfo[] = [
     baseLeagueInfo,
     { ...spreadMock, enabled: 'false' },
     { ...totalMock, enabled: 'false' },
 ];
 
-const leagueInfoEnabledSpreadDisabledTotals: LeagueInfo[] = [
+const leagueInfoEnabledSpreadDisabledTotals: LeagueConfigInfo[] = [
     baseLeagueInfo,
     spreadMock,
     { ...totalMock, enabled: 'false' },
 ];
 
-const leagueInfoEnabledSpeadAndTotals: LeagueInfo[] = [baseLeagueInfo, spreadMock, totalMock];
-const leagueInfoEnabledAll: LeagueInfo[] = [baseLeagueInfo, spreadMock, totalMock, childMoneylineMock];
+const leagueInfoEnabledSpeadAndTotals: LeagueConfigInfo[] = [baseLeagueInfo, spreadMock, totalMock];
+const leagueInfoEnabledAll: LeagueConfigInfo[] = [baseLeagueInfo, spreadMock, totalMock, childMoneylineMock];
 
 // Grouped Exports
 export const LeagueMocks = {

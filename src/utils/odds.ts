@@ -2,7 +2,7 @@ import * as oddslib from 'oddslib';
 import { DRAW, MIN_ODDS_FOR_DIFF_CHECKING, MONEYLINE_TYPE_ID, ZERO } from '../constants/common';
 import { MoneylineTypes } from '../enums/sports';
 import { HomeAwayTeams, Odds, OddsObject } from '../types/odds';
-import { ChildMarket, LeagueInfo } from '../types/sports';
+import { ChildMarket, LeagueConfigInfo } from '../types/sports';
 import { checkOddsFromBookmakers } from './bookmakers';
 import { getLeagueInfo } from './sports';
 import { adjustSpreadOnOdds, getSpreadData } from './spread';
@@ -267,7 +267,7 @@ export const createChildMarkets: (
  */
 export const filterOddsByMarketNameBookmaker = (
     oddsArray: Odds,
-    leagueInfos: LeagueInfo[],
+    leagueInfos: LeagueConfigInfo[],
     oddsProvider: string
 ): any[] => {
     const allChildMarketsTypes = leagueInfos
