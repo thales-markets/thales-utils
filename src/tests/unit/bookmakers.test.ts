@@ -21,7 +21,7 @@ describe('Bookmakers', () => {
         );
 
         const hasOdds = market.odds.some(
-            (odd) => odd.american !== 0 || odd.decimal !== 0 || odd.normalizedImplied !== 0
+            (odd: any) => odd.american !== 0 || odd.decimal !== 0 || odd.normalizedImplied !== 0
         );
 
         expect(hasOdds).toBe(false);
@@ -44,7 +44,7 @@ describe('Bookmakers', () => {
         );
 
         const hasOdds = market.odds.some(
-            (odd) => odd.american !== 0 || odd.decimal !== 0 || odd.normalizedImplied !== 0
+            (odd: any) => odd.american !== 0 || odd.decimal !== 0 || odd.normalizedImplied !== 0
         );
 
         expect(hasOdds).toBe(false);
@@ -67,7 +67,7 @@ describe('Bookmakers', () => {
         );
 
         const hasOdds = market.odds.some(
-            (odd) => odd.american !== 0 || odd.decimal !== 0 || odd.normalizedImplied !== 0
+            (odd: any) => odd.american !== 0 || odd.decimal !== 0 || odd.normalizedImplied !== 0
         );
 
         expect(hasOdds).toBe(false);

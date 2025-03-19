@@ -1,6 +1,6 @@
 import { LeagueInfo } from '../types/sports';
 
-export const adjustSpreadOnOdds = (impliedProbs, minSpread, targetSpread) => {
+export const adjustSpreadOnOdds = (impliedProbs: number[], minSpread: number, targetSpread: number) => {
     // Step 1: Check if any implied probability is zero
     if (impliedProbs.some((prob) => prob === 0)) {
         return impliedProbs;
@@ -54,7 +54,12 @@ export const adjustSpreadOnOdds = (impliedProbs, minSpread, targetSpread) => {
     return adjustedImpliedProbs;
 };
 
-export const getSpreadData = (spreadData, sportId, typeId, defaultSpreadForLiveMarkets) => {
+export const getSpreadData = (
+    spreadData: any[],
+    sportId: string,
+    typeId: number,
+    defaultSpreadForLiveMarkets: number
+) => {
     const sportSpreadData = spreadData.find(
         (data) => Number(data.typeId) === Number(typeId) && Number(data.sportId) === Number(sportId)
     );

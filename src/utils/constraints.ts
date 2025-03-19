@@ -2,7 +2,11 @@ import { League, Sport } from '../enums/sports';
 import { ScoresObject } from '../types/odds';
 import { getLeagueSport } from './sports';
 
-export const checkGameContraints = (opticOddsScoresApiResponse: ScoresObject, marketLeague: League, constraintsMap) => {
+export const checkGameContraints = (
+    opticOddsScoresApiResponse: ScoresObject,
+    marketLeague: League,
+    constraintsMap: Map<Sport, number>
+) => {
     const marketSport = getLeagueSport(marketLeague);
     const homeTeam = opticOddsScoresApiResponse.homeTeam;
     const awayTeam = opticOddsScoresApiResponse.awayTeam;
@@ -28,7 +32,12 @@ export const checkGameContraints = (opticOddsScoresApiResponse: ScoresObject, ma
     };
 };
 
-export const allowGameSportWithPeriodConstraint = (homeTeam, awayTeam, currentPeriod, periodLimitForLiveTrade) => {
+export const allowGameSportWithPeriodConstraint = (
+    homeTeam: string,
+    awayTeam: string,
+    currentPeriod: number,
+    periodLimitForLiveTrade: number
+) => {
     if (!Number.isNaN(currentPeriod) && currentPeriod >= periodLimitForLiveTrade) {
         return {
             allow: false,
@@ -38,10 +47,18 @@ export const allowGameSportWithPeriodConstraint = (homeTeam, awayTeam, currentPe
     return { allow: true, message: '' };
 };
 
-export const allowSoccerGame = (homeTeam, awayTeam, currentClock, currentPeriod, soccerMinuteLimitForLiveTrading) => {
+export const allowSoccerGame = (
+    homeTeam: string,
+    awayTeam: string,
+    currentClock: string,
+    currentPeriod: string,
+    soccerMinuteLimitForLiveTrading: number | undefined
+) => {
     const currentClockNumber = Number(currentClock);
     if (
-        (!Number.isNaN(currentClockNumber) && currentClockNumber >= soccerMinuteLimitForLiveTrading) ||
+        (!Number.isNaN(currentClockNumber) &&
+            soccerMinuteLimitForLiveTrading !== undefined &&
+            currentClockNumber >= soccerMinuteLimitForLiveTrading) ||
         (Number.isNaN(currentClockNumber) && currentPeriod.toLowerCase() != 'half')
     ) {
         return { allow: false, message: `Blocking game ${homeTeam} - ${awayTeam} due to clock: ${currentClock}min` };
@@ -52,13 +69,13 @@ export const allowSoccerGame = (homeTeam, awayTeam, currentClock, currentPeriod,
 
 export const allowGameSportWithResultConstraint = (
     opticOddsScoresApiResponse: ScoresObject,
-    homeTeam,
-    awayTeam,
-    currentPeriod,
-    currentScoreHome,
-    currentScoreAway,
-    marketLeague,
-    marketSport
+    homeTeam: string,
+    awayTeam: string,
+    currentPeriod: string,
+    currentScoreHome: number,
+    currentScoreAway: number,
+    marketLeague: League,
+    marketSport: Sport
 ) => {
     const setInProgress = Number(currentPeriod);
     const currentResultInSet = fetchResultInCurrentSet(setInProgress, opticOddsScoresApiResponse);
@@ -87,7 +104,7 @@ export const allowGameSportWithResultConstraint = (
         }
     }
 
-    if (marketLeague.toString().startsWith(League.TENNIS_GS) && atpGrandSlamMatch) {
+    if (marketLeague.toString().startsWith(League.TENNIS_GS.toString()) && atpGrandSlamMatch) {
         return checkResultConstraint(
             homeTeam,
             awayTeam,
@@ -99,10 +116,10 @@ export const allowGameSportWithResultConstraint = (
     }
 
     if (
-        (marketLeague.toString().startsWith(League.TENNIS_GS) && !atpGrandSlamMatch) ||
-        marketLeague.toString().startsWith(League.TENNIS_MASTERS) ||
-        marketLeague.toString().startsWith(League.SUMMER_OLYMPICS_TENNIS) ||
-        marketLeague.toString().startsWith(League.TENNIS_WTA)
+        (marketLeague.toString().startsWith(League.TENNIS_GS.toString()) && !atpGrandSlamMatch) ||
+        marketLeague.toString().startsWith(League.TENNIS_MASTERS.toString()) ||
+        marketLeague.toString().startsWith(League.SUMMER_OLYMPICS_TENNIS.toString()) ||
+        marketLeague.toString().startsWith(League.TENNIS_WTA.toString())
     ) {
         return checkResultConstraint(
             homeTeam,
@@ -148,7 +165,14 @@ export const fetchResultInCurrentSet = (currentSet: number, opticOddsScoresApiRe
     return { home: currentHomeGameScore, away: currentAwayGameScore };
 };
 
-const checkResultConstraint = (homeTeam, awayTeam, currentResultInSet, currentSetsWon, setThreshold, resultLimit) => {
+const checkResultConstraint = (
+    homeTeam: string,
+    awayTeam: string,
+    currentResultInSet: { home: number; away: number },
+    currentSetsWon: { home: number; away: number },
+    setThreshold: number,
+    resultLimit: number
+) => {
     if (Number(currentSetsWon.home) == setThreshold || Number(currentSetsWon.away) == setThreshold) {
         if (Number(currentSetsWon.home) == setThreshold && currentResultInSet.home >= resultLimit) {
             return {
