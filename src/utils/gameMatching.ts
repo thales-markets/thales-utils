@@ -1,5 +1,5 @@
+import { Sport } from 'overtime-utils';
 import { LEAGUES_NO_FORMAL_HOME_AWAY } from '../constants/sports';
-import { Sport } from '../enums/sports';
 import { getLeagueSport } from './sports';
 
 export const teamNamesMatching = (
