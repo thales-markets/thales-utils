@@ -68,6 +68,7 @@ export const gamesDatesMatching = (
     timeDifferenceMinutes: number
 ) => {
     let datesMatch = false;
+    sportId; // TODO: remove it from callers
 
     const opticOddsTimestamp = apiStartDate.getTime();
     const marketTimestamp = marketMaturityDate.getTime();
