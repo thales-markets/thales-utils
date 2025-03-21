@@ -1,6 +1,4 @@
-import { Sport } from 'overtime-utils';
 import { LEAGUES_NO_FORMAL_HOME_AWAY } from '../constants/sports';
-import { getLeagueSport } from './sports';
 
 export const teamNamesMatching = (
     leagueId: number,
@@ -67,21 +65,16 @@ export const gamesDatesMatching = (
     marketMaturityDate: Date,
     apiStartDate: Date,
     sportId: number,
-    tennisDifferenceEnvVariable: number
+    timeDifferenceMinutes: number
 ) => {
-    let datesMatch;
-    const marketSport = getLeagueSport(sportId);
-    if (marketSport == Sport.TENNIS) {
-        const opticOddsTimestamp = apiStartDate.getTime();
-        const marketTimestamp = marketMaturityDate.getTime();
-        const differenceBetweenDates = Math.abs(marketTimestamp - opticOddsTimestamp);
-        if (differenceBetweenDates <= Number(tennisDifferenceEnvVariable * 60 * 1000)) {
-            datesMatch = true;
-        } else {
-            datesMatch = false;
-        }
-    } else {
-        datesMatch = apiStartDate.toUTCString() == marketMaturityDate.toUTCString();
+    let datesMatch = false;
+    sportId; // TODO: remove it from callers
+
+    const opticOddsTimestamp = apiStartDate.getTime();
+    const marketTimestamp = marketMaturityDate.getTime();
+    const differenceBetweenDates = Math.abs(marketTimestamp - opticOddsTimestamp);
+    if (differenceBetweenDates <= Number(timeDifferenceMinutes * 60 * 1000)) {
+        datesMatch = true;
     }
 
     return datesMatch;
