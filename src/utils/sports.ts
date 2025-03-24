@@ -1,36 +1,5 @@
-import { League, LeagueMap, Sport } from 'overtime-utils';
+import { League } from 'overtime-utils';
 import { LeagueConfigInfo } from '../types/sports';
-
-// Methods that use data from LeagueMap defined in constants in utils
-export const getLeagueSport = (league: League) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.sport : Sport.EMPTY;
-};
-
-export const getLeagueLabel = (league: League) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.label : '';
-};
-
-export const getLeagueProvider = (league: League) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.provider : '';
-};
-
-export const getLeagueIsDrawAvailable = (league: League) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.isDrawAvailable : false;
-};
-
-export const getLeaguePeriodType = (league: League) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.periodType : '';
-};
-
-export const getLeagueOpticOddsName = (league: League) => {
-    const leagueInfo = LeagueMap[league];
-    return leagueInfo ? leagueInfo.opticOddsName : undefined;
-};
 
 // Methods are using data from live-markets-map.csv
 export const getLiveSupportedLeagues = (leagueInfoArray: LeagueConfigInfo[]) => {

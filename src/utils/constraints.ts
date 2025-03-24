@@ -1,6 +1,5 @@
-import { League, Sport } from 'overtime-utils';
+import { League, Sport, getLeagueSport } from 'overtime-utils';
 import { ScoresObject } from '../types/odds';
-import { getLeagueSport } from './sports';
 
 export const checkGameContraints = (
     opticOddsScoresApiResponse: ScoresObject,
