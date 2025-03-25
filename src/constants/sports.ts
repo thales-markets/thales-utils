@@ -191,6 +191,8 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     17: 'UEFA - Europa League',
     18: 'FIFA - World Cup Qualifiers',
     19: 'Japan - J1 League',
+    20: 'India - IPL',
+    21: 'England - T20 Blast',
     45: 'CONMEBOL - Copa Libertadores',
     57: 'Netherlands - Eredivisie',
     61: 'Portugal - Primeira Liga',
@@ -297,4 +299,8 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20298: 'Call of Duty',
     20299: 'Starcraft',
     20300: 'Valorant',
+    20301: 'ICC - T20 World Cup',
+    20302: 'Australia - Big Bash League',
+    20303: 'USA - Major League Cricket',
+    20304: 'Australia - Big Bash League Women',
 };
