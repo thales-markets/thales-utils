@@ -201,6 +201,7 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     138: 'Spain - Copa del Rey',
     152: 'WTA',
     156: 'ATP',
+    157: 'ATP Challenger',
     141: 'Italy - Coppa Italia',
     209: 'Germany - DFB Pokal',
     230: 'Mexico - Liga MX',

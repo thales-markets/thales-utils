@@ -118,7 +118,8 @@ export const allowGameSportWithResultConstraint = (
         (marketLeague.toString().startsWith(League.TENNIS_GS.toString()) && !atpGrandSlamMatch) ||
         marketLeague.toString().startsWith(League.TENNIS_MASTERS.toString()) ||
         marketLeague.toString().startsWith(League.SUMMER_OLYMPICS_TENNIS.toString()) ||
-        marketLeague.toString().startsWith(League.TENNIS_WTA.toString())
+        marketLeague.toString().startsWith(League.TENNIS_WTA.toString()) ||
+        marketLeague.toString().startsWith(League.TENNIS_ATP_CHALLENGER.toString())
     ) {
         return checkResultConstraint(
             homeTeam,
