@@ -304,4 +304,5 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20302: 'Australia - Big Bash League',
     20303: 'USA - Major League Cricket',
     20304: 'Australia - Big Bash League Women',
+    20305: 'Pakistan - Super League',
 };
