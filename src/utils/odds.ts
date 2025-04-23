@@ -191,12 +191,20 @@ export const createChildMarkets: (
     defaultSpreadForLiveMarkets,
     leagueMap
 ) => {
-    const [spreadOdds, totalOdds, moneylineOdds, childMarkets]: any[] = [[], [], [], []];
+    const [spreadOdds, totalOdds, moneylineOdds, correctScoreOdds, doubleChanceOdds, childMarkets]: any[] = [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+    ];
     const leagueInfo = getLeagueInfo(leagueId, leagueMap);
     const commonData = {
         homeTeam: apiResponseWithOdds.homeTeam,
         awayTeam: apiResponseWithOdds.awayTeam,
     };
+
     if (leagueInfo.length > 0) {
         // TODO ADD ODDS COMPARISON BETWEEN BOOKMAKERS
         const allChildOdds = filterOddsByMarketNameBookmaker(
@@ -212,22 +220,28 @@ export const createChildMarkets: (
                 if (Math.abs(Number(odd.points) % 1) === 0.5) spreadOdds.push(odd);
             } else if (odd.type === 'Moneyline') {
                 moneylineOdds.push(odd);
+            } else if (odd.type === 'Correct Score') {
+                correctScoreOdds.push(odd);
+            } else if (odd.type === 'Double Chance') {
+                doubleChanceOdds.push(odd);
             }
         });
 
-        const formattedOdds = [
+        const homeAwayFormattedOdds = [
             ...groupAndFormatSpreadOdds(spreadOdds, commonData),
             ...groupAndFormatTotalOdds(totalOdds, commonData),
             ...groupAndFormatMoneylineOdds(moneylineOdds, commonData),
+            ...groupAndFormatDoubleChanceOdds(doubleChanceOdds, commonData),
         ];
+        const otherFormattedOdds = [...groupAndFormatCorrectScoreOdds(correctScoreOdds, commonData)];
 
-        const oddsWithSpreadAdjusted = adjustSpreadOnChildOdds(
-            formattedOdds,
+        const homeAwayOddsWithSpreadAdjusted = adjustSpreadOnChildOdds(
+            homeAwayFormattedOdds,
             spreadDataForSport,
             defaultSpreadForLiveMarkets
         );
 
-        oddsWithSpreadAdjusted.forEach((data) => {
+        homeAwayOddsWithSpreadAdjusted.forEach((data) => {
             const childMarket = {
                 leagueId: Number(data.sportId),
                 typeId: Number(data.typeId),
@@ -251,9 +265,29 @@ export const createChildMarkets: (
                 childMarkets.push(childMarket);
             }
         });
+
+        otherFormattedOdds.forEach((data) => {
+            const leagueInfoByTypeId = leagueInfo.find((league) => Number(league.typeId) === Number(data.typeId));
+            const minOdds = leagueInfoByTypeId?.minOdds;
+            const maxOdds = leagueInfoByTypeId?.maxOdds;
+
+            const childMarket = {
+                leagueId: Number(data.sportId),
+                typeId: Number(data.typeId),
+                type: data.type.toLowerCase(),
+                line: Number(data.line || 0),
+                odds: data.odds.map((odd: any) => {
+                    const impliedOdds = convertOddsToImpl(odd) || ZERO;
+                    return !minOdds || !maxOdds || impliedOdds >= minOdds || impliedOdds <= maxOdds ? 0 : impliedOdds;
+                }),
+                positionNames: data.positionNames,
+            };
+            childMarkets.push(childMarket);
+        });
     } else {
         console.warn(`No child markets for leagueID: ${Number(leagueId)}`);
     }
+
     return childMarkets;
 };
 
@@ -395,11 +429,11 @@ export const groupAndFormatTotalOdds = (oddsArray: any[], commonData: HomeAwayTe
 };
 
 /**
- * Groups spread odds by their lines and formats the result.
+ * Groups moneyline odds by their lines and formats the result.
  *
  * @param {Array} oddsArray - The input array of odds objects.
  * @param {Object} commonData - The common data object containing homeTeam information.
- * @returns {Array} The grouped and formatted spread odds.
+ * @returns {Array} The grouped and formatted moneyline odds.
  */
 export const groupAndFormatMoneylineOdds = (oddsArray: any[], commonData: HomeAwayTeams) => {
     // Group odds by their selection points and selection
@@ -439,6 +473,118 @@ export const groupAndFormatMoneylineOdds = (oddsArray: any[], commonData: HomeAw
     return formattedOdds;
 };
 
+/**
+ * Groups correct score odds by their lines and formats the result.
+ *
+ * @param {Array} oddsArray - The input array of odds objects.
+ * @param {Object} commonData - The common data object containing homeTeam and awayTeam information.
+ * @returns {Array} The grouped and formatted correct score odds.
+ */
+export const groupAndFormatCorrectScoreOdds = (oddsArray: any[], commonData: HomeAwayTeams): any[] => {
+    const homeTeamKey = commonData.homeTeam.toLowerCase().replace(/\s+/g, '_');
+    const awayTeamKey = commonData.awayTeam.toLowerCase().replace(/\s+/g, '_');
+
+    const oddsMap = {
+        draw_0_0: 0,
+        draw_1_1: 0,
+        draw_2_2: 0,
+        draw_3_3: 0,
+        draw_4_4: 0,
+        [`${homeTeamKey}_1_0`]: 0,
+        [`${homeTeamKey}_2_0`]: 0,
+        [`${homeTeamKey}_2_1`]: 0,
+        [`${homeTeamKey}_3_0`]: 0,
+        [`${homeTeamKey}_3_1`]: 0,
+        [`${homeTeamKey}_3_2`]: 0,
+        [`${homeTeamKey}_4_0`]: 0,
+        [`${homeTeamKey}_4_1`]: 0,
+        [`${homeTeamKey}_4_2`]: 0,
+        [`${homeTeamKey}_4_3`]: 0,
+        [`${awayTeamKey}_1_0`]: 0,
+        [`${awayTeamKey}_2_0`]: 0,
+        [`${awayTeamKey}_2_1`]: 0,
+        [`${awayTeamKey}_3_0`]: 0,
+        [`${awayTeamKey}_3_1`]: 0,
+        [`${awayTeamKey}_3_2`]: 0,
+        [`${awayTeamKey}_4_0`]: 0,
+        [`${awayTeamKey}_4_1`]: 0,
+        [`${awayTeamKey}_4_2`]: 0,
+        [`${awayTeamKey}_4_3`]: 0,
+        other: 0,
+    };
+
+    // Populate the oddsMap with the odds from the provided array
+    oddsArray.forEach((odd) => {
+        const normalizedSelection = `${odd.selection.toLowerCase().replace(/\s+/g, '_')}_${odd.selectionLine.replace(
+            ':',
+            '_'
+        )}`;
+        if (oddsMap.hasOwnProperty(normalizedSelection)) {
+            oddsMap[normalizedSelection] = odd.price;
+        }
+    });
+
+    const allOddsAreZero = Object.values(oddsMap).every((odd) => odd === ZERO);
+
+    if (allOddsAreZero) {
+        return [];
+    }
+
+    const positionNames = Object.keys(oddsMap);
+
+    // Create the market object
+    const marketObject = {
+        homeTeam: commonData.homeTeam,
+        awayTeam: commonData.awayTeam,
+        line: 0,
+        positionNames: positionNames,
+        odds: Object.values(oddsMap),
+        type: 'Correct Score',
+        typeId: 10100,
+    };
+    return [marketObject];
+};
+
+/**
+ * Groups double chance odds by their lines and formats the result.
+ *
+ * @param {Array} oddsArray - The input array of odds objects.
+ * @param {Object} commonData - The common data object containing homeTeam and awayTeam information.
+ * @returns {Array} The grouped and formatted correct score odds.
+ */
+export const groupAndFormatDoubleChanceOdds = (oddsArray: any[], commonData: HomeAwayTeams) => {
+    let probability1X = 0;
+    let probability12 = 0;
+    let probabilityX2 = 0;
+
+    oddsArray.forEach((odd) => {
+        if (odd.selection.includes(commonData.homeTeam)) {
+            if (odd.selection.includes(commonData.awayTeam)) {
+                probability12 = odd.price;
+            } else {
+                probability1X = odd.price;
+            }
+        } else if (odd.selection.includes(commonData.awayTeam)) {
+            probabilityX2 = odd.price;
+        }
+    });
+
+    if ([probability1X, probability12, probabilityX2].every((odd) => odd === ZERO)) {
+        return [];
+    }
+    // Create the market object
+    const marketObject = {
+        homeTeam: commonData.homeTeam,
+        awayTeam: commonData.awayTeam,
+        line: 0,
+        odds: [probability1X, probability12, probabilityX2],
+        type: 'Double Chance',
+        typeId: 10003,
+    };
+    return [marketObject];
+};
+
+// used for home/away markets
 export const adjustSpreadOnChildOdds = (
     iterableGroupedOdds: any[],
     spreadDataForSport: any,
