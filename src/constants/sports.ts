@@ -306,6 +306,7 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20147: 'CONCACAF - Champions Cup',
     20148: 'UEFA - Nations League Women',
     20149: 'Canada - Premier League',
+    20150: 'Norway - Eliteserien',
     20200: 'Eurocup',
     20201: 'Spain - Liga ACB',
     20202: 'Italy - Lega Basket Serie A',
