@@ -14,19 +14,30 @@ describe('Sports', () => {
     });
 
     it('Should return all enabled bet types for league', () => {
-        const betTypes = getBetTypesForLeague(9806, LeagueMocks.leagueInfoEnabledSpeadAndTotals);
+        const betTypes = getBetTypesForLeague(9806, LeagueMocks.leagueInfoEnabledAll);
 
         expect(betTypes).toContain('Moneyline');
         expect(betTypes).toContain('Goal Spread');
         expect(betTypes).toContain('Total Goals');
+        expect(betTypes).toContain('Double Chance');
+        expect(betTypes).toContain('Correct Score');
     });
 
-    it('Should return all enabled bet types for league, and not contain disabled ones', () => {
-        const betTypes = getBetTypesForLeague(9806, LeagueMocks.leagueInfoEnabledSpreadDisabledTotals);
+    it('Should return all enabled bet types for league, and not contain disabled ones (Totals)', () => {
+        let betTypes = getBetTypesForLeague(9806, LeagueMocks.leagueInfoEnabledSpreadDisabledTotals);
 
         expect(betTypes).toContain('Moneyline');
         expect(betTypes).toContain('Goal Spread');
         expect(betTypes).not.toContain('Total Goals');
+    });
+
+    it('Should return all enabled bet types for league, and not contain disabled ones (Double Chance and Correct Score)', () => {
+        let betTypes = getBetTypesForLeague(9806, LeagueMocks.leagueInfoDisabledCorrectScoreAndDoubleChance);
+
+        expect(betTypes).toContain('Moneyline');
+        expect(betTypes).toContain('Goal Spread');
+        expect(betTypes).not.toContain('Double Chance');
+        expect(betTypes).not.toContain('Correct Score');
     });
 
     it('Should return all enabled spread bet types for league', () => {
