@@ -24,7 +24,7 @@ describe('Sports', () => {
     });
 
     it('Should return all enabled bet types for league, and not contain disabled ones (Totals)', () => {
-        let betTypes = getBetTypesForLeague(9806, LeagueMocks.leagueInfoEnabledSpreadDisabledTotals);
+        const betTypes = getBetTypesForLeague(9806, LeagueMocks.leagueInfoEnabledSpreadDisabledTotals);
 
         expect(betTypes).toContain('Moneyline');
         expect(betTypes).toContain('Goal Spread');
@@ -32,7 +32,7 @@ describe('Sports', () => {
     });
 
     it('Should return all enabled bet types for league, and not contain disabled ones (Double Chance and Correct Score)', () => {
-        let betTypes = getBetTypesForLeague(9806, LeagueMocks.leagueInfoDisabledCorrectScoreAndDoubleChance);
+        const betTypes = getBetTypesForLeague(9806, LeagueMocks.leagueInfoDisabledCorrectScoreAndDoubleChance);
 
         expect(betTypes).toContain('Moneyline');
         expect(betTypes).toContain('Goal Spread');
