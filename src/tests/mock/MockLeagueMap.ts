@@ -30,6 +30,26 @@ const totalMock: LeagueConfigInfo = {
     minOdds: 0.75,
 };
 
+const doubleChanceMock: LeagueConfigInfo = {
+    sportId: 9806,
+    enabled: 'true',
+    marketName: 'Double Chance',
+    typeId: 10003,
+    type: 'Double Chance',
+    maxOdds: 0.01,
+    minOdds: 0.99,
+};
+
+const correctScoreMock: LeagueConfigInfo = {
+    sportId: 9806,
+    enabled: 'true',
+    marketName: 'Correct Score',
+    typeId: 10100,
+    type: 'Correct Score',
+    maxOdds: 0.25,
+    minOdds: 0.75,
+};
+
 const childMoneylineMock: LeagueConfigInfo = {
     sportId: 9806,
     enabled: 'true',
@@ -54,6 +74,8 @@ const leagueInfoMockDisabledChilds: LeagueConfigInfo[] = [
     baseLeagueInfo,
     { ...spreadMock, enabled: 'false' },
     { ...totalMock, enabled: 'false' },
+    { ...doubleChanceMock, enabled: 'false' },
+    { ...correctScoreMock, enabled: 'false' },
 ];
 
 const leagueInfoEnabledSpreadDisabledTotals: LeagueConfigInfo[] = [
@@ -62,8 +84,23 @@ const leagueInfoEnabledSpreadDisabledTotals: LeagueConfigInfo[] = [
     { ...totalMock, enabled: 'false' },
 ];
 
+const leagueInfoDisabledCorrectScoreAndDoubleChance: LeagueConfigInfo[] = [
+    baseLeagueInfo,
+    spreadMock,
+    totalMock,
+    { ...doubleChanceMock, enabled: 'false' },
+    { ...correctScoreMock, enabled: 'false' },
+];
+
 const leagueInfoEnabledSpeadAndTotals: LeagueConfigInfo[] = [baseLeagueInfo, spreadMock, totalMock];
-const leagueInfoEnabledAll: LeagueConfigInfo[] = [baseLeagueInfo, spreadMock, totalMock, childMoneylineMock];
+const leagueInfoEnabledAll: LeagueConfigInfo[] = [
+    baseLeagueInfo,
+    spreadMock,
+    totalMock,
+    childMoneylineMock,
+    doubleChanceMock,
+    correctScoreMock,
+];
 
 // Grouped Exports
 export const LeagueMocks = {
@@ -74,4 +111,5 @@ export const LeagueMocks = {
     leagueInfoEnabledSpreadDisabledTotals,
     leagueInfoEnabledSpeadAndTotals,
     leagueInfoEnabledAll,
+    leagueInfoDisabledCorrectScoreAndDoubleChance,
 };

@@ -101,10 +101,14 @@ describe('Markets', () => {
             const containsSpread = market.childMarkets.some((child: any) => child.type === 'spread');
             const containsTotal = market.childMarkets.some((child: any) => child.type === 'total');
             const containsChildMoneyline = market.childMarkets.some((child: any) => child.type === 'moneyline');
+            const containsChildCorrectScore = market.childMarkets.some((child: any) => child.type === 'correct score');
+            const containsChildDoubleChance = market.childMarkets.some((child: any) => child.type === 'double chance');
 
             expect(containsSpread).toBe(true);
             expect(containsTotal).toBe(true);
             expect(containsChildMoneyline).toBe(true);
+            expect(containsChildCorrectScore).toBe(true);
+            expect(containsChildDoubleChance).toBe(true);
         });
 
         it('Should return warning message that there are is no configuration available in league map csv', () => {
