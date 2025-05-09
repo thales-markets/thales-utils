@@ -193,6 +193,7 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     19: 'Japan - J1 League',
     20: 'India - IPL',
     21: 'England - T20 Blast',
+    33: 'IIHF - World Championship',
     45: 'CONMEBOL - Copa Libertadores',
     57: 'Netherlands - Eredivisie',
     61: 'Portugal - Primeira Liga',
