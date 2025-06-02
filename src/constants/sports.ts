@@ -325,6 +325,7 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20216: 'FIBA - AfroBasket Qualifiers',
     20217: 'Greece - A1 League',
     20218: 'International - Champions League',
+    20296: 'Overwatch',
     20297: 'Rocket League',
     20298: 'Call of Duty',
     20299: 'Starcraft',
