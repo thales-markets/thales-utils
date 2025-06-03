@@ -250,6 +250,8 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     9502: 'Oceania - Super Rugby',
     9503: 'International - Six Nations',
     9510: 'AFL',
+    9520: 'CFL',
+    9521: 'UFL',
     9806: 'UEFA - Nations League',
     9977: 'CS2',
     9983: 'Dota 2',
