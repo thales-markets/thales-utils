@@ -181,6 +181,7 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     6: 'NHL',
     7: 'UFC',
     8: 'WNBA',
+    9: 'PFL',
     10: 'USA - Major League Soccer',
     11: 'England - Premier League',
     12: 'France - Ligue 1',
@@ -378,4 +379,10 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20437: 'Russia - Superliga Women',
     20438: 'South Korea - V League',
     20439: 'South Korea - V League Women',
+    20516: 'CONCACAF - Gold Cup',
+    20535: 'Ecuador - Serie A',
+    20555: 'COSAFA - Cup',
+    20578: 'Iceland - Besta Deild Karla',
+    20603: 'Korea - K1 League',
+    20651: 'Peru - Primera Division',
 };
