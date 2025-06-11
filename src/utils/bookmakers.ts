@@ -25,7 +25,7 @@ export const checkOddsFromBookmakers = (
     minOddsForDiffChecking: number
 ) => {
     // Main bookmaker odds
-    const firstBookmakerOdds = oddsMap.get(arrayOfBookmakers[0]);
+    const firstBookmakerOdds = oddsMap.get(arrayOfBookmakers[0].toLowerCase());
 
     if (!firstBookmakerOdds) {
         // If no matching bookmakers are found, return zero odds
