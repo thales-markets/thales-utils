@@ -340,6 +340,7 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20304: 'Australia - Big Bash League Women',
     20305: 'Pakistan - Super League',
     20320: 'England - Premier League Darts',
+    20321: 'PDC - World Cup of Darts',
     20400: 'Argentina - Liga Argentina',
     20401: 'Argentina - Liga Argentina Women',
     20402: 'Austria - AVL',
@@ -386,4 +387,6 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20578: 'Iceland - Besta Deild Karla',
     20603: 'Korea - K1 League',
     20651: 'Peru - Primera Division',
+    20712: 'UEFA - European Championship U21',
+    20713: 'UEFA - European Championship Women',
 };
