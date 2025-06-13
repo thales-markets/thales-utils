@@ -100,9 +100,11 @@ describe('Markets', () => {
 
             const containsSpread = market.childMarkets.some((child: any) => child.type === 'spread');
             const containsTotal = market.childMarkets.some((child: any) => child.type === 'total');
-            const containsChildMoneyline = market.childMarkets.some((child: any) => child.type === 'moneyline');
-            const containsChildCorrectScore = market.childMarkets.some((child: any) => child.type === 'correct score');
-            const containsChildDoubleChance = market.childMarkets.some((child: any) => child.type === 'double chance');
+            const containsChildMoneyline = market.childMarkets.some(
+                (child: any) => child.type === 'secondPeriodWinner'
+            );
+            const containsChildCorrectScore = market.childMarkets.some((child: any) => child.type === 'correctScore');
+            const containsChildDoubleChance = market.childMarkets.some((child: any) => child.type === 'doubleChance');
 
             expect(containsSpread).toBe(true);
             expect(containsTotal).toBe(true);

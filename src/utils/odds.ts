@@ -1,4 +1,5 @@
 import * as oddslib from 'oddslib';
+import { MarketType, MarketTypeMap } from 'overtime-utils';
 import { DRAW, MIN_ODDS_FOR_DIFF_CHECKING, MONEYLINE_TYPE_ID, ZERO } from '../constants/common';
 import { MoneylineTypes } from '../enums/sports';
 import { HomeAwayTeams, Odds, OddsObject } from '../types/odds';
@@ -245,7 +246,7 @@ export const createChildMarkets: (
             const childMarket = {
                 leagueId: Number(data.sportId),
                 typeId: Number(data.typeId),
-                type: data.type.toLowerCase(),
+                type: MarketTypeMap[data.typeId as MarketType]?.key || '',
                 line: Number(data.line || 0),
                 odds: data.odds,
             };
@@ -274,7 +275,7 @@ export const createChildMarkets: (
             const childMarket = {
                 leagueId: Number(data.sportId),
                 typeId: Number(data.typeId),
-                type: data.type.toLowerCase(),
+                type: MarketTypeMap[data.typeId as MarketType]?.key || '',
                 line: Number(data.line || 0),
                 odds: data.odds.map((odd: any) => {
                     const impliedOdds = convertOddsToImpl(odd) || ZERO;
