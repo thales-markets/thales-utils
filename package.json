@@ -1,6 +1,6 @@
 {
     "name": "overtime-live-trading-utils",
-    "version": "2.0.39-rc.0",
+    "version": "2.0.39",
     "description": "",
     "main": "main.js",
     "scripts": {
