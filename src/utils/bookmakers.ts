@@ -133,7 +133,7 @@ export const checkOddsFromBookmakers = (
                 return true;
             }
         }
-        return false; // fix for es-lint
+        return false;
     });
 
     if (hasLargeImpliedPercentageDifference) {
