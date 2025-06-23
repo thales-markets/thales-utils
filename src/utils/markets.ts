@@ -1,4 +1,5 @@
 import * as oddslib from 'oddslib';
+import { ZERO_ODDS_AFTER_SPREAD_ADJUSTMENT } from '../constants/errors';
 import { OddsObject } from '../types/odds';
 import { createChildMarkets, getParentOdds } from './odds';
 import { getLeagueInfo } from './sports';
@@ -63,7 +64,7 @@ export const processMarket = (
                     normalizedImplied: probability,
                 };
             } else {
-                market.errorMessage = 'Bad odds after spread adjustment';
+                market.errorMessage = ZERO_ODDS_AFTER_SPREAD_ADJUSTMENT;
                 return {
                     american: 0,
                     decimal: 0,

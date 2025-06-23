@@ -130,7 +130,7 @@ describe('Markets', () => {
             );
 
             expect(warnSpy).toHaveBeenCalled();
-            expect(warnSpy).toHaveBeenCalledWith(NO_MARKETS_FOR_LEAGUE_ID);
+            expect(warnSpy).toHaveBeenCalledWith(`${NO_MARKETS_FOR_LEAGUE_ID}: ${Number(mockSoccer.leagueId)}`);
 
             // Restore the original implementation
             warnSpy.mockRestore();
