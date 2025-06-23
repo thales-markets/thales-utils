@@ -1,6 +1,7 @@
 import * as oddslib from 'oddslib';
 import { MarketType, MarketTypeMap } from 'overtime-utils';
 import { DRAW, MIN_ODDS_FOR_DIFF_CHECKING, MONEYLINE_TYPE_ID, ZERO } from '../constants/common';
+import { NO_MARKETS_FOR_LEAGUE_ID } from '../constants/errors';
 import { MoneylineTypes } from '../enums/sports';
 import { HomeAwayTeams, Odds, OddsObject } from '../types/odds';
 import { ChildMarket, LeagueConfigInfo } from '../types/sports';
@@ -286,7 +287,7 @@ export const createChildMarkets: (
             childMarkets.push(childMarket);
         });
     } else {
-        console.warn(`No child markets for leagueID: ${Number(leagueId)}`);
+        console.warn(`${NO_MARKETS_FOR_LEAGUE_ID}: ${Number(leagueId)}`);
     }
 
     return childMarkets;

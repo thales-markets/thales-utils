@@ -1,4 +1,9 @@
 import * as oddslib from 'oddslib';
+import {
+    DIFF_BETWEEN_BOOKMAKERS_MESSAGE,
+    NO_MATCHING_BOOKMAKERS_MESSAGE,
+    ZERO_ODDS_MESSAGE,
+} from '../constants/errors';
 
 export const getBookmakersArray = (bookmakersData: any[], sportId: any, backupLiveOddsProviders: string[]) => {
     const sportBookmakersData = bookmakersData.find((data) => Number(data.sportId) === Number(sportId));
@@ -33,7 +38,7 @@ export const checkOddsFromBookmakers = (
             homeOdds: 0,
             awayOdds: 0,
             drawOdds: 0,
-            errorMessage: 'Returning zero odds cause no matching bookmakers have been found',
+            errorMessage: NO_MATCHING_BOOKMAKERS_MESSAGE,
         };
     }
 
@@ -63,7 +68,7 @@ export const checkOddsFromBookmakers = (
             homeOdds: 0,
             awayOdds: 0,
             drawOdds: 0,
-            errorMessage: `Returning zero odds cause bookmakers have 0 or 1 odds`,
+            errorMessage: ZERO_ODDS_MESSAGE,
             // TODO: Return sportsbook name with zero odds
         };
     }
@@ -128,7 +133,7 @@ export const checkOddsFromBookmakers = (
                 return true;
             }
         }
-        return false; // fix for es-lint
+        return false;
     });
 
     if (hasLargeImpliedPercentageDifference) {
@@ -136,7 +141,7 @@ export const checkOddsFromBookmakers = (
             homeOdds: 0,
             awayOdds: 0,
             drawOdds: 0,
-            errorMessage: 'Returning zero odds due to percentage difference between bookmakers',
+            errorMessage: DIFF_BETWEEN_BOOKMAKERS_MESSAGE,
         };
     }
 
