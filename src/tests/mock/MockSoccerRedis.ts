@@ -50,7 +50,6 @@ export const mockSoccer = {
         '0x80974b0005f2b5c5ea75d1717a23c7a4c907839a585aadee58d0c4baacdfc4e8',
         '0x20e31e07d357ce06a783a29a13f5eac28664182ecd6e7bee3b41ba131cc606eb',
     ],
-    isV3: true,
     childMarkets: [
         {
             gameId: '0x3030394130434633343445450000000000000000000000000000000000000000',

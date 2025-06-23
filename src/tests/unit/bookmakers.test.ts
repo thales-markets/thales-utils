@@ -50,6 +50,7 @@ describe('Bookmakers', () => {
         expect(hasOdds).toBe(false);
         expect(market).toHaveProperty('errorMessage');
         expect(market.errorMessage).toBe(DIFF_BETWEEN_BOOKMAKERS_MESSAGE);
+        expect(market).not.toHaveProperty('childMarkets');
     });
 
     it('Should return zero odds for moneyline as no matching bookmaker was provided', () => {

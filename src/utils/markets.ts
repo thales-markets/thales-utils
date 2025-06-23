@@ -74,7 +74,9 @@ export const processMarket = (
         });
     }
 
-    if (moneylineOdds.errorMessage !== DIFF_BETWEEN_BOOKMAKERS_MESSAGE) {
+    if (moneylineOdds.errorMessage === DIFF_BETWEEN_BOOKMAKERS_MESSAGE) {
+        delete market.childMarkets;
+    } else {
         const childMarkets = createChildMarkets(
             apiResponseWithOdds,
             sportSpreadData,
