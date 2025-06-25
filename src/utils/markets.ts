@@ -79,7 +79,7 @@ export const processMarket = (
     }
 
     if ([ZERO_ODDS_MESSAGE, DIFF_BETWEEN_BOOKMAKERS_MESSAGE].includes(moneylineOdds.errorMessage || '')) {
-        delete market.childMarkets;
+        market.childMarkets = [];
     } else {
         const childMarkets = createChildMarkets(
             apiResponseWithOdds,
