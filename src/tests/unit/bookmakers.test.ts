@@ -27,6 +27,7 @@ describe('Bookmakers', () => {
         expect(hasOdds).toBe(false);
         expect(market).toHaveProperty('errorMessage');
         expect(market.errorMessage).toBe(ZERO_ODDS_MESSAGE);
+        expect(market).not.toHaveProperty('childMarkets');
     });
 
     it('Should return zero odds for moneyline when there is quote diff between bookmakers', () => {

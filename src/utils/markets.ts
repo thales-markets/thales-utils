@@ -1,5 +1,9 @@
 import * as oddslib from 'oddslib';
-import { DIFF_BETWEEN_BOOKMAKERS_MESSAGE, ZERO_ODDS_AFTER_SPREAD_ADJUSTMENT } from '../constants/errors';
+import {
+    DIFF_BETWEEN_BOOKMAKERS_MESSAGE,
+    ZERO_ODDS_AFTER_SPREAD_ADJUSTMENT,
+    ZERO_ODDS_MESSAGE,
+} from '../constants/errors';
 import { OddsObject } from '../types/odds';
 import { createChildMarkets, getParentOdds } from './odds';
 import { getLeagueInfo } from './sports';
@@ -74,7 +78,7 @@ export const processMarket = (
         });
     }
 
-    if (moneylineOdds.errorMessage === DIFF_BETWEEN_BOOKMAKERS_MESSAGE) {
+    if ([ZERO_ODDS_MESSAGE, DIFF_BETWEEN_BOOKMAKERS_MESSAGE].includes(moneylineOdds.errorMessage || '')) {
         delete market.childMarkets;
     } else {
         const childMarkets = createChildMarkets(
