@@ -332,6 +332,8 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20219: 'Turkey - BSL',
     20220: 'FIBA - Eurobasket Women',
     20221: 'Philippines - Phillipine Cup',
+    20222: 'FIBA - World Cup U19',
+    20223: 'FIBA - Americup Women',
     20296: 'Overwatch',
     20297: 'Rocket League',
     20298: 'Call of Duty',
