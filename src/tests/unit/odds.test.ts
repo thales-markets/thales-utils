@@ -1,4 +1,4 @@
-import { ZERO_ODDS_MESSAGE } from '../../constants/errors';
+import { ZERO_ODDS_MESSAGE_SINGLE_BOOKMAKER } from '../../constants/errors';
 import { processMarket } from '../../utils/markets';
 import { mapOpticOddsApiFixtureOdds } from '../../utils/opticOdds';
 import { LeagueMocks } from '../mock/MockLeagueMap';
@@ -52,7 +52,7 @@ describe('Odds', () => {
 
         expect(hasOdds).toBe(false);
         expect(market).toHaveProperty('errorMessage');
-        expect(market.errorMessage).toBe(ZERO_ODDS_MESSAGE);
+        expect(market.errorMessage).toBe(ZERO_ODDS_MESSAGE_SINGLE_BOOKMAKER);
     });
 
     it('Should contain child markets for good odds', () => {
