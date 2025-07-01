@@ -3,6 +3,7 @@ import {
     DIFF_BETWEEN_BOOKMAKERS_MESSAGE,
     NO_MATCHING_BOOKMAKERS_MESSAGE,
     ZERO_ODDS_MESSAGE,
+    ZERO_ODDS_MESSAGE_SINGLE_BOOKMAKER,
 } from '../constants/errors';
 
 export const getBookmakersArray = (bookmakersData: any[], sportId: any, backupLiveOddsProviders: string[]) => {
@@ -68,7 +69,7 @@ export const checkOddsFromBookmakers = (
             homeOdds: 0,
             awayOdds: 0,
             drawOdds: 0,
-            errorMessage: ZERO_ODDS_MESSAGE,
+            errorMessage: arrayOfBookmakers.length === 1 ? ZERO_ODDS_MESSAGE_SINGLE_BOOKMAKER : ZERO_ODDS_MESSAGE,
             // TODO: Return sportsbook name with zero odds
         };
     }
