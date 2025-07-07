@@ -239,6 +239,7 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     397: 'Spain - ASOBAL',
     398: 'Sweden - Handbollsligan',
     399: 'Euroleague',
+    400: 'USA - NBA Summer League',
     536: 'Saudi Arabia - Saudi League',
     8909: 'Olympics Table Tennis Women',
     8910: 'Olympics Table Tennis Men',
