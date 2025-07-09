@@ -1,5 +1,4 @@
 export type Coins =
-    | 'sUSD'
     | 'DAI'
     | 'USDCe'
     | 'USDbC'
@@ -10,4 +9,7 @@ export type Coins =
     | 'ETH'
     | 'ARB'
     | 'THALES'
-    | 'sTHALES';
+    | 'sTHALES'
+    | 'OVER'
+    | 'cbBTC'
+    | 'wBTC';

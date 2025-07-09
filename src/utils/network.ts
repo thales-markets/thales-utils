@@ -3,10 +3,16 @@ import { NetworkParams } from '../types/network';
 
 export const hasEthereumInjected = () => !!window.ethereum;
 
-export const getDefaultDecimalsForNetwork = (networkId: NetworkId, isDeprecated?: boolean) => {
+export const getDefaultDecimalsForNetwork = (networkId: NetworkId) => {
     if (
-        [NetworkId.Arbitrum, NetworkId.PolygonMainnet, NetworkId.Base, NetworkId.OptimismSepolia].includes(networkId) ||
-        (networkId === NetworkId.OptimismMainnet && !isDeprecated)
+        [
+            NetworkId.Arbitrum,
+            NetworkId.PolygonMainnet,
+            NetworkId.Base,
+            NetworkId.ZkSync,
+            NetworkId.OptimismSepolia,
+            NetworkId.OptimismMainnet,
+        ].includes(networkId)
     )
         return 6;
     return 18;

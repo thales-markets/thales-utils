@@ -1,7 +1,6 @@
 import { Coins } from '../types/tokens';
 
 export const COLLATERAL_DECIMALS: Record<Coins, number> = {
-    sUSD: 18,
     DAI: 18,
     USDCe: 6,
     USDbC: 6,
@@ -13,6 +12,9 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     ARB: 18,
     THALES: 18,
     sTHALES: 18,
+    OVER: 18,
+    cbBTC: 8,
+    wBTC: 8,
 };
 
 export const DEFAULT_CURRENCY_DECIMALS = 2;
