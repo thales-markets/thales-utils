@@ -75,6 +75,9 @@ export const formatPercentageWithSign = (value: NumericValue, decimals = DEFAULT
     `${Number(value) > 0 ? '+' : ''}${formatPercentage(value, decimals)}`;
 
 export const ceilNumberToDecimals = (value: number, decimals = DEFAULT_CURRENCY_DECIMALS) => {
+    if (countDecimals(value) <= decimals) {
+        return value;
+    }
     return Math.ceil(value * Math.pow(10, decimals)) / Math.pow(10, decimals);
 };
 
