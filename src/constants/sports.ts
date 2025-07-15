@@ -400,4 +400,7 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20713: 'UEFA - European Championship Women',
     20870: 'FINA - World Championship',
     20871: 'FINA - World Championship Women',
+    305: 'USA - MLB All Star',
+    20310: 'USA - National Lacrosse League',
+    20311: 'USA - Premier Lacrosse League',
 };
