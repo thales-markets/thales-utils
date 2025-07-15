@@ -398,4 +398,6 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20651: 'Peru - Primera Division',
     20712: 'UEFA - European Championship U21',
     20713: 'UEFA - European Championship Women',
+    20870: 'FINA - World Championship',
+    20871: 'FINA - World Championship Women',
 };
