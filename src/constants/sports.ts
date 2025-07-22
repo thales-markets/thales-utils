@@ -413,4 +413,5 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20682: 'Slovenia - PrvaLiga',
     20714: 'Slovakia - Superliga',
     20715: 'China - FA Cup',
+    20529: 'Czech Republic - First League',
 };
