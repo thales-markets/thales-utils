@@ -414,4 +414,12 @@ export const LeagueIdMapOpticOdds: Record<number, string> = {
     20714: 'Slovakia - Superliga',
     20715: 'China - FA Cup',
     20529: 'Czech Republic - First League',
+    20637: 'North America - Leagues Cup',
+    20503: 'Brazil - Serie B',
+    20166: 'Australia - Cup',
+    20600: 'Kazakhstan - Premier League',
+    20549: 'Estonia - Premium Liiga',
+    20702: 'USA - USL Championship',
+    20519: 'Costa Rica - Primera Division',
+    20663: 'Russia - Cup',
 };
