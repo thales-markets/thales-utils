@@ -1,6 +1,6 @@
 import bytes32 from 'bytes32';
+import { getLeagueOpticOddsName, LeagueMap } from 'overtime-utils';
 import { OPTIC_ODDS_ID_SEPARATOR, OVERTIME_ID_SEPARATOR } from '../constants/common';
-import { LeagueIdMapOpticOdds } from '../constants/sports';
 import { Fixture, OddsObject, ScoresObject } from '../types/odds';
 
 export const mapOpticOddsApiFixtures = (fixturesData: any[]): Fixture[] =>
@@ -85,9 +85,9 @@ export const mapFromOpticOddsToOvertimeFormat = (fixtureId: string) => {
         return fixtureId;
     }
     const [leagueName, id] = fixtureId.split(OPTIC_ODDS_ID_SEPARATOR);
-    const overtimeLeagueId = Object.keys(LeagueIdMapOpticOdds).find(
-        (key) => formatOpticOddsLeagueName(LeagueIdMapOpticOdds[Number(key)]) === leagueName
-    );
+    const overtimeLeagueId = Object.values(LeagueMap).find(
+        (league) => formatOpticOddsLeagueName(league.opticOddsName || '') === leagueName
+    )?.id;
     if (!overtimeLeagueId) {
         throw `Optic Odds league ${leagueName} not mapped.`;
     }
@@ -99,7 +99,7 @@ export const mapFromOvertimeToOpticOddsFormat = (gameId: string) => {
         return gameId;
     }
     const [leagueId, id] = gameId.split(OVERTIME_ID_SEPARATOR);
-    const opticOddsLeagueName = LeagueIdMapOpticOdds[Number(leagueId)];
+    const opticOddsLeagueName = getLeagueOpticOddsName(Number(leagueId));
     if (!opticOddsLeagueName) {
         throw `Overtime league ID ${leagueId} not mapped.`;
     }
