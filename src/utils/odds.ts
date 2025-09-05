@@ -480,15 +480,13 @@ export const groupAndFormatMoneylineOdds = (oddsArray: any[], commonData: HomeAw
     return formattedOdds;
 };
 
-/**
- * Groups moneyline odds by their lines and formats the result.
+/**w
+ * Groups GG (Both Teams to Score) odds by their lines and formats the result.
  *
  * @param {Array} oddsArray - The input array of odds objects.
- * @param {Object} commonData - The common data object containing homeTeam information.
  * @returns {Array} The grouped and formatted moneyline odds.
  */
 export const groupAndFormatGGOdds = (oddsArray: any[]) => {
-    // Group odds by their selection points and selection
     const groupedOdds = oddsArray.reduce((acc: any, odd: any) => {
         const { price, selection, typeId, sportId, type } = odd;
         const key = typeId;
