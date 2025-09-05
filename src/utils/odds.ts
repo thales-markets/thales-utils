@@ -193,7 +193,8 @@ export const createChildMarkets: (
     defaultSpreadForLiveMarkets,
     leagueMap
 ) => {
-    const [spreadOdds, totalOdds, moneylineOdds, correctScoreOdds, doubleChanceOdds, childMarkets]: any[] = [
+    const [spreadOdds, totalOdds, moneylineOdds, correctScoreOdds, doubleChanceOdds, ggOdds, childMarkets]: any[] = [
+        [],
         [],
         [],
         [],
@@ -226,6 +227,8 @@ export const createChildMarkets: (
                 correctScoreOdds.push(odd);
             } else if (odd.type === 'Double Chance') {
                 doubleChanceOdds.push(odd);
+            } else if (odd.type === 'Both Teams To Score') {
+                ggOdds.push(odd);
             }
         });
 
@@ -233,6 +236,7 @@ export const createChildMarkets: (
             ...groupAndFormatSpreadOdds(spreadOdds, commonData),
             ...groupAndFormatTotalOdds(totalOdds, commonData),
             ...groupAndFormatMoneylineOdds(moneylineOdds, commonData),
+            ...groupAndFormatGGOdds(ggOdds),
             ...groupAndFormatDoubleChanceOdds(doubleChanceOdds, commonData),
         ];
         const otherFormattedOdds = [...groupAndFormatCorrectScoreOdds(correctScoreOdds, commonData)];
@@ -457,6 +461,52 @@ export const groupAndFormatMoneylineOdds = (oddsArray: any[], commonData: HomeAw
 
         return acc;
     }, {}) as any;
+
+    // Format the grouped odds into the desired output
+    const formattedOdds = Object.entries(groupedOdds as any).reduce((acc: any, [_key, value]) => {
+        if ((value as any).home !== null && (value as any).away !== null) {
+            acc.push({
+                odds: (value as any).draw
+                    ? [(value as any).home, (value as any).away, (value as any).draw]
+                    : [(value as any).home, (value as any).away],
+                typeId: (value as any).typeId,
+                sportId: (value as any).sportId,
+                type: (value as any).type,
+            });
+        }
+        return acc;
+    }, []);
+
+    return formattedOdds;
+};
+
+/**
+ * Groups moneyline odds by their lines and formats the result.
+ *
+ * @param {Array} oddsArray - The input array of odds objects.
+ * @param {Object} commonData - The common data object containing homeTeam information.
+ * @returns {Array} The grouped and formatted moneyline odds.
+ */
+export const groupAndFormatGGOdds = (oddsArray: any[]) => {
+    // Group odds by their selection points and selection
+    const groupedOdds = oddsArray.reduce((acc: any, odd: any) => {
+        const { price, selection, typeId, sportId, type } = odd;
+        const key = typeId;
+
+        if (!acc[key]) {
+            acc[key] = { home: null, away: null, draw: null, typeId: null, sportId: null };
+        }
+
+        if (selection.toLowerCase() === 'yes') acc[key].home = price;
+        else if (selection.toLowerCase() === 'no') acc[key].away = price;
+
+        acc[key].typeId = typeId;
+        acc[key].type = type;
+        acc[key].sportId = sportId;
+
+        return acc;
+    }, {}) as any;
+
     // Format the grouped odds into the desired output
     const formattedOdds = Object.entries(groupedOdds as any).reduce((acc: any, [_key, value]) => {
         if ((value as any).home !== null && (value as any).away !== null) {
