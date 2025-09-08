@@ -60,6 +60,46 @@ const childMoneylineMock: LeagueConfigInfo = {
     minOdds: 0.75,
 };
 
+const bothTeamsToScoreMock: LeagueConfigInfo = {
+    sportId: 9806,
+    enabled: 'true',
+    marketName: 'Both Teams To Score',
+    typeId: 10009,
+    type: 'Both Teams To Score',
+    maxOdds: 0.01,
+    minOdds: 0.99,
+};
+
+const bothTeamsToScoreMock1stHalf: LeagueConfigInfo = {
+    sportId: 9806,
+    enabled: 'true',
+    marketName: '1st Half Both Teams To Score',
+    typeId: 10101,
+    type: 'Both Teams To Score',
+    maxOdds: 0.01,
+    minOdds: 0.99,
+};
+
+const bothTeamsToScoreMock2ndHalf: LeagueConfigInfo = {
+    sportId: 9806,
+    enabled: 'true',
+    marketName: '2nd Half Both Teams To Score',
+    typeId: 10102,
+    type: 'Both Teams To Score',
+    maxOdds: 0.01,
+    minOdds: 0.99,
+};
+
+const drawNoBetMock: LeagueConfigInfo = {
+    sportId: 9806,
+    enabled: 'true',
+    marketName: 'Draw No Bet',
+    typeId: 10010,
+    type: 'Moneyline',
+    maxOdds: 0.01,
+    minOdds: 0.99,
+};
+
 const baseDiffSportId: LeagueConfigInfo = {
     ...baseLeagueInfo,
     sportId: 4,
@@ -100,6 +140,10 @@ const leagueInfoEnabledAll: LeagueConfigInfo[] = [
     childMoneylineMock,
     doubleChanceMock,
     correctScoreMock,
+    bothTeamsToScoreMock,
+    bothTeamsToScoreMock1stHalf,
+    bothTeamsToScoreMock2ndHalf,
+    drawNoBetMock,
 ];
 
 // Grouped Exports

@@ -105,12 +105,25 @@ describe('Markets', () => {
             );
             const containsChildCorrectScore = market.childMarkets.some((child: any) => child.type === 'correctScore');
             const containsChildDoubleChance = market.childMarkets.some((child: any) => child.type === 'doubleChance');
+            const containsChildGG = market.childMarkets.some((child: any) => child.type === 'bothTeamsToScore');
+            const containsChildGG1stHalf = market.childMarkets.some(
+                (child: any) => child.type === 'firstPeriodBothTeamsToScore'
+            );
+            const containsChildGG2ndHalf = market.childMarkets.some(
+                (child: any) => child.type === 'secondPeriodBothTeamsToScore'
+            );
+            const containsChildDrawNoBet = market.childMarkets.some((child: any) => child.type === 'drawNoBet');
 
+            expect(containsChildGG).toBe(true);
+            expect(containsChildGG1stHalf).toBe(true);
+            expect(containsChildGG2ndHalf).toBe(true);
             expect(containsSpread).toBe(true);
             expect(containsTotal).toBe(true);
             expect(containsChildMoneyline).toBe(true);
             expect(containsChildCorrectScore).toBe(true);
             expect(containsChildDoubleChance).toBe(true);
+            expect(containsChildGG).toBe(true);
+            expect(containsChildDrawNoBet).toBe(true);
         });
 
         it('Should return warning message that there are is no configuration available in league map csv', () => {
