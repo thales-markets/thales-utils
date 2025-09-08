@@ -97,9 +97,6 @@ describe('Markets', () => {
                 undefined,
                 LeagueMocks.leagueInfoEnabledAll
             );
-            market.childMarkets.forEach((child: any) => {
-                console.log(child);
-            });
 
             const containsSpread = market.childMarkets.some((child: any) => child.type === 'spread');
             const containsTotal = market.childMarkets.some((child: any) => child.type === 'total');
