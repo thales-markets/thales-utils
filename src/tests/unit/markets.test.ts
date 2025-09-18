@@ -113,6 +113,9 @@ describe('Markets', () => {
                 (child: any) => child.type === 'secondPeriodBothTeamsToScore'
             );
             const containsChildDrawNoBet = market.childMarkets.some((child: any) => child.type === 'drawNoBet');
+            const containsWillThereBeOvertime = market.childMarkets.some(
+                (child: any) => child.type === 'willThereBeOvertime'
+            );
 
             expect(containsChildGG).toBe(true);
             expect(containsChildGG1stHalf).toBe(true);
@@ -124,6 +127,7 @@ describe('Markets', () => {
             expect(containsChildDoubleChance).toBe(true);
             expect(containsChildGG).toBe(true);
             expect(containsChildDrawNoBet).toBe(true);
+            expect(containsWillThereBeOvertime).toBe(true);
         });
 
         it('Should return warning message that there are is no configuration available in league map csv', () => {
