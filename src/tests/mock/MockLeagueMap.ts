@@ -100,7 +100,7 @@ const drawNoBetMock: LeagueConfigInfo = {
     minOdds: 0.99,
 };
 
-const WillThereBeOvertime: LeagueConfigInfo = {
+const willThereBeOvertime: LeagueConfigInfo = {
     sportId: 9806,
     enabled: 'true',
     marketName: 'Will There Be Overtime',
@@ -154,7 +154,7 @@ const leagueInfoEnabledAll: LeagueConfigInfo[] = [
     bothTeamsToScoreMock1stHalf,
     bothTeamsToScoreMock2ndHalf,
     drawNoBetMock,
-    WillThereBeOvertime,
+    willThereBeOvertime,
 ];
 
 // Grouped Exports
