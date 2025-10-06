@@ -43,9 +43,9 @@ export const getPriceDataAtTimestampFromOracle = async (
     apiSecret: string
 ) => {
     let priceData: AssetPriceDataAtTimestamp = {
-        priceUpdateData: '',
+        priceUpdateData: [],
         price: 0,
-        timestamp: timestampSec,
+        timestamp: 0,
     };
 
     switch (oracle) {
@@ -61,7 +61,7 @@ export const getPriceDataAtTimestampFromOracle = async (
             const report = await fetchSingleReport(apiKey, apiSecret, networkId, priceId, timestampSec);
             const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
             priceData = {
-                priceUpdateData: report.fullReport,
+                priceUpdateData: [report.fullReport],
                 price: parsedReport.price,
                 timestamp: parsedReport.validFromTimestamp,
             };
