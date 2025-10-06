@@ -37,6 +37,10 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     wBTC: 8,
 };
 
+export const OTHER_COLLATERAL_DECIMALS: Record<string, number> = {
+    LINK: 18,
+};
+
 export const DEFAULT_CURRENCY_DECIMALS = 2;
 export const SHORT_CURRENCY_DECIMALS = 4;
 export const MEDIUM_CURRENCY_DECIMALS = 6;

@@ -28,7 +28,7 @@ export const getPriceId = (networkId: NetworkId, currency: string) => {
     }
 };
 
-const getCurrencyByPriceId = (networkId: NetworkId, priceId: string) => {
+export const getAssetByPriceId = (networkId: NetworkId, priceId: string) => {
     if (TEST_NETWORKS.includes(networkId)) {
         return (
             Object.keys(PRICE_ID.testnet).find((key) => PRICE_ID.testnet[key] === '0x' + priceId) || 'currencyNotFound'
@@ -93,7 +93,7 @@ export const getCurrentPrices = async (networkId: NetworkId, priceIds: string[])
         currentPrices = response.parsed.reduce(
             (accumulator: AssetsPrices, priceFeed: any) => ({
                 ...accumulator,
-                [getCurrencyByPriceId(networkId, priceFeed.id)]: priceNumberFormatter(priceFeed.price.price),
+                [getAssetByPriceId(networkId, priceFeed.id)]: priceNumberFormatter(priceFeed.price.price),
             }),
             {}
         );

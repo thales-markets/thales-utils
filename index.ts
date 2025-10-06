@@ -15,12 +15,15 @@ export * from './src/utils/style';
 
 //enums
 export * from './src/enums/network';
+export * from './src/enums/priceOracles';
 
 //types
+export * from './src/types/chainlink';
 export * from './src/types/prices';
 export * from './src/types/tokens';
 
 //constants
+export * from './src/constants/chainlink';
 export * from './src/constants/currency';
 export * from './src/constants/network';
 export * from './src/constants/pyth';
