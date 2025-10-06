@@ -1,5 +1,5 @@
 import { DATA_STREAMS_ENDPOINTS, DATA_STREAMS_PATHS, FEED_ID } from '../constants/chainlink';
-import { COLLATERAL_DECIMALS, CRYPTO_CURRENCY_MAP, OTHER_COLLATERAL_DECIMALS } from '../constants/currency';
+import { COLLATERAL_DECIMALS, OTHER_COLLATERAL_DECIMALS } from '../constants/currency';
 import { TEST_NETWORKS } from '../constants/network';
 import { NetworkId } from '../enums/network';
 import { ParsedFullReport, SingleReport, SingleReportResponse } from '../types/chainlink';
@@ -124,19 +124,19 @@ export const fetchSingleReport = async (
     return data.report;
 };
 
-export const getFeedId = (networkId: NetworkId, currency: (typeof CRYPTO_CURRENCY_MAP)[number]) => {
+export const getFeedId = (networkId: NetworkId, asset: string) => {
     if (TEST_NETWORKS.includes(networkId)) {
-        return FEED_ID.testnet[currency];
+        return FEED_ID.testnet[asset];
     } else {
-        return FEED_ID.mainnet[currency];
+        return FEED_ID.mainnet[asset];
     }
 };
 
 export const getAssetByFeedId = (networkId: NetworkId, feedID: string) => {
     if (TEST_NETWORKS.includes(networkId)) {
-        return Object.keys(FEED_ID.testnet).find((key) => FEED_ID.testnet[key] === '0x' + feedID) || 'currencyNotFound';
+        return Object.keys(FEED_ID.testnet).find((key) => FEED_ID.testnet[key] === '0x' + feedID) || 'assetNotFound';
     } else {
-        return Object.keys(FEED_ID.mainnet).find((key) => FEED_ID.mainnet[key] === '0x' + feedID) || 'currencyNotFound';
+        return Object.keys(FEED_ID.mainnet).find((key) => FEED_ID.mainnet[key] === '0x' + feedID) || 'assetNotFound';
     }
 };
 

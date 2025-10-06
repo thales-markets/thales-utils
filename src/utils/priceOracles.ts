@@ -1,14 +1,25 @@
 import { NetworkId } from '../enums/network';
 import { OracleSource } from '../enums/priceOracles';
 import { AssetPriceDataAtTimestamp } from '../types/prices';
-import { fetchSingleReport, getAssetByFeedId, parseChainlinkFullReport } from './chainlink';
-import { getCurrentPrices, getPricesAtTimestamp, getSupportedAssetsAsObject } from './pyth';
+import { fetchSingleReport, getAssetByFeedId, getFeedId, parseChainlinkFullReport } from './chainlink';
+import { getCurrentPrices, getPriceId, getPricesAtTimestamp, getSupportedAssetsAsObject } from './pyth';
 import { priceNumberFormatter } from './speedMarkets';
+
+export const getPriceIdForOracle = (oracle: OracleSource, networkId: NetworkId, asset: string) => {
+    switch (oracle) {
+        case OracleSource.Pyth:
+            return getPriceId(networkId, asset);
+        case OracleSource.Chainlink:
+            return getFeedId(networkId, asset);
+        default:
+            return getPriceId(networkId, asset);
+    }
+};
 
 export const getCurrentPricesFromOracle = async (
     oracle: OracleSource,
     networkId: NetworkId,
-    priceIds: string[],
+    assets: string[],
     apiKey: string,
     apiSecret: string
 ) => {
@@ -16,16 +27,18 @@ export const getCurrentPricesFromOracle = async (
 
     switch (oracle) {
         case OracleSource.Pyth:
+            const priceIds = assets.map((asset) => getPriceId(networkId, asset));
             prices = await getCurrentPrices(networkId, priceIds);
             break;
         case OracleSource.Chainlink:
-            const promises = priceIds.map((priceId) => fetchSingleReport(apiKey, apiSecret, networkId, priceId));
+            const feedIds = assets.map((asset) => getFeedId(networkId, asset));
+            const promises = feedIds.map((feedId) => fetchSingleReport(apiKey, apiSecret, networkId, feedId));
             const reports = await Promise.all(promises);
-            for (let i = 0; i < priceIds.length; i++) {
-                const priceId = priceIds[i];
+            for (let i = 0; i < feedIds.length; i++) {
+                const feedId = feedIds[i];
                 const report = reports[i];
                 const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
-                const asset = getAssetByFeedId(networkId, priceId);
+                const asset = getAssetByFeedId(networkId, feedId);
                 prices[asset] = parsedReport.price;
             }
             break;
@@ -37,7 +50,7 @@ export const getCurrentPricesFromOracle = async (
 export const getPriceDataAtTimestampFromOracle = async (
     oracle: OracleSource,
     networkId: NetworkId,
-    priceId: string,
+    asset: string,
     timestampSec: number,
     apiKey: string,
     apiSecret: string
@@ -50,6 +63,7 @@ export const getPriceDataAtTimestampFromOracle = async (
 
     switch (oracle) {
         case OracleSource.Pyth:
+            const priceId = getPriceId(networkId, asset);
             const pythPriceData = await getPricesAtTimestamp(networkId, [priceId], timestampSec);
             priceData.priceUpdateData = pythPriceData.binary.data.map((vaa: string) => '0x' + vaa);
             if (pythPriceData.parsed) {
@@ -58,7 +72,8 @@ export const getPriceDataAtTimestampFromOracle = async (
             }
             break;
         case OracleSource.Chainlink:
-            const report = await fetchSingleReport(apiKey, apiSecret, networkId, priceId, timestampSec);
+            const feedId = getFeedId(networkId, asset);
+            const report = await fetchSingleReport(apiKey, apiSecret, networkId, feedId, timestampSec);
             const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
             priceData = {
                 priceUpdateData: [report.fullReport],

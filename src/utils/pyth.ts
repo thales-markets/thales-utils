@@ -20,22 +20,22 @@ const getPriceServiceEndpoint = (networkId: NetworkId) => {
     }
 };
 
-export const getPriceId = (networkId: NetworkId, currency: string) => {
+export const getPriceId = (networkId: NetworkId, asset: string) => {
     if (TEST_NETWORKS.includes(networkId)) {
-        return PRICE_ID.testnet[currency];
+        return PRICE_ID.testnet[asset];
     } else {
-        return PRICE_ID.mainnet[currency];
+        return PRICE_ID.mainnet[asset];
     }
 };
 
 export const getAssetByPriceId = (networkId: NetworkId, priceId: string) => {
     if (TEST_NETWORKS.includes(networkId)) {
         return (
-            Object.keys(PRICE_ID.testnet).find((key) => PRICE_ID.testnet[key] === '0x' + priceId) || 'currencyNotFound'
+            Object.keys(PRICE_ID.testnet).find((key) => PRICE_ID.testnet[key] === '0x' + priceId) || 'assetNotFound'
         );
     } else {
         return (
-            Object.keys(PRICE_ID.mainnet).find((key) => PRICE_ID.mainnet[key] === '0x' + priceId) || 'currencyNotFound'
+            Object.keys(PRICE_ID.mainnet).find((key) => PRICE_ID.mainnet[key] === '0x' + priceId) || 'assetNotFound'
         );
     }
 };
