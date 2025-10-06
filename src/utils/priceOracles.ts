@@ -5,17 +5,6 @@ import { fetchSingleReport, getAssetByFeedId, getFeedId, parseChainlinkFullRepor
 import { getCurrentPrices, getPriceId, getPricesAtTimestamp, getSupportedAssetsAsObject } from './pyth';
 import { priceNumberFormatter } from './speedMarkets';
 
-export const getPriceIdForOracle = (oracle: OracleSource, networkId: NetworkId, asset: string) => {
-    switch (oracle) {
-        case OracleSource.Pyth:
-            return getPriceId(networkId, asset);
-        case OracleSource.Chainlink:
-            return getFeedId(networkId, asset);
-        default:
-            return getPriceId(networkId, asset);
-    }
-};
-
 export const getCurrentPricesFromOracle = async (
     oracle: OracleSource,
     networkId: NetworkId,

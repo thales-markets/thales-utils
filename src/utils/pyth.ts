@@ -30,13 +30,9 @@ export const getPriceId = (networkId: NetworkId, asset: string) => {
 
 export const getAssetByPriceId = (networkId: NetworkId, priceId: string) => {
     if (TEST_NETWORKS.includes(networkId)) {
-        return (
-            Object.keys(PRICE_ID.testnet).find((key) => PRICE_ID.testnet[key] === '0x' + priceId) || 'assetNotFound'
-        );
+        return Object.keys(PRICE_ID.testnet).find((key) => PRICE_ID.testnet[key] === '0x' + priceId) || 'assetNotFound';
     } else {
-        return (
-            Object.keys(PRICE_ID.mainnet).find((key) => PRICE_ID.mainnet[key] === '0x' + priceId) || 'assetNotFound'
-        );
+        return Object.keys(PRICE_ID.mainnet).find((key) => PRICE_ID.mainnet[key] === '0x' + priceId) || 'assetNotFound';
     }
 };
 
@@ -135,7 +131,7 @@ export const getBenchmarksPriceFeeds = async (priceFeeds: { priceId: string; pub
     const benchmarksPriceFeeds: { priceId: string; publishTime: number; price: number }[] = [];
 
     if (priceFeeds.length) {
-        const benchmarksPricePromises = priceFeeds.map((data: any) =>
+        const benchmarksPricePromises = priceFeeds.map((data: { priceId: string; publishTime: number }) =>
             fetch(`${BENCHMARKS_PRICE_ENDPOINT}${data.publishTime}?ids=${data.priceId}`).catch((e) =>
                 console.log('Pyth price benchmarks error', e)
             )
