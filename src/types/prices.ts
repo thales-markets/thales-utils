@@ -4,4 +4,5 @@ export type AssetPriceDataAtTimestamp = {
     priceUpdateData: string[];
     price: number;
     timestamp: number;
+    nativeFee: number;
 };

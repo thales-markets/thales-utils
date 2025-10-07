@@ -163,7 +163,7 @@ export const parseChainlinkFullReport = (networkId: NetworkId, fullReport: strin
         feedID,
         validFromTimestamp: parseTimestamp(),
         observationsTimestamp: parseTimestamp(),
-        nativeFee: parseFees(COLLATERAL_DECIMALS.ETH),
+        nativeFee: parseFees(COLLATERAL_DECIMALS.WETH), // WETH is native token for OP, Arb and Base (Polygon should return 0)
         linkFee: parseFees(OTHER_COLLATERAL_DECIMALS.LINK),
         expiresAt: parseTimestamp(),
         price: parsePrice(),

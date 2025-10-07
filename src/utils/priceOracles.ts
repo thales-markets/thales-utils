@@ -48,6 +48,7 @@ export const getPriceDataAtTimestampFromOracle = async (
         priceUpdateData: [],
         price: 0,
         timestamp: 0,
+        nativeFee: 0,
     };
 
     switch (oracle) {
@@ -68,6 +69,7 @@ export const getPriceDataAtTimestampFromOracle = async (
                 priceUpdateData: [report.fullReport],
                 price: parsedReport.price,
                 timestamp: parsedReport.validFromTimestamp,
+                nativeFee: parsedReport.nativeFee,
             };
             break;
     }
