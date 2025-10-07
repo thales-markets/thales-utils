@@ -6,6 +6,7 @@ import {
     HALVES_PERIOD_TYPE_ID_MAPPING,
     QUARTERS_PERIOD_TYPE_ID_MAPPING,
     INNINGS_PERIOD_TYPE_ID_MAPPING,
+    PERIOD_BASED_TYPE_ID_MAPPING,
     FULL_GAME_TYPE_IDS,
 } from '../types/resolution';
 
@@ -123,6 +124,27 @@ export const canResolveMarketViaOpticOddsApi = (
 };
 
 /**
+ * Maps a numeric value to a SportPeriodType enum
+ * @param sportTypeNum - Numeric representation of sport type (0 = halves, 1 = quarters, 2 = innings, 3 = period)
+ * @returns SportPeriodType enum value
+ * @throws Error if invalid number provided
+ */
+export function mapNumberToSportPeriodType(sportTypeNum: number): SportPeriodType {
+    switch (sportTypeNum) {
+        case 0:
+            return SportPeriodType.HALVES_BASED;
+        case 1:
+            return SportPeriodType.QUARTERS_BASED;
+        case 2:
+            return SportPeriodType.INNINGS_BASED;
+        case 3:
+            return SportPeriodType.PERIOD_BASED;
+        default:
+            throw new Error(`Invalid sport type number: ${sportTypeNum}. Must be 0 (halves), 1 (quarters), 2 (innings), or 3 (period).`);
+    }
+}
+
+/**
  * Selects the appropriate period-to-typeId mapping based on sport type
  * @param sportType - Sport period structure type
  * @returns Period-to-typeId mapping for the specified sport type
@@ -135,6 +157,8 @@ function selectMappingForSportType(sportType: SportPeriodType): { [period: numbe
             return QUARTERS_PERIOD_TYPE_ID_MAPPING;
         case SportPeriodType.INNINGS_BASED:
             return INNINGS_PERIOD_TYPE_ID_MAPPING;
+        case SportPeriodType.PERIOD_BASED:
+            return PERIOD_BASED_TYPE_ID_MAPPING;
     }
 }
 
@@ -142,26 +166,26 @@ function selectMappingForSportType(sportType: SportPeriodType): { [period: numbe
  * Checks if a single market type can be resolved based on completed periods
  * @param event - Event object from OpticOdds API
  * @param typeId - Single market type ID to check
- * @param sportType - Sport period structure type (halves, quarters, or innings based) - REQUIRED
+ * @param sportType - Sport period structure type - REQUIRED (enum or number: 0=halves, 1=quarters, 2=innings, 3=period)
  * @returns boolean indicating if that typeId can be resolved
  */
 export function canResolveMarketsForEvent(
     event: OpticOddsEvent,
     typeId: number,
-    sportType: SportPeriodType
+    sportType: SportPeriodType | number
 ): boolean;
 
 /**
  * Checks which market types can be resolved from a batch based on completed periods
  * @param event - Event object from OpticOdds API
  * @param typeIds - Array of market type IDs to check
- * @param sportType - Sport period structure type (halves, quarters, or innings based) - REQUIRED
+ * @param sportType - Sport period structure type - REQUIRED (enum or number: 0=halves, 1=quarters, 2=innings, 3=period)
  * @returns Array of typeIds that can be resolved
  */
 export function canResolveMarketsForEvent(
     event: OpticOddsEvent,
     typeIds: number[],
-    sportType: SportPeriodType
+    sportType: SportPeriodType | number
 ): number[];
 
 /**
@@ -170,15 +194,22 @@ export function canResolveMarketsForEvent(
  * @example
  * // Check single typeId for NFL (quarters-based)
  * const canResolve = canResolveMarketsForEvent(event, 10021, SportPeriodType.QUARTERS_BASED);
+ * // Or using number
+ * const canResolve = canResolveMarketsForEvent(event, 10021, 1);
  *
  * // Check batch of typeIds for MLB (innings-based)
  * const resolvable = canResolveMarketsForEvent(event, [10021, 10051], SportPeriodType.INNINGS_BASED);
  * // Returns: [10021] if only period 1-4 complete, [10021, 10051] if period 5 complete
+ *
+ * // Check with period-based (no halves/secondary moneyline)
+ * const canResolve = canResolveMarketsForEvent(event, 10021, SportPeriodType.PERIOD_BASED);
+ * // Or using number
+ * const canResolve = canResolveMarketsForEvent(event, 10021, 3);
  */
 export function canResolveMarketsForEvent(
     event: OpticOddsEvent,
     typeIdOrTypeIds: number | number[],
-    sportType: SportPeriodType
+    sportType: SportPeriodType | number
 ): boolean | number[] {
     // Get completed periods
     const periodData = detectCompletedPeriods(event);
@@ -190,8 +221,11 @@ export function canResolveMarketsForEvent(
     const status = (event.fixture?.status || event.status || '').toLowerCase();
     const isCompleted = status === 'completed' || status === 'complete' || status === 'finished';
 
+    // Convert number to SportPeriodType if needed
+    const sportTypeEnum = typeof sportType === 'number' ? mapNumberToSportPeriodType(sportType) : sportType;
+
     // Select appropriate mapping based on sport type
-    const mapping = selectMappingForSportType(sportType);
+    const mapping = selectMappingForSportType(sportTypeEnum);
 
     // Collect all resolvable typeIds based on completed periods
     const resolvableTypeIds = new Set<number>();
