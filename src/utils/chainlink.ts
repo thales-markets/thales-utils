@@ -156,18 +156,30 @@ export const parseChainlinkFullReport = (networkId: NetworkId, fullReport: strin
     const assetDecimals = COLLATERAL_DECIMALS[asset];
 
     const parseTimestamp = () => Number(BigInt(readBytesAsHex(32)));
-    const parseFees = (decimals: number) => bigNumberFormatter(BigInt(readBytesAsHex(32)), decimals);
+    const parseFees = () => BigInt(readBytesAsHex(32));
     const parsePrice = () => bigNumberFormatter(BigInt(readBytesAsHex(32)), assetDecimals);
+
+    // Order of parse commands are important!
+    const validFromTimestamp = parseTimestamp();
+    const observationsTimestamp = parseTimestamp();
+    const nativeFee = parseFees();
+    const linkFee = parseFees();
+    const expiresAt = parseTimestamp();
+    const price = parsePrice();
+    const bid = parsePrice();
+    const ask = parsePrice();
 
     return {
         feedID,
-        validFromTimestamp: parseTimestamp(),
-        observationsTimestamp: parseTimestamp(),
-        nativeFee: parseFees(COLLATERAL_DECIMALS.WETH), // WETH is native token for OP, Arb and Base (Polygon should return 0)
-        linkFee: parseFees(OTHER_COLLATERAL_DECIMALS.LINK),
-        expiresAt: parseTimestamp(),
-        price: parsePrice(),
-        bid: parsePrice(),
-        ask: parsePrice(),
+        validFromTimestamp,
+        observationsTimestamp,
+        nativeFee,
+        nativeFeeDec: bigNumberFormatter(nativeFee, COLLATERAL_DECIMALS.WETH), // WETH is native token for OP, Arb and Base (Polygon should return 0)
+        linkFee,
+        linkFeeDec: bigNumberFormatter(linkFee, OTHER_COLLATERAL_DECIMALS.LINK),
+        expiresAt,
+        price,
+        bid,
+        ask,
     };
 };

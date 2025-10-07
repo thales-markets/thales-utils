@@ -48,7 +48,7 @@ export const getPriceDataAtTimestampFromOracle = async (
         priceUpdateData: [],
         price: 0,
         timestamp: 0,
-        nativeFee: 0,
+        nativeFee: BigInt(0),
     };
 
     switch (oracle) {

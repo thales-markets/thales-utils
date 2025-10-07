@@ -13,8 +13,10 @@ export type ParsedFullReport = {
     feedID: string;
     validFromTimestamp: number;
     observationsTimestamp: number;
-    nativeFee: number;
-    linkFee: number;
+    nativeFee: bigint;
+    nativeFeeDec: number;
+    linkFee: bigint;
+    linkFeeDec: number;
     expiresAt: number;
     price: number;
     bid: number;
