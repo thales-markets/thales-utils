@@ -1,4 +1,10 @@
-import { DATA_STREAMS_ENDPOINTS, DATA_STREAMS_PATHS, FEED_ID } from '../constants/chainlink';
+import {
+    DATA_STREAMS_CANDLESTICK_ENDPOINTS,
+    DATA_STREAMS_CANDLESTICK_PATHS,
+    DATA_STREAMS_ENDPOINTS,
+    DATA_STREAMS_PATHS,
+    FEED_ID,
+} from '../constants/chainlink';
 import { COLLATERAL_DECIMALS, OTHER_COLLATERAL_DECIMALS } from '../constants/currency';
 import { TEST_NETWORKS } from '../constants/network';
 import { NetworkId } from '../enums/network';
@@ -87,6 +93,32 @@ const getDataStreamEndpoint = (networkId: NetworkId) => {
     } else {
         return DATA_STREAMS_ENDPOINTS.mainnet;
     }
+};
+
+const getDataStreamCandlestickEndpoint = (networkId: NetworkId) => {
+    if (TEST_NETWORKS.includes(networkId)) {
+        return DATA_STREAMS_CANDLESTICK_ENDPOINTS.testnet;
+    } else {
+        return DATA_STREAMS_CANDLESTICK_ENDPOINTS.mainnet;
+    }
+};
+
+export const getApiAccessToken = async (apiKey: string, apiSecret: string, networkId: NetworkId) => {
+    const url = `${getDataStreamCandlestickEndpoint(networkId)}${DATA_STREAMS_CANDLESTICK_PATHS.auth}`;
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ login: apiKey, password: apiSecret }).toString(),
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        console.error(`Chainlink get access token API (${url}) error (status ${response.status}): ${text}`);
+    }
+
+    const responseData = await response.json();
+    return responseData.d.access_token;
 };
 
 export const fetchSingleReport = async (
