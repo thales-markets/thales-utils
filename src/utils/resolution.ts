@@ -163,32 +163,6 @@ function selectMappingForSportType(sportType: SportPeriodType): { [period: numbe
 }
 
 /**
- * Checks if a single market type can be resolved based on completed periods
- * @param event - Event object from OpticOdds API
- * @param typeId - Single market type ID to check
- * @param sportType - Sport period structure type - REQUIRED (enum or number: 0=halves, 1=quarters, 2=innings, 3=period)
- * @returns boolean indicating if that typeId can be resolved
- */
-export function canResolveMarketsForEvent(
-    event: OpticOddsEvent,
-    typeId: number,
-    sportType: SportPeriodType | number
-): boolean;
-
-/**
- * Checks which market types can be resolved from a batch based on completed periods
- * @param event - Event object from OpticOdds API
- * @param typeIds - Array of market type IDs to check
- * @param sportType - Sport period structure type - REQUIRED (enum or number: 0=halves, 1=quarters, 2=innings, 3=period)
- * @returns Array of typeIds that can be resolved
- */
-export function canResolveMarketsForEvent(
-    event: OpticOddsEvent,
-    typeIds: number[],
-    sportType: SportPeriodType | number
-): number[];
-
-/**
  * Implementation - checks if specific market type(s) can be resolved based on completed periods
  *
  * @example
