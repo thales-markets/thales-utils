@@ -18,4 +18,9 @@ export * from './src/enums/sports';
 
 // types
 export * from './src/types/resolution';
-export { PERIOD_TYPE_ID_MAPPING, FULL_GAME_TYPE_IDS } from './src/types/resolution';
+export {
+    HALVES_PERIOD_TYPE_ID_MAPPING,
+    QUARTERS_PERIOD_TYPE_ID_MAPPING,
+    INNINGS_PERIOD_TYPE_ID_MAPPING,
+    FULL_GAME_TYPE_IDS,
+} from './src/types/resolution';

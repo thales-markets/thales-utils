@@ -2,7 +2,10 @@ import {
     PeriodResolutionData,
     PeriodScores,
     OpticOddsEvent,
-    PERIOD_TYPE_ID_MAPPING,
+    SportPeriodType,
+    HALVES_PERIOD_TYPE_ID_MAPPING,
+    QUARTERS_PERIOD_TYPE_ID_MAPPING,
+    INNINGS_PERIOD_TYPE_ID_MAPPING,
     FULL_GAME_TYPE_IDS,
 } from '../types/resolution';
 
@@ -10,14 +13,11 @@ import {
  * Detects completed periods for a game based on OpticOdds API event data
  * A period is considered complete if the next period (period + 1) exists in the scores
  * @param event - Event object from OpticOdds API
- * @param sportName - Optional sport name override (will use event.sport.name if not provided)
  * @returns PeriodResolutionData with completed periods, readiness status, and period scores
  */
 export const detectCompletedPeriods = (
-    event: OpticOddsEvent,
-    sportName?: string
+    event: OpticOddsEvent
 ): PeriodResolutionData | null => {
-    const sport = (sportName || event.sport?.name || '').toLowerCase();
     const status = (event.fixture?.status || event.status || '').toLowerCase();
     const isLive = event.fixture?.is_live ?? event.is_live ?? false;
 
@@ -96,80 +96,92 @@ export const detectCompletedPeriods = (
  * Checks if a market can be resolved based on game and sport
  * @param gameId - The game/fixture ID
  * @param event - Event object from OpticOdds API
- * @param sportName - Optional sport name override
  * @returns boolean indicating if market can be resolved
  */
 export const canResolveMarketForGameIdAndSport = (
     gameId: string,
-    event: OpticOddsEvent,
-    sportName?: string
+    event: OpticOddsEvent
 ): boolean => {
     const eventId = event.fixture?.id || event.id || '';
     if (eventId !== gameId) {
         return false;
     }
 
-    const periodData = detectCompletedPeriods(event, sportName);
+    const periodData = detectCompletedPeriods(event);
     return periodData !== null && periodData.readyForResolution;
 };
 
 /**
  * Convenience function to check resolution status via OpticOdds API event
  * @param event - Event object from OpticOdds API
- * @param sportName - Optional sport name override
  * @returns PeriodResolutionData if periods are complete, null otherwise
  */
 export const canResolveMarketViaOpticOddsApi = (
-    event: OpticOddsEvent,
-    sportName?: string
+    event: OpticOddsEvent
 ): PeriodResolutionData | null => {
-    return detectCompletedPeriods(event, sportName);
+    return detectCompletedPeriods(event);
 };
+
+/**
+ * Selects the appropriate period-to-typeId mapping based on sport type
+ * @param sportType - Sport period structure type
+ * @returns Period-to-typeId mapping for the specified sport type
+ */
+function selectMappingForSportType(sportType: SportPeriodType): { [period: number]: number[] } {
+    switch (sportType) {
+        case SportPeriodType.HALVES_BASED:
+            return HALVES_PERIOD_TYPE_ID_MAPPING;
+        case SportPeriodType.QUARTERS_BASED:
+            return QUARTERS_PERIOD_TYPE_ID_MAPPING;
+        case SportPeriodType.INNINGS_BASED:
+            return INNINGS_PERIOD_TYPE_ID_MAPPING;
+    }
+}
 
 /**
  * Checks if a single market type can be resolved based on completed periods
  * @param event - Event object from OpticOdds API
  * @param typeId - Single market type ID to check
- * @param sportName - Optional sport name override
+ * @param sportType - Sport period structure type (halves, quarters, or innings based) - REQUIRED
  * @returns boolean indicating if that typeId can be resolved
  */
 export function canResolveMarketsForEvent(
     event: OpticOddsEvent,
     typeId: number,
-    sportName?: string
+    sportType: SportPeriodType
 ): boolean;
 
 /**
  * Checks which market types can be resolved from a batch based on completed periods
  * @param event - Event object from OpticOdds API
  * @param typeIds - Array of market type IDs to check
- * @param sportName - Optional sport name override
+ * @param sportType - Sport period structure type (halves, quarters, or innings based) - REQUIRED
  * @returns Array of typeIds that can be resolved
  */
 export function canResolveMarketsForEvent(
     event: OpticOddsEvent,
     typeIds: number[],
-    sportName?: string
+    sportType: SportPeriodType
 ): number[];
 
 /**
  * Implementation - checks if specific market type(s) can be resolved based on completed periods
  *
  * @example
- * // Check single typeId
- * const canResolve = canResolveMarketsForEvent(event, 10021); // true/false
+ * // Check single typeId for NFL (quarters-based)
+ * const canResolve = canResolveMarketsForEvent(event, 10021, SportPeriodType.QUARTERS_BASED);
  *
- * // Check batch of typeIds
- * const resolvable = canResolveMarketsForEvent(event, [10021, 10022, 10001]);
- * // Returns: [10021] if only period 1 is complete
+ * // Check batch of typeIds for MLB (innings-based)
+ * const resolvable = canResolveMarketsForEvent(event, [10021, 10051], SportPeriodType.INNINGS_BASED);
+ * // Returns: [10021] if only period 1-4 complete, [10021, 10051] if period 5 complete
  */
 export function canResolveMarketsForEvent(
     event: OpticOddsEvent,
     typeIdOrTypeIds: number | number[],
-    sportName?: string
+    sportType: SportPeriodType
 ): boolean | number[] {
     // Get completed periods
-    const periodData = detectCompletedPeriods(event, sportName);
+    const periodData = detectCompletedPeriods(event);
     if (!periodData) {
         return Array.isArray(typeIdOrTypeIds) ? [] : false;
     }
@@ -178,11 +190,14 @@ export function canResolveMarketsForEvent(
     const status = (event.fixture?.status || event.status || '').toLowerCase();
     const isCompleted = status === 'completed' || status === 'complete' || status === 'finished';
 
+    // Select appropriate mapping based on sport type
+    const mapping = selectMappingForSportType(sportType);
+
     // Collect all resolvable typeIds based on completed periods
     const resolvableTypeIds = new Set<number>();
 
     for (const period of periodData.completedPeriods) {
-        const typeIdsForPeriod = PERIOD_TYPE_ID_MAPPING[period] || [];
+        const typeIdsForPeriod = mapping[period] || [];
         typeIdsForPeriod.forEach((id) => resolvableTypeIds.add(id));
     }
 

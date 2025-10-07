@@ -4,6 +4,7 @@ import {
     canResolveMarketViaOpticOddsApi,
     canResolveMarketsForEvent,
 } from '../../utils/resolution';
+import { SportPeriodType } from '../../types/resolution';
 import {
     MockSoccerCompletedEvent,
     MockSoccerLiveSecondHalf,
@@ -182,7 +183,7 @@ describe('Resolution Utils', () => {
                 },
             };
 
-            const result = detectCompletedPeriods(event, 'nfl');
+            const result = detectCompletedPeriods(event);
 
             expect(result).not.toBeNull();
             expect(result?.completedPeriods).toEqual([1, 2]);
@@ -740,54 +741,54 @@ describe('Resolution Utils', () => {
     describe('canResolveMarketsForEvent', () => {
         describe('Single typeId checks', () => {
             it('Should return true for 1st period typeId when period 1 is complete (Soccer 2nd half)', () => {
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 10021);
+                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 10021, SportPeriodType.HALVES_BASED);
                 expect(result).toBe(true);
             });
 
             it('Should return false for 2nd period typeId when only period 1 is complete', () => {
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 10022);
+                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 10022, SportPeriodType.HALVES_BASED);
                 expect(result).toBe(false);
             });
 
             it('Should return false for full game typeId during live game', () => {
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 10001);
+                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 10001, SportPeriodType.HALVES_BASED);
                 expect(result).toBe(false);
             });
 
             it('Should return true for full game typeId when game is completed', () => {
-                const result = canResolveMarketsForEvent(MockSoccerCompletedEvent, 10001);
+                const result = canResolveMarketsForEvent(MockSoccerCompletedEvent, 10001, SportPeriodType.HALVES_BASED);
                 expect(result).toBe(true);
             });
 
             it('Should return true for 1st quarter typeId when quarter 1 complete (NFL)', () => {
-                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, 10021);
+                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, 10021, SportPeriodType.QUARTERS_BASED);
                 expect(result).toBe(true);
             });
 
             it('Should return true for 2nd quarter typeId when quarters 1-2 complete (NFL)', () => {
-                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, 10022);
+                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, 10022, SportPeriodType.QUARTERS_BASED);
                 expect(result).toBe(true);
             });
 
             it('Should return false for 3rd quarter typeId during 3rd quarter (NFL)', () => {
-                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, 10023);
+                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, 10023, SportPeriodType.QUARTERS_BASED);
                 expect(result).toBe(false);
             });
 
             it('Should return true for all quarter typeIds when game is completed (NFL)', () => {
-                expect(canResolveMarketsForEvent(MockNFLCompletedEvent, 10021)).toBe(true);
-                expect(canResolveMarketsForEvent(MockNFLCompletedEvent, 10022)).toBe(true);
-                expect(canResolveMarketsForEvent(MockNFLCompletedEvent, 10023)).toBe(true);
-                expect(canResolveMarketsForEvent(MockNFLCompletedEvent, 10024)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedEvent, 10021, SportPeriodType.QUARTERS_BASED)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedEvent, 10022, SportPeriodType.QUARTERS_BASED)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedEvent, 10023, SportPeriodType.QUARTERS_BASED)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedEvent, 10024, SportPeriodType.QUARTERS_BASED)).toBe(true);
             });
 
             it('Should return false when no periods are complete', () => {
-                const result = canResolveMarketsForEvent(MockSoccerLiveFirstHalf, 10021);
+                const result = canResolveMarketsForEvent(MockSoccerLiveFirstHalf, 10021, SportPeriodType.HALVES_BASED);
                 expect(result).toBe(false);
             });
 
             it('Should return false for non-existent typeId', () => {
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 99999);
+                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 99999, SportPeriodType.HALVES_BASED);
                 expect(result).toBe(false);
             });
         });
@@ -795,50 +796,50 @@ describe('Resolution Utils', () => {
         describe('Batch typeIds checks', () => {
             it('Should return only resolvable typeIds for live soccer in 2nd half', () => {
                 const typeIds = [10021, 10022, 10031, 10001];
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, typeIds);
+                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, typeIds, SportPeriodType.HALVES_BASED);
 
                 expect(result).toEqual([10021, 10031]); // Only period 1 typeIds
             });
 
             it('Should exclude full game typeIds during live game', () => {
                 const typeIds = [10021, 10001, 10002, 10003];
-                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, typeIds);
+                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, typeIds, SportPeriodType.QUARTERS_BASED);
 
                 expect(result).toEqual([10021]); // Full game typeIds excluded
             });
 
             it('Should include full game typeIds when game is completed', () => {
                 const typeIds = [10021, 10022, 10001, 10002];
-                const result = canResolveMarketsForEvent(MockSoccerCompletedEvent, typeIds);
+                const result = canResolveMarketsForEvent(MockSoccerCompletedEvent, typeIds, SportPeriodType.HALVES_BASED);
 
                 expect(result).toEqual([10021, 10022, 10001, 10002]);
             });
 
             it('Should return empty array when no typeIds are resolvable', () => {
                 const typeIds = [10022, 10023, 10024];
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, typeIds);
+                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, typeIds, SportPeriodType.HALVES_BASED);
 
                 expect(result).toEqual([]);
             });
 
             it('Should return multiple period typeIds for NFL game in 3rd quarter', () => {
-                const typeIds = [10021, 10022, 10023, 10024, 10031, 10032];
-                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, typeIds);
+                const typeIds = [10021, 10022, 10023, 10024, 10031, 10032, 10051];
+                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, typeIds, SportPeriodType.QUARTERS_BASED);
 
-                // Periods 1 and 2 are complete
-                expect(result).toEqual([10021, 10022, 10031, 10032]);
+                // Periods 1 and 2 are complete (period 2 also completes 1st half = 10051)
+                expect(result).toEqual([10021, 10022, 10031, 10032, 10051]);
             });
 
             it('Should handle all 9 periods for completed MLB game', () => {
                 const typeIds = [10021, 10022, 10023, 10024, 10025, 10026, 10027, 10028, 10029];
-                const result = canResolveMarketsForEvent(MockMLBCompletedEvent, typeIds);
+                const result = canResolveMarketsForEvent(MockMLBCompletedEvent, typeIds, SportPeriodType.INNINGS_BASED);
 
                 expect(result).toEqual(typeIds); // All 9 innings complete
             });
 
             it('Should return empty array when no periods complete', () => {
                 const typeIds = [10021, 10022, 10031];
-                const result = canResolveMarketsForEvent(MockSoccerLiveFirstHalf, typeIds);
+                const result = canResolveMarketsForEvent(MockSoccerLiveFirstHalf, typeIds, SportPeriodType.HALVES_BASED);
 
                 expect(result).toEqual([]);
             });
@@ -846,7 +847,7 @@ describe('Resolution Utils', () => {
 
         describe('Edge cases', () => {
             it('Should handle event with no completed periods', () => {
-                const result = canResolveMarketsForEvent(MockSoccerLiveFirstHalfInProgress, 10021);
+                const result = canResolveMarketsForEvent(MockSoccerLiveFirstHalfInProgress, 10021, SportPeriodType.HALVES_BASED);
                 expect(result).toBe(false);
             });
 
@@ -855,18 +856,18 @@ describe('Resolution Utils', () => {
                 const fullGameTypeIds = [0, 10001, 10002, 10003, 10004, 10010, 10011, 10012];
 
                 fullGameTypeIds.forEach((typeId) => {
-                    const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, typeId);
+                    const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, typeId, SportPeriodType.QUARTERS_BASED);
                     expect(result).toBe(false);
                 });
             });
 
-            it('Should work with sport name override parameter for single typeId', () => {
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 10021, 'soccer');
+            it('Should work with sport type parameter for single typeId', () => {
+                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, 10021, SportPeriodType.HALVES_BASED);
                 expect(result).toBe(true);
             });
 
-            it('Should work with sport name override parameter for batch typeIds', () => {
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, [10021, 10022], 'soccer');
+            it('Should work with sport type parameter for batch typeIds', () => {
+                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, [10021, 10022], SportPeriodType.HALVES_BASED);
                 expect(result).toEqual([10021]);
             });
         });
@@ -882,45 +883,160 @@ describe('Resolution Utils', () => {
             });
 
             it('Should resolve all quarter typeIds (10021-10024) for completed overtime game', () => {
-                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10021)).toBe(true);
-                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10022)).toBe(true);
-                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10023)).toBe(true);
-                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10024)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10021, SportPeriodType.QUARTERS_BASED)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10022, SportPeriodType.QUARTERS_BASED)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10023, SportPeriodType.QUARTERS_BASED)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10024, SportPeriodType.QUARTERS_BASED)).toBe(true);
             });
 
             it('Should resolve overtime period typeId (10025)', () => {
-                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10025);
+                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10025, SportPeriodType.QUARTERS_BASED);
                 expect(result).toBe(true);
             });
 
             it('Should resolve full game typeIds for completed overtime game', () => {
-                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10001)).toBe(true);
-                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10002)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10001, SportPeriodType.QUARTERS_BASED)).toBe(true);
+                expect(canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10002, SportPeriodType.QUARTERS_BASED)).toBe(true);
             });
 
             it('Should return all resolvable typeIds including overtime in batch check', () => {
                 const typeIds = [10021, 10022, 10023, 10024, 10025, 10001];
-                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, typeIds);
+                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, typeIds, SportPeriodType.QUARTERS_BASED);
 
                 expect(result).toEqual(typeIds); // All should be resolvable (game completed with overtime)
             });
 
             it('Should return false for 8th period typeId (period did not occur)', () => {
-                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10028);
+                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10028, SportPeriodType.QUARTERS_BASED);
                 expect(result).toBe(false);
             });
 
             it('Should return false for 9th period typeId (period did not occur)', () => {
-                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10029);
+                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, 10029, SportPeriodType.QUARTERS_BASED);
                 expect(result).toBe(false);
             });
 
             it('Should not include non-existent periods in batch check', () => {
                 const typeIds = [10021, 10022, 10025, 10028, 10029];
-                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, typeIds);
+                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, typeIds, SportPeriodType.QUARTERS_BASED);
 
                 // Only periods 1, 2, and 5 occurred, so only their typeIds should be returned
                 expect(result).toEqual([10021, 10022, 10025]);
+            });
+        });
+
+        describe('Sport-type-specific resolution for typeId 10051 (1st half)', () => {
+            it('Soccer (HALVES_BASED): Should resolve typeId 10051 after period 1', () => {
+                // Soccer: Period 1 = 1st half
+                const result = canResolveMarketsForEvent(
+                    MockSoccerLiveSecondHalf,
+                    10051,
+                    SportPeriodType.HALVES_BASED
+                );
+                expect(result).toBe(true);
+            });
+
+            it('NFL (QUARTERS_BASED): Should resolve typeId 10051 after period 2', () => {
+                // NFL: Period 2 completes 1st half (quarters 1+2)
+                const result = canResolveMarketsForEvent(
+                    MockNFLLiveThirdQuarter,
+                    10051,
+                    SportPeriodType.QUARTERS_BASED
+                );
+                expect(result).toBe(true);
+            });
+
+            it('NFL (QUARTERS_BASED): Should NOT resolve typeId 10051 after only period 1', () => {
+                // Create mock with only period 1 complete
+                const mockNFLFirstQuarter = {
+                    ...MockNFLLiveThirdQuarter,
+                    scores: {
+                        home: { total: 7.0, periods: { period_1: 7.0 } },
+                        away: { total: 3.0, periods: { period_1: 3.0 } },
+                    },
+                    in_play: { period: '2', clock: '5:00' },
+                };
+
+                const result = canResolveMarketsForEvent(
+                    mockNFLFirstQuarter,
+                    10051,
+                    SportPeriodType.QUARTERS_BASED
+                );
+                expect(result).toBe(false);
+            });
+
+            it('MLB (INNINGS_BASED): Should resolve typeId 10051 after period 5', () => {
+                // MLB: Period 5 completes 1st half (innings 1-5)
+                const result = canResolveMarketsForEvent(
+                    MockMLBLiveSixthInning,
+                    10051,
+                    SportPeriodType.INNINGS_BASED
+                );
+                expect(result).toBe(true);
+            });
+
+            it('MLB (INNINGS_BASED): Should NOT resolve typeId 10051 after only period 4', () => {
+                // Create mock with only period 1-4 complete
+                const mockMLBFourthInning = {
+                    ...MockMLBLiveSixthInning,
+                    scores: {
+                        home: {
+                            total: 3.0,
+                            periods: {
+                                period_1: 0.0,
+                                period_2: 2.0,
+                                period_3: 1.0,
+                                period_4: 0.0,
+                            },
+                        },
+                        away: {
+                            total: 1.0,
+                            periods: {
+                                period_1: 1.0,
+                                period_2: 0.0,
+                                period_3: 0.0,
+                                period_4: 0.0,
+                            },
+                        },
+                    },
+                    in_play: { period: '5', clock: null },
+                };
+
+                const result = canResolveMarketsForEvent(
+                    mockMLBFourthInning,
+                    10051,
+                    SportPeriodType.INNINGS_BASED
+                );
+                expect(result).toBe(false);
+            });
+        });
+
+        describe('Sport-type-specific resolution for typeId 10052 (2nd half)', () => {
+            it('Soccer (HALVES_BASED): Should resolve typeId 10052 after period 2', () => {
+                const result = canResolveMarketsForEvent(
+                    MockSoccerCompletedEvent,
+                    10052,
+                    SportPeriodType.HALVES_BASED
+                );
+                expect(result).toBe(true);
+            });
+
+            it('NFL (QUARTERS_BASED): Should resolve typeId 10052 after period 4', () => {
+                const result = canResolveMarketsForEvent(
+                    MockNFLCompletedEvent,
+                    10052,
+                    SportPeriodType.QUARTERS_BASED
+                );
+                expect(result).toBe(true);
+            });
+
+            it('MLB (INNINGS_BASED): Should resolve typeId 10052 after period 9', () => {
+                const result = canResolveMarketsForEvent(
+                    MockMLBCompletedEvent,
+                    10052,
+                    SportPeriodType.INNINGS_BASED
+                );
+                expect(result).toBe(true);
             });
         });
     });
