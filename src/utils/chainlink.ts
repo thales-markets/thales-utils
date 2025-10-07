@@ -95,32 +95,6 @@ const getDataStreamEndpoint = (networkId: NetworkId) => {
     }
 };
 
-const getDataStreamCandlestickEndpoint = (networkId: NetworkId) => {
-    if (TEST_NETWORKS.includes(networkId)) {
-        return DATA_STREAMS_CANDLESTICK_ENDPOINTS.testnet;
-    } else {
-        return DATA_STREAMS_CANDLESTICK_ENDPOINTS.mainnet;
-    }
-};
-
-export const getApiAccessToken = async (apiKey: string, apiSecret: string, networkId: NetworkId) => {
-    const url = `${getDataStreamCandlestickEndpoint(networkId)}${DATA_STREAMS_CANDLESTICK_PATHS.auth}`;
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ login: apiKey, password: apiSecret }).toString(),
-    });
-
-    if (!response.ok) {
-        const text = await response.text();
-        console.error(`Chainlink get access token API (${url}) error (status ${response.status}): ${text}`);
-    }
-
-    const responseData = await response.json();
-    return responseData.d.access_token;
-};
-
 export const fetchSingleReport = async (
     apiKey: string,
     apiSecret: string,
@@ -214,4 +188,30 @@ export const parseChainlinkFullReport = (networkId: NetworkId, fullReport: strin
         bid,
         ask,
     };
+};
+
+export const getDataStreamCandlestickEndpoint = (networkId: NetworkId) => {
+    if (TEST_NETWORKS.includes(networkId)) {
+        return DATA_STREAMS_CANDLESTICK_ENDPOINTS.testnet;
+    } else {
+        return DATA_STREAMS_CANDLESTICK_ENDPOINTS.mainnet;
+    }
+};
+
+export const getCandlestickApiAccessToken = async (apiKey: string, apiSecret: string, networkId: NetworkId) => {
+    const url = `${getDataStreamCandlestickEndpoint(networkId)}${DATA_STREAMS_CANDLESTICK_PATHS.auth}`;
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ login: apiKey, password: apiSecret }).toString(),
+    });
+
+    if (!response.ok) {
+        const text = await response.text();
+        console.error(`Chainlink get access token API (${url}) error (status ${response.status}): ${text}`);
+    }
+
+    const responseData = await response.json();
+    return responseData.d.access_token;
 };
