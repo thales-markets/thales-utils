@@ -135,9 +135,9 @@ export const getFeedId = (networkId: NetworkId, asset: string) => {
 
 export const getAssetByFeedId = (networkId: NetworkId, feedID: string) => {
     if (TEST_NETWORKS.includes(networkId)) {
-        return Object.keys(FEED_ID.testnet).find((key) => FEED_ID.testnet[key] === '0x' + feedID) || 'assetNotFound';
+        return Object.keys(FEED_ID.testnet).find((key) => FEED_ID.testnet[key] === feedID) || 'assetNotFound';
     } else {
-        return Object.keys(FEED_ID.mainnet).find((key) => FEED_ID.mainnet[key] === '0x' + feedID) || 'assetNotFound';
+        return Object.keys(FEED_ID.mainnet).find((key) => FEED_ID.mainnet[key] === feedID) || 'assetNotFound';
     }
 };
 
