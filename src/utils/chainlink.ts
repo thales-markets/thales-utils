@@ -1,6 +1,7 @@
 import { DATA_STREAMS_ENDPOINTS, DATA_STREAMS_PATHS, FEED_ID } from '../constants/chainlink';
 import { COLLATERAL_DECIMALS, OTHER_COLLATERAL_DECIMALS } from '../constants/currency';
 import { TEST_NETWORKS } from '../constants/network';
+import { SPEED_MARKETS_PRICE_DECIMALS } from '../constants/speedMarkets';
 import { NetworkId } from '../enums/network';
 import { ParsedFullReport, SingleReport, SingleReportResponse } from '../types/chainlink';
 import { Coins } from '../types/tokens';
@@ -183,3 +184,6 @@ export const parseChainlinkFullReport = (networkId: NetworkId, fullReport: strin
         ask,
     };
 };
+
+export const normalizeCandlestickPrice = (price: number, asset: Coins) =>
+    (price / 10 ** COLLATERAL_DECIMALS[asset as Coins]) * SPEED_MARKETS_PRICE_DECIMALS;
