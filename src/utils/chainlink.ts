@@ -185,5 +185,5 @@ export const parseChainlinkFullReport = (networkId: NetworkId, fullReport: strin
     };
 };
 
-export const normalizeCandlestickPrice = (price: number, asset: Coins) =>
-    (price / 10 ** COLLATERAL_DECIMALS[asset as Coins]).toFixed(SPEED_MARKETS_PRICE_DECIMALS);
+export const normalizeCandlestickPrice = (price: number, asset: string) =>
+    (price / 10 ** OTHER_COLLATERAL_DECIMALS[asset]).toFixed(SPEED_MARKETS_PRICE_DECIMALS);

@@ -38,7 +38,9 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
 };
 
 export const OTHER_COLLATERAL_DECIMALS: Record<string, number> = {
+    ...COLLATERAL_DECIMALS,
     LINK: 18,
+    BTC: 18,
 };
 
 export const DEFAULT_CURRENCY_DECIMALS = 2;
