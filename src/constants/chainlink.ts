@@ -12,16 +12,6 @@ export const DATA_STREAMS_PATHS = {
     latest: '/api/v1/reports/latest',
 };
 
-export const DATA_STREAMS_CANDLESTICK_ENDPOINTS = {
-    testnet: 'https://priceapi.testnet-dataengine.chain.link',
-    mainnet: 'https://priceapi.dataengine.chain.link',
-};
-
-export const DATA_STREAMS_CANDLESTICK_PATHS = {
-    auth: '/api/v1/authorize',
-    history: '/api/v1/history',
-};
-
 // You can find the ids of feeds at https://docs.chain.link/data-streams/crypto-streams
 export const FEED_ID = {
     testnet: {
