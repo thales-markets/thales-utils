@@ -1,8 +1,8 @@
 import {
     detectCompletedPeriods,
-    canResolveMarketForGameIdAndSport,
-    canResolveMarketViaOpticOddsApi,
     canResolveMarketsForEvent,
+    canResolveMultipleTypeIdsForEvent,
+    filterMarketsThatCanBeResolved,
 } from '../../utils/resolution';
 import { SportPeriodType } from '../../types/resolution';
 import {
@@ -570,173 +570,6 @@ describe('Resolution Utils', () => {
         });
     });
 
-    describe('canResolveMarketForGameIdAndSport', () => {
-        it('Should return true when game can be resolved', () => {
-            const event = {
-                sport: {
-                    name: 'Soccer',
-                },
-                fixture: {
-                    id: 'match-123',
-                    status: 'live',
-                    is_live: true,
-                },
-                scores: {
-                    home: {
-                        total: 2.0,
-                        periods: {
-                            period_1: 1.0,
-                        },
-                    },
-                    away: {
-                        total: 1.0,
-                        periods: {
-                            period_1: 1.0,
-                        },
-                    },
-                },
-                in_play: {
-                    period: '2',
-                },
-            };
-
-            const result = canResolveMarketForGameIdAndSport('match-123', event);
-
-            expect(result).toBe(true);
-        });
-
-        it('Should return false when gameId does not match', () => {
-            const event = {
-                sport: {
-                    name: 'Soccer',
-                },
-                fixture: {
-                    id: 'match-456',
-                    status: 'live',
-                    is_live: true,
-                },
-                scores: {
-                    home: {
-                        total: 1.0,
-                        periods: {
-                            period_1: 1.0,
-                        },
-                    },
-                    away: {
-                        total: 0.0,
-                        periods: {
-                            period_1: 0.0,
-                        },
-                    },
-                },
-                in_play: {
-                    period: '2',
-                },
-            };
-
-            const result = canResolveMarketForGameIdAndSport('match-999', event);
-
-            expect(result).toBe(false);
-        });
-
-        it('Should return false when no periods are completed', () => {
-            const event = {
-                sport: {
-                    name: 'Basketball',
-                },
-                fixture: {
-                    id: 'match-789',
-                    status: 'live',
-                    is_live: true,
-                },
-                scores: {
-                    home: {
-                        total: 15.0,
-                        periods: {},
-                    },
-                    away: {
-                        total: 12.0,
-                        periods: {},
-                    },
-                },
-                in_play: {
-                    period: '1',
-                },
-            };
-
-            const result = canResolveMarketForGameIdAndSport('match-789', event);
-
-            expect(result).toBe(false);
-        });
-    });
-
-    describe('canResolveMarketViaOpticOddsApi', () => {
-        it('Should return period resolution data when available', () => {
-            const event = {
-                sport: {
-                    name: 'Tennis',
-                },
-                fixture: {
-                    id: 'api-test-1',
-                    status: 'live',
-                    is_live: true,
-                },
-                scores: {
-                    home: {
-                        total: 1.0,
-                        periods: {
-                            period_1: 7.0,
-                        },
-                    },
-                    away: {
-                        total: 0.0,
-                        periods: {
-                            period_1: 5.0,
-                        },
-                    },
-                },
-                in_play: {
-                    period: '2',
-                },
-            };
-
-            const result = canResolveMarketViaOpticOddsApi(event);
-
-            expect(result).not.toBeNull();
-            expect(result?.completedPeriods).toEqual([1]);
-            expect(result?.readyForResolution).toBe(true);
-        });
-
-        it('Should return null when no periods completed', () => {
-            const event = {
-                sport: {
-                    name: 'Soccer',
-                },
-                fixture: {
-                    id: 'api-test-2',
-                    status: 'live',
-                    is_live: true,
-                },
-                scores: {
-                    home: {
-                        total: 0.0,
-                        periods: {},
-                    },
-                    away: {
-                        total: 0.0,
-                        periods: {},
-                    },
-                },
-                in_play: {
-                    period: '1',
-                },
-            };
-
-            const result = canResolveMarketViaOpticOddsApi(event);
-
-            expect(result).toBeNull();
-        });
-    });
 
     describe('canResolveMarketsForEvent', () => {
         describe('Single typeId checks', () => {
@@ -796,35 +629,35 @@ describe('Resolution Utils', () => {
         describe('Batch typeIds checks', () => {
             it('Should return only resolvable typeIds for live soccer in 2nd half', () => {
                 const typeIds = [10021, 10022, 10031, 10001];
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, typeIds, SportPeriodType.HALVES_BASED);
+                const result = filterMarketsThatCanBeResolved(MockSoccerLiveSecondHalf, typeIds, SportPeriodType.HALVES_BASED);
 
                 expect(result).toEqual([10021, 10031]); // Only period 1 typeIds
             });
 
             it('Should exclude full game typeIds during live game', () => {
                 const typeIds = [10021, 10001, 10002, 10003];
-                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, typeIds, SportPeriodType.QUARTERS_BASED);
+                const result = filterMarketsThatCanBeResolved(MockNFLLiveThirdQuarter, typeIds, SportPeriodType.QUARTERS_BASED);
 
                 expect(result).toEqual([10021]); // Full game typeIds excluded
             });
 
             it('Should include full game typeIds when game is completed', () => {
                 const typeIds = [10021, 10022, 10001, 10002];
-                const result = canResolveMarketsForEvent(MockSoccerCompletedEvent, typeIds, SportPeriodType.HALVES_BASED);
+                const result = filterMarketsThatCanBeResolved(MockSoccerCompletedEvent, typeIds, SportPeriodType.HALVES_BASED);
 
                 expect(result).toEqual([10021, 10022, 10001, 10002]);
             });
 
             it('Should return empty array when no typeIds are resolvable', () => {
                 const typeIds = [10022, 10023, 10024];
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, typeIds, SportPeriodType.HALVES_BASED);
+                const result = filterMarketsThatCanBeResolved(MockSoccerLiveSecondHalf, typeIds, SportPeriodType.HALVES_BASED);
 
                 expect(result).toEqual([]);
             });
 
             it('Should return multiple period typeIds for NFL game in 3rd quarter', () => {
                 const typeIds = [10021, 10022, 10023, 10024, 10031, 10032, 10051];
-                const result = canResolveMarketsForEvent(MockNFLLiveThirdQuarter, typeIds, SportPeriodType.QUARTERS_BASED);
+                const result = filterMarketsThatCanBeResolved(MockNFLLiveThirdQuarter, typeIds, SportPeriodType.QUARTERS_BASED);
 
                 // Periods 1 and 2 are complete (period 2 also completes 1st half = 10051)
                 expect(result).toEqual([10021, 10022, 10031, 10032, 10051]);
@@ -832,16 +665,75 @@ describe('Resolution Utils', () => {
 
             it('Should handle all 9 periods for completed MLB game', () => {
                 const typeIds = [10021, 10022, 10023, 10024, 10025, 10026, 10027, 10028, 10029];
-                const result = canResolveMarketsForEvent(MockMLBCompletedEvent, typeIds, SportPeriodType.INNINGS_BASED);
+                const result = filterMarketsThatCanBeResolved(MockMLBCompletedEvent, typeIds, SportPeriodType.INNINGS_BASED);
 
                 expect(result).toEqual(typeIds); // All 9 innings complete
             });
 
             it('Should return empty array when no periods complete', () => {
                 const typeIds = [10021, 10022, 10031];
-                const result = canResolveMarketsForEvent(MockSoccerLiveFirstHalf, typeIds, SportPeriodType.HALVES_BASED);
+                const result = filterMarketsThatCanBeResolved(MockSoccerLiveFirstHalf, typeIds, SportPeriodType.HALVES_BASED);
 
                 expect(result).toEqual([]);
+            });
+        });
+
+        describe('Multiple typeIds boolean array checks', () => {
+            it('Should return boolean array for live soccer in 2nd half', () => {
+                const typeIds = [10021, 10022, 10031, 10001];
+                const result = canResolveMultipleTypeIdsForEvent(MockSoccerLiveSecondHalf, typeIds, SportPeriodType.HALVES_BASED);
+
+                expect(result).toEqual([true, false, true, false]); // Period 1 typeIds are true, period 2 and full game are false
+            });
+
+            it('Should return false for full game typeIds during live game', () => {
+                const typeIds = [10021, 10001, 10002, 10003];
+                const result = canResolveMultipleTypeIdsForEvent(MockNFLLiveThirdQuarter, typeIds, SportPeriodType.QUARTERS_BASED);
+
+                expect(result).toEqual([true, false, false, false]); // Only period 1 is true
+            });
+
+            it('Should return all true for completed game', () => {
+                const typeIds = [10021, 10022, 10001, 10002];
+                const result = canResolveMultipleTypeIdsForEvent(MockSoccerCompletedEvent, typeIds, SportPeriodType.HALVES_BASED);
+
+                expect(result).toEqual([true, true, true, true]); // All complete
+            });
+
+            it('Should return all false when no typeIds are resolvable', () => {
+                const typeIds = [10022, 10023, 10024];
+                const result = canResolveMultipleTypeIdsForEvent(MockSoccerLiveSecondHalf, typeIds, SportPeriodType.HALVES_BASED);
+
+                expect(result).toEqual([false, false, false]);
+            });
+
+            it('Should return mixed booleans for NFL game in 3rd quarter', () => {
+                const typeIds = [10021, 10022, 10023, 10024, 10031, 10032, 10051];
+                const result = canResolveMultipleTypeIdsForEvent(MockNFLLiveThirdQuarter, typeIds, SportPeriodType.QUARTERS_BASED);
+
+                // Periods 1 and 2 are complete (period 2 also completes 1st half = 10051)
+                expect(result).toEqual([true, true, false, false, true, true, true]);
+            });
+
+            it('Should handle all 9 periods for completed MLB game', () => {
+                const typeIds = [10021, 10022, 10023, 10024, 10025, 10026, 10027, 10028, 10029];
+                const result = canResolveMultipleTypeIdsForEvent(MockMLBCompletedEvent, typeIds, SportPeriodType.INNINGS_BASED);
+
+                expect(result).toEqual([true, true, true, true, true, true, true, true, true]); // All 9 innings complete
+            });
+
+            it('Should return all false when no periods complete', () => {
+                const typeIds = [10021, 10022, 10031];
+                const result = canResolveMultipleTypeIdsForEvent(MockSoccerLiveFirstHalf, typeIds, SportPeriodType.HALVES_BASED);
+
+                expect(result).toEqual([false, false, false]);
+            });
+
+            it('Should work with numeric sport type parameter', () => {
+                const typeIds = [10021, 10022];
+                const result = canResolveMultipleTypeIdsForEvent(MockSoccerLiveSecondHalf, typeIds, 0); // 0 = HALVES_BASED
+
+                expect(result).toEqual([true, false]);
             });
         });
 
@@ -867,7 +759,7 @@ describe('Resolution Utils', () => {
             });
 
             it('Should work with sport type parameter for batch typeIds', () => {
-                const result = canResolveMarketsForEvent(MockSoccerLiveSecondHalf, [10021, 10022], SportPeriodType.HALVES_BASED);
+                const result = filterMarketsThatCanBeResolved(MockSoccerLiveSecondHalf, [10021, 10022], SportPeriodType.HALVES_BASED);
                 expect(result).toEqual([10021]);
             });
         });
@@ -901,7 +793,7 @@ describe('Resolution Utils', () => {
 
             it('Should return all resolvable typeIds including overtime in batch check', () => {
                 const typeIds = [10021, 10022, 10023, 10024, 10025, 10001];
-                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, typeIds, SportPeriodType.QUARTERS_BASED);
+                const result = filterMarketsThatCanBeResolved(MockNFLCompletedWithOvertime, typeIds, SportPeriodType.QUARTERS_BASED);
 
                 expect(result).toEqual(typeIds); // All should be resolvable (game completed with overtime)
             });
@@ -918,7 +810,7 @@ describe('Resolution Utils', () => {
 
             it('Should not include non-existent periods in batch check', () => {
                 const typeIds = [10021, 10022, 10025, 10028, 10029];
-                const result = canResolveMarketsForEvent(MockNFLCompletedWithOvertime, typeIds, SportPeriodType.QUARTERS_BASED);
+                const result = filterMarketsThatCanBeResolved(MockNFLCompletedWithOvertime, typeIds, SportPeriodType.QUARTERS_BASED);
 
                 // Only periods 1, 2, and 5 occurred, so only their typeIds should be returned
                 expect(result).toEqual([10021, 10022, 10025]);
