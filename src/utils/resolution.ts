@@ -132,29 +132,28 @@ function selectMappingForSportType(sportType: SportPeriodType): { [period: numbe
 }
 
 /**
- * Checks if a specific market type can be resolved based on completed periods
+ * Checks if a specific market type can be resolved based on completed periods (Enum version)
  *
  * @example
  * // Check single typeId for NFL (quarters-based)
  * const canResolve = canResolveMarketsForEvent(event, 10021, SportPeriodType.QUARTERS_BASED);
- * // Or using number
- * const canResolve = canResolveMarketsForEvent(event, 10021, 1);
  *
  * // Check with period-based (no halves/secondary moneyline)
  * const canResolve = canResolveMarketsForEvent(event, 10021, SportPeriodType.PERIOD_BASED);
+ *
+ * @param event - OpticOdds event object containing fixture data
+ * @param typeId - The market type identifier
+ * @param sportType - The sport period type enum
+ * @returns true if the market can be resolved based on completed periods
  */
 export function canResolveMarketsForEvent(
     event: OpticOddsEvent,
     typeId: number,
-    sportType: SportPeriodType | number
+    sportType: SportPeriodType
 ): boolean {
-    // Get completed periods
     const periodData = detectCompletedPeriods(event);
-    if (!periodData) {
-        return false;
-    }
+    if (!periodData) return false;
 
-    // Check if game is fully completed
     const status = (event.fixture?.status || event.status || '').toLowerCase();
     const isCompleted = status === 'completed' || status === 'complete' || status === 'finished';
 
@@ -163,15 +162,10 @@ export function canResolveMarketsForEvent(
         return isCompleted;
     }
 
-    // Convert number to SportPeriodType if needed
-    const sportTypeEnum = typeof sportType === 'number' ? mapNumberToSportPeriodType(sportType) : sportType;
-
     // Select appropriate mapping based on sport type
-    const mapping = selectMappingForSportType(sportTypeEnum);
+    const mapping = selectMappingForSportType(sportType);
 
-    // Collect all resolvable typeIds based on completed periods
     const resolvableTypeIds = new Set<number>();
-
     for (const period of periodData.completedPeriods) {
         const typeIdsForPeriod = mapping[period] || [];
         typeIdsForPeriod.forEach((id) => resolvableTypeIds.add(id));
@@ -179,6 +173,28 @@ export function canResolveMarketsForEvent(
 
     return resolvableTypeIds.has(typeId);
 }
+
+/**
+ * Checks if a specific market type can be resolved based on completed periods (Number version)
+ *
+ * @example
+ * // Check single typeId for NFL (quarters-based)
+ * const canResolve = canResolveMarketsForEventNumber(event, 10021, 1);
+ *
+ * @param event - OpticOdds event object containing fixture data
+ * @param typeId - The market type identifier
+ * @param sportTypeNumber - Numeric value representing the sport period type
+ * @returns true if the market can be resolved based on completed periods
+ */
+export function canResolveMarketsForEventNumber(
+    event: OpticOddsEvent,
+    typeId: number,
+    sportTypeNumber: number
+): boolean {
+    const sportTypeEnum = mapNumberToSportPeriodType(sportTypeNumber);
+    return canResolveMarketsForEvent(event, typeId, sportTypeEnum);
+}
+
 
 /**
  * Checks if multiple market types can be resolved, returning a boolean for each
