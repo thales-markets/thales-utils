@@ -1,4 +1,3 @@
-import { TEST_NETWORKS } from '../constants/network';
 import { NetworkId } from '../enums/network';
 import { OracleSource } from '../enums/priceOracles';
 import { AssetPriceDataAtTimestamp } from '../types/prices';
@@ -52,8 +51,6 @@ export const getPriceDataAtTimestampFromOracle = async (
         nativeFee: BigInt(0),
     };
 
-    const isTestNetwork = TEST_NETWORKS.includes(networkId);
-
     switch (oracle) {
         case OracleSource.Pyth:
             const priceId = getPriceId(networkId, asset);
@@ -72,7 +69,7 @@ export const getPriceDataAtTimestampFromOracle = async (
                 priceUpdateData: [report.fullReport],
                 price: parsedReport.price,
                 timestamp: parsedReport.validFromTimestamp,
-                nativeFee: isTestNetwork ? parsedReport.nativeFee : BigInt(0), // Currently not paying fees to Chainlink on mainnets
+                nativeFee: BigInt(0), // Currently not paying fees to Chainlink on mainnets (parsedReport.nativeFee)
             };
             break;
     }
