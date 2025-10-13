@@ -28,6 +28,7 @@ export const PYTH_API_TIMEOUT_MS = 15000;
 
 // You can find at https://docs.pyth.network/price-feeds/contract-addresses/evm
 export const PYTH_CONTRACT_ADDRESS = {
+    [NetworkId.Mainnet]: '0x4305FB66699C3B2702D4d05CF36551390A4c69C6' as Address, // not in use
     [NetworkId.OptimismMainnet]: '0xff1a0f4744e8582DF1aE09D5611b887B6a12925C' as Address,
     [NetworkId.Arbitrum]: '0xff1a0f4744e8582DF1aE09D5611b887B6a12925C' as Address,
     [NetworkId.Base]: '0x8250f4aF4B972684F7b336503E2D6dFeDeB1487a' as Address,

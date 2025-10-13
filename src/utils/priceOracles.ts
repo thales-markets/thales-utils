@@ -64,13 +64,15 @@ export const getPriceDataAtTimestampFromOracle = async (
         case OracleSource.Chainlink:
             const feedId = getFeedId(networkId, asset);
             const report = await fetchSingleReport(apiKey, apiSecret, networkId, feedId, timestampSec);
-            const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
-            priceData = {
-                priceUpdateData: [report.fullReport],
-                price: parsedReport.price,
-                timestamp: parsedReport.validFromTimestamp,
-                nativeFee: BigInt(0), // Currently not paying fees to Chainlink on mainnets (parsedReport.nativeFee)
-            };
+            if (report.fullReport) {
+                const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
+                priceData = {
+                    priceUpdateData: [report.fullReport],
+                    price: parsedReport.price,
+                    timestamp: parsedReport.validFromTimestamp,
+                    nativeFee: BigInt(0), // Currently not paying fees to Chainlink on mainnets (parsedReport.nativeFee)
+                };
+            }
             break;
     }
 

@@ -142,7 +142,9 @@ export const getAssetByFeedId = (networkId: NetworkId, feedID: string) => {
 };
 
 export const parseChainlinkFullReport = (networkId: NetworkId, fullReport: string): ParsedFullReport => {
-    if (fullReport.startsWith('0x')) fullReport = fullReport.slice(2);
+    if (fullReport.startsWith('0x')) {
+        fullReport = fullReport.slice(2);
+    }
 
     let offset = 256 * 2; // Skip context header first 256 bytes
 
