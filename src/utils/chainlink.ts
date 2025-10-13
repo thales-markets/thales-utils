@@ -1,4 +1,3 @@
-import * as thisCrypto from 'crypto';
 import { DATA_STREAMS_ENDPOINTS, DATA_STREAMS_PATHS, FEED_ID } from '../constants/chainlink';
 import { COLLATERAL_DECIMALS, OTHER_COLLATERAL_DECIMALS } from '../constants/currency';
 import { TEST_NETWORKS } from '../constants/network';
@@ -30,14 +29,14 @@ const sha256 = async (data: string | ArrayBuffer): Promise<string> => {
         buffer = data as ArrayBuffer;
     }
 
-    const hashBuffer = await thisCrypto.subtle.digest('SHA-256', buffer);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
     return bufferToHex(hashBuffer);
 };
 
 /** Generate HMAC-SHA256 */
 const hmacSha256 = async (key: string, message: string): Promise<string> => {
     const keyData = toUint8Array(key);
-    const cryptoKey = await thisCrypto.subtle.importKey(
+    const cryptoKey = await crypto.subtle.importKey(
         'raw',
         keyData.buffer as ArrayBuffer,
         { name: 'HMAC', hash: 'SHA-256' },
@@ -46,7 +45,7 @@ const hmacSha256 = async (key: string, message: string): Promise<string> => {
     );
 
     const messageData = toUint8Array(message);
-    const signatureBuffer = await thisCrypto.subtle.sign('HMAC', cryptoKey, messageData.buffer as ArrayBuffer);
+    const signatureBuffer = await crypto.subtle.sign('HMAC', cryptoKey, messageData.buffer as ArrayBuffer);
 
     return bufferToHex(signatureBuffer);
 };
