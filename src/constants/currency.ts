@@ -1,4 +1,24 @@
+import { keyBy } from 'lodash';
 import { Coins } from '../types/tokens';
+
+const CRYPTO_CURRENCY = [
+    'DAI',
+    'USDCe',
+    'USDC',
+    'USDT',
+    'OP',
+    'WETH',
+    'ETH',
+    'ARB',
+    'USDbC',
+    'THALES',
+    'sTHALES',
+    'OVER',
+    'cbBTC',
+    'BTC',
+    'wBTC',
+];
+export const CRYPTO_CURRENCY_MAP = keyBy(CRYPTO_CURRENCY);
 
 export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     DAI: 18,
@@ -15,6 +35,12 @@ export const COLLATERAL_DECIMALS: Record<Coins, number> = {
     OVER: 18,
     cbBTC: 8,
     wBTC: 8,
+};
+
+export const OTHER_COLLATERAL_DECIMALS: Record<string, number> = {
+    ...COLLATERAL_DECIMALS,
+    LINK: 18,
+    BTC: 18,
 };
 
 export const DEFAULT_CURRENCY_DECIMALS = 2;
