@@ -22,7 +22,10 @@ const parseTimeToMinutes = (str: string): number => {
  * @param config The configuration array.
  * @param networkId The network name to match.
  */
-export const getOracleSource = (networkId: number, config = SPEED_MARKETS_CONFIG as ConfigItem[]): OracleSource => {
+export const getCurrentOracleSource = (
+    networkId: number,
+    config = SPEED_MARKETS_CONFIG as ConfigItem[]
+): OracleSource => {
     const now = new Date();
     const currentDay = now.toLocaleString('en-US', { weekday: 'long', timeZone: 'UTC' });
     const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
@@ -60,7 +63,7 @@ export const getOracleSource = (networkId: number, config = SPEED_MARKETS_CONFIG
  * @param config The configuration array.
  * @param networkId The network name to match.
  */
-export const getMinDeltaTime = (networkId: number, config = SPEED_MARKETS_CONFIG as ConfigItem[]): number => {
+export const getCurrentMinDeltaTime = (networkId: number, config = SPEED_MARKETS_CONFIG as ConfigItem[]): number => {
     const now = new Date();
     const currentDay = now.toLocaleString('en-US', { weekday: 'long', timeZone: 'UTC' });
     const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
