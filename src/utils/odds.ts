@@ -524,6 +524,29 @@ export const groupAndFormatGGOdds = (oddsArray: any[]) => {
 };
 
 /**
+ * Normalize a score line like "A:B" to a map-friendly key "A_B" with
+ * numeric normalization (removing any leading zeros).
+ *
+ * Behavior:
+ * - Accepts optional whitespace around the colon (e.g., "03 : 10").
+ * - Parses both sides as numbers to strip leading zeros:
+ *     "13:09" → "13_9", "13:00" → "13_0", "03:10" → "3_10".
+ * - If the input does NOT match "<digits> : <digits>", falls back to a simple
+ *   string replace of ":" with "_" without numeric parsing.
+ *
+ * @param {string|number} line
+ *   A score string (e.g., "13:09") or any value coercible to string.
+ *
+ * @returns {string}
+ *   The normalized key (e.g., "13_9"). If not a digit:digit pattern, returns
+ *   the string with ":" replaced by "_".
+ */
+function normalizeScoreLine(line: any) {
+    const m = String(line).match(/(\d+)\s*:\s*(\d+)/);
+    return m ? `${Number(m[1])}_${Number(m[2])}` : String(line).replace(':', '_');
+}
+
+/**
  * Groups correct score odds by their lines and formats the result.
  *
  * @param {Array} oddsArray - The input array of odds objects.
@@ -534,65 +557,280 @@ export const groupAndFormatCorrectScoreOdds = (oddsArray: any[], commonData: Hom
     const homeTeamKey = commonData.homeTeam.toLowerCase().replace(/\s+/g, '_');
     const awayTeamKey = commonData.awayTeam.toLowerCase().replace(/\s+/g, '_');
 
-    const oddsMap = {
-        draw_0_0: 0,
-        draw_1_1: 0,
-        draw_2_2: 0,
-        draw_3_3: 0,
-        draw_4_4: 0,
-        [`${homeTeamKey}_1_0`]: 0,
-        [`${homeTeamKey}_2_0`]: 0,
-        [`${homeTeamKey}_2_1`]: 0,
-        [`${homeTeamKey}_3_0`]: 0,
-        [`${homeTeamKey}_3_1`]: 0,
-        [`${homeTeamKey}_3_2`]: 0,
-        [`${homeTeamKey}_4_0`]: 0,
-        [`${homeTeamKey}_4_1`]: 0,
-        [`${homeTeamKey}_4_2`]: 0,
-        [`${homeTeamKey}_4_3`]: 0,
-        [`${awayTeamKey}_1_0`]: 0,
-        [`${awayTeamKey}_2_0`]: 0,
-        [`${awayTeamKey}_2_1`]: 0,
-        [`${awayTeamKey}_3_0`]: 0,
-        [`${awayTeamKey}_3_1`]: 0,
-        [`${awayTeamKey}_3_2`]: 0,
-        [`${awayTeamKey}_4_0`]: 0,
-        [`${awayTeamKey}_4_1`]: 0,
-        [`${awayTeamKey}_4_2`]: 0,
-        [`${awayTeamKey}_4_3`]: 0,
-        other: 0,
-    };
+    // Group odds by typeId first
+    const oddsByTypeId = oddsArray.reduce((acc: any, odd: any) => {
+        const typeId = odd.typeId || 10100;
+        if (!acc[typeId]) {
+            acc[typeId] = [];
+        }
+        acc[typeId].push(odd);
+        return acc;
+    }, {});
 
-    // Populate the oddsMap with the odds from the provided array
-    oddsArray.forEach((odd) => {
-        const normalizedSelection = `${odd.selection.toLowerCase().replace(/\s+/g, '_')}_${odd.selectionLine.replace(
-            ':',
-            '_'
-        )}`;
-        if (oddsMap.hasOwnProperty(normalizedSelection)) {
-            oddsMap[normalizedSelection] = odd.price;
+    // Create market objects for each unique typeId
+    const marketObjects: any[] = [];
+
+    Object.entries(oddsByTypeId).forEach(([typeId, odds]: [string, any]) => {
+        const oddsMap = {
+            draw_0_0: 0,
+            draw_1_1: 0,
+            draw_2_2: 0,
+            draw_3_3: 0,
+            draw_4_4: 0,
+            [`${homeTeamKey}_1_0`]: 0,
+            [`${homeTeamKey}_2_0`]: 0,
+            [`${homeTeamKey}_2_1`]: 0,
+            [`${homeTeamKey}_3_0`]: 0,
+            [`${homeTeamKey}_3_1`]: 0,
+            [`${homeTeamKey}_3_2`]: 0,
+            [`${homeTeamKey}_4_0`]: 0,
+            [`${homeTeamKey}_4_1`]: 0,
+            [`${homeTeamKey}_4_2`]: 0,
+            [`${homeTeamKey}_4_3`]: 0,
+            [`${awayTeamKey}_1_0`]: 0,
+            [`${awayTeamKey}_2_0`]: 0,
+            [`${awayTeamKey}_2_1`]: 0,
+            [`${awayTeamKey}_3_0`]: 0,
+            [`${awayTeamKey}_3_1`]: 0,
+            [`${awayTeamKey}_3_2`]: 0,
+            [`${awayTeamKey}_4_0`]: 0,
+            [`${awayTeamKey}_4_1`]: 0,
+            [`${awayTeamKey}_4_2`]: 0,
+            [`${awayTeamKey}_4_3`]: 0,
+            draw_5_5: 0,
+            draw_6_6: 0,
+            draw_7_7: 0,
+            draw_8_8: 0,
+            draw_9_9: 0,
+            draw_10_10: 0,
+            draw_11_11: 0,
+            draw_12_12: 0,
+            draw_13_13: 0,
+            draw_14_14: 0,
+            [`${homeTeamKey}_5_0`]: 0,
+            [`${homeTeamKey}_5_1`]: 0,
+            [`${homeTeamKey}_5_2`]: 0,
+            [`${homeTeamKey}_5_3`]: 0,
+            [`${homeTeamKey}_5_4`]: 0,
+            [`${homeTeamKey}_6_0`]: 0,
+            [`${homeTeamKey}_6_1`]: 0,
+            [`${homeTeamKey}_6_2`]: 0,
+            [`${homeTeamKey}_6_3`]: 0,
+            [`${homeTeamKey}_6_4`]: 0,
+            [`${homeTeamKey}_6_5`]: 0,
+            [`${homeTeamKey}_7_0`]: 0,
+            [`${homeTeamKey}_7_1`]: 0,
+            [`${homeTeamKey}_7_2`]: 0,
+            [`${homeTeamKey}_7_3`]: 0,
+            [`${homeTeamKey}_7_4`]: 0,
+            [`${homeTeamKey}_7_5`]: 0,
+            [`${homeTeamKey}_7_6`]: 0,
+            [`${homeTeamKey}_8_0`]: 0,
+            [`${homeTeamKey}_8_1`]: 0,
+            [`${homeTeamKey}_8_2`]: 0,
+            [`${homeTeamKey}_8_3`]: 0,
+            [`${homeTeamKey}_8_4`]: 0,
+            [`${homeTeamKey}_8_5`]: 0,
+            [`${homeTeamKey}_8_6`]: 0,
+            [`${homeTeamKey}_8_7`]: 0,
+            [`${homeTeamKey}_9_0`]: 0,
+            [`${homeTeamKey}_9_1`]: 0,
+            [`${homeTeamKey}_9_2`]: 0,
+            [`${homeTeamKey}_9_3`]: 0,
+            [`${homeTeamKey}_9_4`]: 0,
+            [`${homeTeamKey}_9_5`]: 0,
+            [`${homeTeamKey}_9_6`]: 0,
+            [`${homeTeamKey}_9_7`]: 0,
+            [`${homeTeamKey}_9_8`]: 0,
+            [`${homeTeamKey}_10_0`]: 0,
+            [`${homeTeamKey}_10_1`]: 0,
+            [`${homeTeamKey}_10_2`]: 0,
+            [`${homeTeamKey}_10_3`]: 0,
+            [`${homeTeamKey}_10_4`]: 0,
+            [`${homeTeamKey}_10_5`]: 0,
+            [`${homeTeamKey}_10_6`]: 0,
+            [`${homeTeamKey}_10_7`]: 0,
+            [`${homeTeamKey}_10_8`]: 0,
+            [`${homeTeamKey}_10_9`]: 0,
+            [`${homeTeamKey}_11_0`]: 0,
+            [`${homeTeamKey}_11_1`]: 0,
+            [`${homeTeamKey}_11_2`]: 0,
+            [`${homeTeamKey}_11_3`]: 0,
+            [`${homeTeamKey}_11_4`]: 0,
+            [`${homeTeamKey}_11_5`]: 0,
+            [`${homeTeamKey}_11_6`]: 0,
+            [`${homeTeamKey}_11_7`]: 0,
+            [`${homeTeamKey}_11_8`]: 0,
+            [`${homeTeamKey}_11_9`]: 0,
+            [`${homeTeamKey}_11_10`]: 0,
+            [`${homeTeamKey}_12_0`]: 0,
+            [`${homeTeamKey}_12_1`]: 0,
+            [`${homeTeamKey}_12_2`]: 0,
+            [`${homeTeamKey}_12_3`]: 0,
+            [`${homeTeamKey}_12_4`]: 0,
+            [`${homeTeamKey}_12_5`]: 0,
+            [`${homeTeamKey}_12_6`]: 0,
+            [`${homeTeamKey}_12_7`]: 0,
+            [`${homeTeamKey}_12_8`]: 0,
+            [`${homeTeamKey}_12_9`]: 0,
+            [`${homeTeamKey}_12_10`]: 0,
+            [`${homeTeamKey}_12_11`]: 0,
+            [`${homeTeamKey}_13_0`]: 0,
+            [`${homeTeamKey}_13_1`]: 0,
+            [`${homeTeamKey}_13_2`]: 0,
+            [`${homeTeamKey}_13_3`]: 0,
+            [`${homeTeamKey}_13_4`]: 0,
+            [`${homeTeamKey}_13_5`]: 0,
+            [`${homeTeamKey}_13_6`]: 0,
+            [`${homeTeamKey}_13_7`]: 0,
+            [`${homeTeamKey}_13_8`]: 0,
+            [`${homeTeamKey}_13_9`]: 0,
+            [`${homeTeamKey}_13_10`]: 0,
+            [`${homeTeamKey}_13_11`]: 0,
+            [`${homeTeamKey}_13_12`]: 0,
+            [`${homeTeamKey}_14_0`]: 0,
+            [`${homeTeamKey}_14_1`]: 0,
+            [`${homeTeamKey}_14_2`]: 0,
+            [`${homeTeamKey}_14_3`]: 0,
+            [`${homeTeamKey}_14_4`]: 0,
+            [`${homeTeamKey}_14_5`]: 0,
+            [`${homeTeamKey}_14_6`]: 0,
+            [`${homeTeamKey}_14_7`]: 0,
+            [`${homeTeamKey}_14_8`]: 0,
+            [`${homeTeamKey}_14_9`]: 0,
+            [`${homeTeamKey}_14_10`]: 0,
+            [`${homeTeamKey}_14_11`]: 0,
+            [`${homeTeamKey}_14_12`]: 0,
+            [`${homeTeamKey}_14_13`]: 0,
+            [`${awayTeamKey}_5_0`]: 0,
+            [`${awayTeamKey}_5_1`]: 0,
+            [`${awayTeamKey}_5_2`]: 0,
+            [`${awayTeamKey}_5_3`]: 0,
+            [`${awayTeamKey}_5_4`]: 0,
+            [`${awayTeamKey}_6_0`]: 0,
+            [`${awayTeamKey}_6_1`]: 0,
+            [`${awayTeamKey}_6_2`]: 0,
+            [`${awayTeamKey}_6_3`]: 0,
+            [`${awayTeamKey}_6_4`]: 0,
+            [`${awayTeamKey}_6_5`]: 0,
+            [`${awayTeamKey}_7_0`]: 0,
+            [`${awayTeamKey}_7_1`]: 0,
+            [`${awayTeamKey}_7_2`]: 0,
+            [`${awayTeamKey}_7_3`]: 0,
+            [`${awayTeamKey}_7_4`]: 0,
+            [`${awayTeamKey}_7_5`]: 0,
+            [`${awayTeamKey}_7_6`]: 0,
+            [`${awayTeamKey}_8_0`]: 0,
+            [`${awayTeamKey}_8_1`]: 0,
+            [`${awayTeamKey}_8_2`]: 0,
+            [`${awayTeamKey}_8_3`]: 0,
+            [`${awayTeamKey}_8_4`]: 0,
+            [`${awayTeamKey}_8_5`]: 0,
+            [`${awayTeamKey}_8_6`]: 0,
+            [`${awayTeamKey}_8_7`]: 0,
+            [`${awayTeamKey}_9_0`]: 0,
+            [`${awayTeamKey}_9_1`]: 0,
+            [`${awayTeamKey}_9_2`]: 0,
+            [`${awayTeamKey}_9_3`]: 0,
+            [`${awayTeamKey}_9_4`]: 0,
+            [`${awayTeamKey}_9_5`]: 0,
+            [`${awayTeamKey}_9_6`]: 0,
+            [`${awayTeamKey}_9_7`]: 0,
+            [`${awayTeamKey}_9_8`]: 0,
+            [`${awayTeamKey}_10_0`]: 0,
+            [`${awayTeamKey}_10_1`]: 0,
+            [`${awayTeamKey}_10_2`]: 0,
+            [`${awayTeamKey}_10_3`]: 0,
+            [`${awayTeamKey}_10_4`]: 0,
+            [`${awayTeamKey}_10_5`]: 0,
+            [`${awayTeamKey}_10_6`]: 0,
+            [`${awayTeamKey}_10_7`]: 0,
+            [`${awayTeamKey}_10_8`]: 0,
+            [`${awayTeamKey}_10_9`]: 0,
+            [`${awayTeamKey}_11_0`]: 0,
+            [`${awayTeamKey}_11_1`]: 0,
+            [`${awayTeamKey}_11_2`]: 0,
+            [`${awayTeamKey}_11_3`]: 0,
+            [`${awayTeamKey}_11_4`]: 0,
+            [`${awayTeamKey}_11_5`]: 0,
+            [`${awayTeamKey}_11_6`]: 0,
+            [`${awayTeamKey}_11_7`]: 0,
+            [`${awayTeamKey}_11_8`]: 0,
+            [`${awayTeamKey}_11_9`]: 0,
+            [`${awayTeamKey}_11_10`]: 0,
+            [`${awayTeamKey}_12_0`]: 0,
+            [`${awayTeamKey}_12_1`]: 0,
+            [`${awayTeamKey}_12_2`]: 0,
+            [`${awayTeamKey}_12_3`]: 0,
+            [`${awayTeamKey}_12_4`]: 0,
+            [`${awayTeamKey}_12_5`]: 0,
+            [`${awayTeamKey}_12_6`]: 0,
+            [`${awayTeamKey}_12_7`]: 0,
+            [`${awayTeamKey}_12_8`]: 0,
+            [`${awayTeamKey}_12_9`]: 0,
+            [`${awayTeamKey}_12_10`]: 0,
+            [`${awayTeamKey}_12_11`]: 0,
+            [`${awayTeamKey}_13_0`]: 0,
+            [`${awayTeamKey}_13_1`]: 0,
+            [`${awayTeamKey}_13_2`]: 0,
+            [`${awayTeamKey}_13_3`]: 0,
+            [`${awayTeamKey}_13_4`]: 0,
+            [`${awayTeamKey}_13_5`]: 0,
+            [`${awayTeamKey}_13_6`]: 0,
+            [`${awayTeamKey}_13_7`]: 0,
+            [`${awayTeamKey}_13_8`]: 0,
+            [`${awayTeamKey}_13_9`]: 0,
+            [`${awayTeamKey}_13_10`]: 0,
+            [`${awayTeamKey}_13_11`]: 0,
+            [`${awayTeamKey}_13_12`]: 0,
+            [`${awayTeamKey}_14_0`]: 0,
+            [`${awayTeamKey}_14_1`]: 0,
+            [`${awayTeamKey}_14_2`]: 0,
+            [`${awayTeamKey}_14_3`]: 0,
+            [`${awayTeamKey}_14_4`]: 0,
+            [`${awayTeamKey}_14_5`]: 0,
+            [`${awayTeamKey}_14_6`]: 0,
+            [`${awayTeamKey}_14_7`]: 0,
+            [`${awayTeamKey}_14_8`]: 0,
+            [`${awayTeamKey}_14_9`]: 0,
+            [`${awayTeamKey}_14_10`]: 0,
+            [`${awayTeamKey}_14_11`]: 0,
+            [`${awayTeamKey}_14_12`]: 0,
+            [`${awayTeamKey}_14_13`]: 0,
+            other: 0,
+        };
+
+        // Populate the oddsMap with the odds from this typeId's odds
+        odds.forEach((odd: any) => {
+            const normalizedSelection = `${odd.selection.toLowerCase().replace(/\s+/g, '_')}_${normalizeScoreLine(
+                odd.selectionLine
+            )}`;
+            if (oddsMap.hasOwnProperty(normalizedSelection)) {
+                oddsMap[normalizedSelection] = odd.price;
+            }
+        });
+
+        const allOddsAreZero = Object.values(oddsMap).every((odd) => odd === ZERO);
+
+        if (!allOddsAreZero) {
+            const positionNames = Object.keys(oddsMap);
+
+            // Create a market object for this typeId
+            const marketObject = {
+                homeTeam: commonData.homeTeam,
+                awayTeam: commonData.awayTeam,
+                line: 0,
+                positionNames: positionNames,
+                odds: Object.values(oddsMap),
+                type: odds?.[0]?.type ? odds[0].type : 'Correct Score',
+                typeId: Number(typeId),
+                sportId: odds?.[0]?.sportId ? odds[0].sportId : undefined,
+            };
+            marketObjects.push(marketObject);
         }
     });
 
-    const allOddsAreZero = Object.values(oddsMap).every((odd) => odd === ZERO);
-
-    if (allOddsAreZero) {
-        return [];
-    }
-
-    const positionNames = Object.keys(oddsMap);
-
-    // Create the market object
-    const marketObject = {
-        homeTeam: commonData.homeTeam,
-        awayTeam: commonData.awayTeam,
-        line: 0,
-        positionNames: positionNames,
-        odds: Object.values(oddsMap),
-        type: 'Correct Score',
-        typeId: 10100,
-    };
-    return [marketObject];
+    return marketObjects;
 };
 
 /**
