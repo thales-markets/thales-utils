@@ -47,7 +47,7 @@ export const SPEED_MARKETS_CONFIG = [
         from: '',
         to: '',
         networks: [11155420],
-        value: 'Chainlink',
+        value: 'Pyth',
         defaultValue: 'Pyth',
     },
     {
