@@ -105,7 +105,7 @@ export const fetchSingleReport = async (
 
         const data = response.data as SingleReportResponse;
         return data.report;
-    } catch (error) {
+    } catch (error: any) {
         const status = error.response?.status || 'unknown';
         const errorMessage = error.response?.data || error.message;
         console.error(`Chainlink API (${url}) error (status ${status}): ${errorMessage}`);
