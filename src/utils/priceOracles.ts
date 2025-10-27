@@ -22,7 +22,7 @@ export const getCurrentPricesFromOracle = async (
             break;
         case OracleSource.Chainlink:
             const feedIds = assets.map((asset) => getFeedId(networkId, asset));
-            const promises = feedIds.map((feedId) => fetchSingleReport(apiUrl, axiosInstance, feedId));
+            const promises = feedIds.map((feedId) => fetchSingleReport(feedId, 0, apiUrl, axiosInstance));
             const reports = await Promise.all(promises);
             for (let i = 0; i < feedIds.length; i++) {
                 const feedId = feedIds[i];
@@ -64,7 +64,7 @@ export const getPriceDataAtTimestampFromOracle = async (
             break;
         case OracleSource.Chainlink:
             const feedId = getFeedId(networkId, asset);
-            const report = await fetchSingleReport(apiUrl, axiosInstance, feedId, timestampSec);
+            const report = await fetchSingleReport(feedId, timestampSec, apiUrl, axiosInstance);
             if (report.fullReport) {
                 const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
                 priceData = {
