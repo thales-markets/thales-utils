@@ -5,13 +5,7 @@ import { fetchSingleReport, getAssetByFeedId, getFeedId, parseChainlinkFullRepor
 import { getCurrentPrices, getPriceId, getPricesAtTimestamp, getSupportedAssetsAsObject } from './pyth';
 import { priceNumberFormatter } from './speedMarkets';
 
-export const getCurrentPricesFromOracle = async (
-    oracle: OracleSource,
-    networkId: NetworkId,
-    assets: string[],
-    apiKey: string,
-    apiSecret: string
-) => {
+export const getCurrentPricesFromOracle = async (oracle: OracleSource, networkId: NetworkId, assets: string[]) => {
     let prices = getSupportedAssetsAsObject();
 
     switch (oracle) {
@@ -21,7 +15,7 @@ export const getCurrentPricesFromOracle = async (
             break;
         case OracleSource.Chainlink:
             const feedIds = assets.map((asset) => getFeedId(networkId, asset));
-            const promises = feedIds.map((feedId) => fetchSingleReport(apiKey, apiSecret, networkId, feedId));
+            const promises = feedIds.map((feedId) => fetchSingleReport(networkId, feedId));
             const reports = await Promise.all(promises);
             for (let i = 0; i < feedIds.length; i++) {
                 const feedId = feedIds[i];
@@ -40,9 +34,7 @@ export const getPriceDataAtTimestampFromOracle = async (
     oracle: OracleSource,
     networkId: NetworkId,
     asset: string,
-    timestampSec: number,
-    apiKey: string,
-    apiSecret: string
+    timestampSec: number
 ) => {
     let priceData: AssetPriceDataAtTimestamp = {
         priceUpdateData: [],
@@ -63,7 +55,7 @@ export const getPriceDataAtTimestampFromOracle = async (
             break;
         case OracleSource.Chainlink:
             const feedId = getFeedId(networkId, asset);
-            const report = await fetchSingleReport(apiKey, apiSecret, networkId, feedId, timestampSec);
+            const report = await fetchSingleReport(networkId, feedId, timestampSec);
             if (report.fullReport) {
                 const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
                 priceData = {
