@@ -1,3 +1,4 @@
+import { AxiosInstance } from 'axios';
 import { NetworkId } from '../enums/network';
 import { OracleSource } from '../enums/priceOracles';
 import { AssetPriceDataAtTimestamp } from '../types/prices';
@@ -5,7 +6,13 @@ import { fetchSingleReport, getAssetByFeedId, getFeedId, parseChainlinkFullRepor
 import { getCurrentPrices, getPriceId, getPricesAtTimestamp, getSupportedAssetsAsObject } from './pyth';
 import { priceNumberFormatter } from './speedMarkets';
 
-export const getCurrentPricesFromOracle = async (oracle: OracleSource, networkId: NetworkId, assets: string[]) => {
+export const getCurrentPricesFromOracle = async (
+    oracle: OracleSource,
+    networkId: NetworkId,
+    assets: string[],
+    apiUrl: string,
+    axiosInstance?: AxiosInstance
+) => {
     let prices = getSupportedAssetsAsObject();
 
     switch (oracle) {
@@ -15,7 +22,7 @@ export const getCurrentPricesFromOracle = async (oracle: OracleSource, networkId
             break;
         case OracleSource.Chainlink:
             const feedIds = assets.map((asset) => getFeedId(networkId, asset));
-            const promises = feedIds.map((feedId) => fetchSingleReport(networkId, feedId));
+            const promises = feedIds.map((feedId) => fetchSingleReport(apiUrl, axiosInstance, feedId));
             const reports = await Promise.all(promises);
             for (let i = 0; i < feedIds.length; i++) {
                 const feedId = feedIds[i];
@@ -34,7 +41,9 @@ export const getPriceDataAtTimestampFromOracle = async (
     oracle: OracleSource,
     networkId: NetworkId,
     asset: string,
-    timestampSec: number
+    timestampSec: number,
+    apiUrl: string,
+    axiosInstance?: AxiosInstance
 ) => {
     let priceData: AssetPriceDataAtTimestamp = {
         priceUpdateData: [],
@@ -55,7 +64,7 @@ export const getPriceDataAtTimestampFromOracle = async (
             break;
         case OracleSource.Chainlink:
             const feedId = getFeedId(networkId, asset);
-            const report = await fetchSingleReport(networkId, feedId, timestampSec);
+            const report = await fetchSingleReport(apiUrl, axiosInstance, feedId, timestampSec);
             if (report.fullReport) {
                 const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
                 priceData = {

@@ -1,4 +1,4 @@
-import { url } from 'inspector';
+import axios, { AxiosInstance } from 'axios';
 import { DATA_STREAMS_ENDPOINTS, FEED_ID } from '../constants/chainlink';
 import { COLLATERAL_DECIMALS, OTHER_COLLATERAL_DECIMALS } from '../constants/currency';
 import { TEST_NETWORKS } from '../constants/network';
@@ -92,15 +92,21 @@ export const getDataStreamEndpoint = (networkId: NetworkId) => {
 };
 
 export const fetchSingleReport = async (
-    networkId: NetworkId,
+    apiUrl: string,
+    axiosInstance: AxiosInstance = axios,
     feedID: string,
     timestamp?: number
 ): Promise<SingleReport> => {
-    const response = await fetch(url);
+    try {
+        const response = await axiosInstance.get(apiUrl);
 
-    if (!response.ok) {
-        const text = await response.text();
-        console.error(`Chainlink API (${url}) error (status ${response.status}): ${text}`);
+        const data = response.data as SingleReportResponse;
+        return data.report;
+    } catch (error) {
+        const status = error.response?.status || 'unknown';
+        const errorMessage = error.response?.data || error.message;
+        console.error(`Chainlink API (${apiUrl}) error (status ${status}): ${errorMessage}`);
+
         return {
             feedID,
             validFromTimestamp: timestamp || 0,
@@ -108,9 +114,6 @@ export const fetchSingleReport = async (
             fullReport: '',
         };
     }
-
-    const data = (await response.json()) as SingleReportResponse;
-    return data.report;
 };
 
 export const getFeedId = (networkId: NetworkId, asset: string) => {
