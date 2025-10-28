@@ -1,4 +1,5 @@
-import { DATA_STREAMS_ENDPOINTS, DATA_STREAMS_PATHS, FEED_ID } from '../constants/chainlink';
+import axios, { AxiosInstance } from 'axios';
+import { DATA_STREAMS_ENDPOINTS, FEED_ID } from '../constants/chainlink';
 import { COLLATERAL_DECIMALS, OTHER_COLLATERAL_DECIMALS } from '../constants/currency';
 import { TEST_NETWORKS } from '../constants/network';
 import { SPEED_MARKETS_PRICE_DECIMALS } from '../constants/speedMarkets';
@@ -67,7 +68,7 @@ const generateHMAC = async (
     return { signature, timestamp };
 };
 
-const generateAuthHeaders = async (
+export const generateAuthHeaders = async (
     method: string,
     path: string,
     apiKey: string,
@@ -82,7 +83,7 @@ const generateAuthHeaders = async (
     };
 };
 
-const getDataStreamEndpoint = (networkId: NetworkId) => {
+export const getDataStreamEndpoint = (networkId: NetworkId) => {
     if (TEST_NETWORKS.includes(networkId)) {
         return DATA_STREAMS_ENDPOINTS.testnet;
     } else {
@@ -91,28 +92,24 @@ const getDataStreamEndpoint = (networkId: NetworkId) => {
 };
 
 export const fetchSingleReport = async (
-    apiKey: string,
-    apiSecret: string,
-    networkId: NetworkId,
     feedID: string,
-    timestamp?: number
+    timestamp: number,
+    apiUrl: string,
+    axiosInstance: AxiosInstance = axios
 ): Promise<SingleReport> => {
-    if (!apiKey || !apiSecret) {
-        console.error('Chainlink API credentials not set.');
-    }
+    const hasQuery = apiUrl.includes('?');
+    const url = `${apiUrl}${hasQuery ? '&' : '?'}feedID=${feedID}${timestamp ? `&timestamp=${timestamp}` : ''}`;
 
-    const method = 'GET';
-    const host = getDataStreamEndpoint(networkId);
-    const path = timestamp ? DATA_STREAMS_PATHS.reports : DATA_STREAMS_PATHS.latest;
-    const fullPath = `${path}?feedID=${feedID}${timestamp ? `&timestamp=${timestamp}` : ''}`;
-    const url = `${host}${fullPath}`;
+    try {
+        const response = await axiosInstance.get(url);
 
-    const headers = await generateAuthHeaders(method, fullPath, apiKey, apiSecret);
-    const response = await fetch(url, { method, headers });
+        const data = response.data as SingleReportResponse;
+        return data.report;
+    } catch (error: any) {
+        const status = error.response?.status || 'unknown';
+        const errorMessage = error.response?.data || error.message;
+        console.error(`Chainlink API (${url}) error (status ${status}): ${errorMessage}`);
 
-    if (!response.ok) {
-        const text = await response.text();
-        console.error(`Chainlink API (${url}) error (status ${response.status}): ${text}`);
         return {
             feedID,
             validFromTimestamp: timestamp || 0,
@@ -120,9 +117,6 @@ export const fetchSingleReport = async (
             fullReport: '',
         };
     }
-
-    const data = (await response.json()) as SingleReportResponse;
-    return data.report;
 };
 
 export const getFeedId = (networkId: NetworkId, asset: string) => {

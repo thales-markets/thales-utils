@@ -1,3 +1,4 @@
+import { AxiosInstance } from 'axios';
 import { NetworkId } from '../enums/network';
 import { OracleSource } from '../enums/priceOracles';
 import { AssetPriceDataAtTimestamp } from '../types/prices';
@@ -9,8 +10,8 @@ export const getCurrentPricesFromOracle = async (
     oracle: OracleSource,
     networkId: NetworkId,
     assets: string[],
-    apiKey: string,
-    apiSecret: string
+    apiUrl: string,
+    axiosInstance?: AxiosInstance
 ) => {
     let prices = getSupportedAssetsAsObject();
 
@@ -21,7 +22,7 @@ export const getCurrentPricesFromOracle = async (
             break;
         case OracleSource.Chainlink:
             const feedIds = assets.map((asset) => getFeedId(networkId, asset));
-            const promises = feedIds.map((feedId) => fetchSingleReport(apiKey, apiSecret, networkId, feedId));
+            const promises = feedIds.map((feedId) => fetchSingleReport(feedId, 0, apiUrl, axiosInstance));
             const reports = await Promise.all(promises);
             for (let i = 0; i < feedIds.length; i++) {
                 const feedId = feedIds[i];
@@ -41,8 +42,8 @@ export const getPriceDataAtTimestampFromOracle = async (
     networkId: NetworkId,
     asset: string,
     timestampSec: number,
-    apiKey: string,
-    apiSecret: string
+    apiUrl: string,
+    axiosInstance?: AxiosInstance
 ) => {
     let priceData: AssetPriceDataAtTimestamp = {
         priceUpdateData: [],
@@ -63,7 +64,7 @@ export const getPriceDataAtTimestampFromOracle = async (
             break;
         case OracleSource.Chainlink:
             const feedId = getFeedId(networkId, asset);
-            const report = await fetchSingleReport(apiKey, apiSecret, networkId, feedId, timestampSec);
+            const report = await fetchSingleReport(feedId, timestampSec, apiUrl, axiosInstance);
             if (report.fullReport) {
                 const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
                 priceData = {
