@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
 import { DATA_STREAMS_ENDPOINTS, FEED_ID } from '../constants/chainlink';
-import { COLLATERAL_DECIMALS, OTHER_COLLATERAL_DECIMALS } from '../constants/currency';
+import { OTHER_COLLATERAL_DECIMALS } from '../constants/currency';
 import { TEST_NETWORKS } from '../constants/network';
 import { SPEED_MARKETS_PRICE_DECIMALS } from '../constants/speedMarkets';
 import { NetworkId } from '../enums/network';
-import { ParsedFullReport, SingleReport, SingleReportResponse } from '../types/chainlink';
+import { ParsedFullReport, SingleReport } from '../types/chainlink';
 import { Coins } from '../types/tokens';
 import { bigNumberFormatter } from './formatters/viem';
 
@@ -91,31 +91,36 @@ export const getDataStreamEndpoint = (networkId: NetworkId) => {
     }
 };
 
-export const fetchSingleReport = async (
-    feedID: string,
+export const fetchReports = async (
+    feedIds: string[],
     timestamp: number,
-    apiUrl: string,
+    apiUrl: string, // https://api.overtime.io/speed-markets/networks/10/price-data
     axiosInstance: AxiosInstance = axios
-): Promise<SingleReport> => {
+): Promise<SingleReport[]> => {
     const hasQuery = apiUrl.includes('?');
-    const url = `${apiUrl}${hasQuery ? '&' : '?'}feedID=${feedID}${timestamp ? `&timestamp=${timestamp}` : ''}`;
+    const url = `${apiUrl}${hasQuery ? '&' : '?'}feedIds=${feedIds.join(',')}${
+        timestamp ? `&timestamp=${timestamp}` : ''
+    }`;
 
     try {
-        const response = await axiosInstance.get(url);
+        const responses = await axiosInstance.get(url);
 
-        const data = response.data as SingleReportResponse;
-        return data.report;
+        const reports = responses.data as SingleReport[];
+        return reports;
     } catch (error: any) {
         const status = error.response?.status || 'unknown';
         const errorMessage = error.response?.data || error.message;
         console.error(`Chainlink API (${url}) error (status ${status}): ${errorMessage}`);
 
-        return {
-            feedID,
-            validFromTimestamp: timestamp || 0,
-            observationsTimestamp: timestamp || 0,
-            fullReport: '',
-        };
+        const reports: SingleReport[] = [];
+        for (const feedID of feedIds) {
+            reports.push({
+                feedID,
+                validFromTimestamp: timestamp || 0,
+                observationsTimestamp: timestamp || 0,
+                fullReport: '',
+            } as SingleReport);
+        }
     }
 };
 
@@ -150,7 +155,7 @@ export const parseChainlinkFullReport = (networkId: NetworkId, fullReport: strin
 
     const feedID = readBytesAsHex(32);
     const asset = getAssetByFeedId(networkId, feedID) as Coins;
-    const assetDecimals = COLLATERAL_DECIMALS[asset];
+    const assetDecimals = OTHER_COLLATERAL_DECIMALS[asset];
 
     const parseTimestamp = () => Number(BigInt(readBytesAsHex(32)));
     const parseFees = () => BigInt(readBytesAsHex(32));
@@ -171,7 +176,7 @@ export const parseChainlinkFullReport = (networkId: NetworkId, fullReport: strin
         validFromTimestamp,
         observationsTimestamp,
         nativeFee,
-        nativeFeeDec: bigNumberFormatter(nativeFee, COLLATERAL_DECIMALS.WETH), // WETH is native token for OP, Arb and Base (Polygon should return 0)
+        nativeFeeDec: bigNumberFormatter(nativeFee, OTHER_COLLATERAL_DECIMALS.WETH), // WETH is native token for OP, Arb and Base (Polygon should return 0)
         linkFee,
         linkFeeDec: bigNumberFormatter(linkFee, OTHER_COLLATERAL_DECIMALS.LINK),
         expiresAt,
