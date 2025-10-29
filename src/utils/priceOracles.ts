@@ -65,7 +65,7 @@ export const getPriceDataAtTimestampFromOracle = async (
             break;
         case OracleSource.Chainlink:
             const feedId = getFeedId(networkId, asset);
-            const reports = await fetchReports([feedId], 0, apiUrl, axiosInstance);
+            const reports = await fetchReports([feedId], timestampSec, apiUrl, axiosInstance);
             const report = reports[0];
             if (report.fullReport) {
                 const parsedReport = parseChainlinkFullReport(networkId, report.fullReport);
