@@ -104,7 +104,6 @@ export const fetchReports = async (
 
     try {
         const responses = await axiosInstance.get(url);
-
         const reports = responses.data as SingleReport[];
         return reports;
     } catch (error: any) {
@@ -121,6 +120,7 @@ export const fetchReports = async (
                 fullReport: '',
             } as SingleReport);
         }
+        return reports;
     }
 };
 
