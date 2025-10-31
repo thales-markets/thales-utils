@@ -9,3 +9,8 @@ export type ConfigItem = {
     value: string;
     defaultValue: string;
 };
+
+export type DeltaTimeChange = {
+    nextChangeTime: Date;
+    deltaTime: number;
+};
