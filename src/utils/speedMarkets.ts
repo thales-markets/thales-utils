@@ -106,7 +106,10 @@ export const getCurrentMinDeltaTime = (networkId: number, config = SPEED_MARKETS
  *   - deltaTime: The value of deltaTime at that change
  *   - or null if no change is found in the next 7 days
  */
-export const getNextDeltaTimeChange = (networkId: number, config = SPEED_MARKETS_CONFIG): DeltaTimeChange | null => {
+export const getNextDeltaTimeChange = (
+    networkId: number,
+    config = SPEED_MARKETS_CONFIG as ConfigItem[]
+): DeltaTimeChange | null => {
     const now = new Date();
     const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -143,7 +146,7 @@ export const getNextDeltaTimeChange = (networkId: number, config = SPEED_MARKETS
             const nextChangeTime = nextDate;
             const deltaTime = Number(entry.value);
 
-            if (deltaTime !== getCurrentMinDeltaTime(networkId, (config = SPEED_MARKETS_CONFIG as ConfigItem[]))) {
+            if (deltaTime !== getCurrentMinDeltaTime(networkId, config)) {
                 return {
                     nextChangeTime,
                     deltaTime,
