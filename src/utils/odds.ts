@@ -845,7 +845,12 @@ export const groupAndFormatDoubleChanceOdds = (oddsArray: any[], commonData: Hom
     let probability12 = 0;
     let probabilityX2 = 0;
 
+    let sportId;
+
     oddsArray.forEach((odd) => {
+        if (odd.sportId) {
+            sportId = odd.sportId;
+        }
         if (odd.selection.includes(commonData.homeTeam)) {
             if (odd.selection.includes(commonData.awayTeam)) {
                 probability12 = odd.price;
@@ -868,6 +873,7 @@ export const groupAndFormatDoubleChanceOdds = (oddsArray: any[], commonData: Hom
         odds: [probability1X, probability12, probabilityX2],
         type: 'Double Chance',
         typeId: 10003,
+        sportId: sportId,
     };
     return [marketObject];
 };
