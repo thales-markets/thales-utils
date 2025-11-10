@@ -17,6 +17,6 @@ export const SPEED_MARKETS_CONFIG = [
     { type: 'deltaTime', day: 'Wednesday', from: '', to: '', networks: [], value: '60', defaultValue: '0' },
     { type: 'deltaTime', day: 'Thursday', from: '', to: '', networks: [], value: '60', defaultValue: '0' },
     { type: 'deltaTime', day: 'Friday', from: '', to: '', networks: [], value: '60', defaultValue: '0' },
-    { type: 'deltaTime', day: 'Saturday', from: '', to: '', networks: [], value: '300', defaultValue: '0' },
-    { type: 'deltaTime', day: 'Sunday', from: '', to: '', networks: [], value: '300', defaultValue: '0' },
+    { type: 'deltaTime', day: 'Saturday', from: '', to: '', networks: [], value: '180', defaultValue: '0' },
+    { type: 'deltaTime', day: 'Sunday', from: '', to: '', networks: [], value: '180', defaultValue: '0' },
 ];
