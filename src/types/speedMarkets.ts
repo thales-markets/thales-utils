@@ -6,8 +6,8 @@ export type ConfigItem = {
     from: string;
     to: string;
     networks: number[];
-    value: string;
-    defaultValue: string;
+    value: string | string[];
+    defaultValue: string | string[];
 };
 
 export type DeltaTimeChange = {
