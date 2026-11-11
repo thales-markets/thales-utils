@@ -51,11 +51,11 @@ export const getCurrentOracleSource = (
 
     // Return value if all conditions are met
     if (inTimeRange && networkMatch && value) {
-        return value.toLowerCase() === 'chainlink' ? OracleSource.Chainlink : OracleSource.Pyth;
+        return value.toString().toLowerCase() === 'chainlink' ? OracleSource.Chainlink : OracleSource.Pyth;
     }
 
     // Otherwise fallback to default
-    return defaultValue.toLowerCase() === 'chainlink' ? OracleSource.Chainlink : OracleSource.Pyth;
+    return defaultValue.toString().toLowerCase() === 'chainlink' ? OracleSource.Chainlink : OracleSource.Pyth;
 };
 
 /**
@@ -93,6 +93,44 @@ export const getCurrentMinDeltaTime = (networkId: number, config = SPEED_MARKETS
 
     // Otherwise fallback to default
     return Number(defaultValue);
+};
+
+/**
+ * Returns the allowed delta times for the current UTC day and time.
+ * @param config The configuration array.
+ * @param networkId The network name to match.
+ */
+export const getCurrentAllowedDeltas = (networkId: number, config = SPEED_MARKETS_CONFIG as ConfigItem[]): number[] => {
+    const now = new Date();
+    const currentDay = now.toLocaleString('en-US', { weekday: 'long', timeZone: 'UTC' });
+    const currentMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+
+    const entry = config.find(
+        (configItem) =>
+            configItem.type.toLowerCase() === ConfigItemType.ALLOWED_DELTAS.toLowerCase() &&
+            configItem.day === currentDay
+    );
+
+    if (!entry) {
+        return [];
+    }
+
+    const { from, to, networks, value, defaultValue } = entry;
+
+    const fromMinutes = from ? parseTimeToMinutes(from) : 0; // midnight default
+    const toMinutes = to ? parseTimeToMinutes(to) : 24 * 60; // end of day
+    const inTimeRange = currentMinutes >= fromMinutes && currentMinutes <= toMinutes;
+
+    // Match network (empty means "all")
+    const networkMatch = !networks?.length || networks.includes(networkId);
+
+    // Return value if all conditions are met
+    if (inTimeRange && networkMatch && value) {
+        return (value as string[]).map((value: string) => Number(value));
+    }
+
+    // Otherwise fallback to default
+    return (defaultValue as string[]).map((value: string) => Number(value));
 };
 
 /**
